@@ -1,5 +1,19 @@
 ---
 layout: home
-title: Home
+paginate: true
+alt_title: "Embedded Cooking Class"
+sub_title: "Twirl Jumper Wires Like Spaghetti!"
+image: /assets/images/amine-ounnas-180287.jpg
+introduction: |
+  Hello.
+  - Test A
+  - Test B
+  - Test C
+actions:
+  - label: "Get Started"
+    icon: github
+    url: "https://github.com/reruo321"
+  - label: "Wow"
+    icon: download
+    url: ""
 ---
-Twirl Jumper Wires Like Spaghetti!
