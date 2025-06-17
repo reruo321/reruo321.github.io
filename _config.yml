@@ -1,4 +1,4 @@
-title: Embedded Cooking Class
+title: Embedded Aglio e Olio
 description: "Twirl Jumper Wires Like Spaghetti!"
 baseurl: "/blog"  # the subpath of your site, e.g. /blog
 twitter_username: Towlette_Pettetucci
@@ -19,7 +19,7 @@ liquid:
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-basically-basic
+remote_theme: "mmistakes/jekyll-theme-basically-basic@1.4.5"
 plugins: # previously gems
   - jekyll-feed
   - jekyll-seo-tag
