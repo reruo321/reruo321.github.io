@@ -50,4 +50,8 @@ google_fonts:
 
 navigation_pages:
   - about.md
-  - cv.md
+  - posts.md
+  - linux.md
+  - embedded.md
+  - firmware.md
+  - cpp.md

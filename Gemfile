@@ -1,13 +1,11 @@
 source "https://rubygems.org"
 
-# Jekyll plugins
-gem "github-pages", group: :jekyll_plugins do
-  gem "jekyll-remote-theme"
-  gem "jekyll-feed"
-  gem "jekyll-seo-tag"
-  gem "jekyll-sitemap"
-  gem "jekyll-paginate"
-  gem "jekyll-algolia"
-end
-
-gem 'wdm', '>= 0.1.0', platforms: [:mingw, :x64_mingw, :mswin] if Gem::Platform.local.os == 'mswin32'
+gem "github-pages", group: :jekyll_plugins
+gem "jekyll-remote-theme", group: :jekyll_plugins
+gem "jekyll-feed", group: :jekyll_plugins
+gem "jekyll-seo-tag", group: :jekyll_plugins
+gem "jekyll-sitemap", group: :jekyll_plugins
+gem "jekyll-paginate", group: :jekyll_plugins
+gem "jekyll-algolia", group: :jekyll_plugins
+gem "fiddle"
+gem "wdm", ">= 0.1.0" if Gem.win_platform?
