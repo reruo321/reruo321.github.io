@@ -8,9 +8,10 @@
 .sass-cache
 _asset_bundler_cache
 _site
-cheatsheet.md
 codekit-config.json
 example/_site
 Gemfile.lock
+post.bat
 node_modules
 npm-debug.log*
+ruby_cheatsheet.md

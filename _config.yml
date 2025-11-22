@@ -31,6 +31,10 @@ algolia:
   search_only_api_key: # YOUR_SEARCH_ONLY_API_KEY
   powered_by: # true (default), false
 
+# Liquid
+liquid:
+  error_mode: strict
+
 # Build settings
 markdown: kramdown
 remote_theme: "mmistakes/jekyll-theme-basically-basic@1.4.5"
@@ -71,12 +75,38 @@ exclude:
   - /docs # ignore Basically Basic sample site
   - /example # ignore Basically Basic dev site
 
+# Collections
+collections:
+  linux:
+    output: true
+    permalink: /:collection/:path/
+  computer-system:
+    output: true
+    permalink: /:collection/:path/
+  embedded:
+    output: true
+  firmware:
+    output: true
+  cpp:
+    output: true
+  web:
+    output: true
+    permalink: /:collection/:path/
+  projects:
+    output: true
+
 # Front Matter Defaults
 defaults:
   # _posts
   - scope:
       path: "_posts"
       type: posts
+    values:
+      layout: post
+      read_time: true
+  - scope:
+      path: "_linux"
+      type: linux
     values:
       layout: post
       read_time: true

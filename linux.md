@@ -1,9 +1,9 @@
 ---
 title: Linux
-layout: collection
+layout: category
 permalink: /linux/
-collection: linux
+taxonomy: linux
 entries_layout: grid
 ---
 
-The collection `linux` contains various projects including Linux shell, system programming, and kernel programming.
+Various Linux adventures — shell scripting, system programming, and kernel hacking.
