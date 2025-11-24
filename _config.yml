@@ -89,6 +89,9 @@ collections:
     output: true
   cpp:
     output: true
+  network:
+    output: true
+    permalink: /:collection/:path/
   web:
     output: true
     permalink: /:collection/:path/

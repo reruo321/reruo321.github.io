@@ -56,6 +56,7 @@ navigation_pages:
   - embedded.md
   - firmware.md
   - cpp.md
+  - network.md
   - web.md
   - projects.md
   - tags.md
