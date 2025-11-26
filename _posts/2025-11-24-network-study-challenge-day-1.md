@@ -13,7 +13,7 @@ tags: [network, OSI, TCP, IP, DHCP, CIDR, Wireshark]
 | - | - | - |
 | **Full Form** | **O**pen **S**ystems **I**nterconnection | **T**ransmission **C**ontrol **P**rotocol/**I**nternet **P**rotocol |
 | **Characteristic** | Conceptual | Practical |
-| **Strength** | - Standardization<br>- Independent Layers<br>- Easier to adopt a new technology[^1]<br>- Make troubleshooting & improving network performance more straightforward | - Real-world Applicability<br>- Have more applications<br>- More commonly used in the actual networking structures |
+| **Strength** | - Standardization<br>- Independent layers<br>- Easier to adopt a new technology[^1]<br>- Make troubleshooting & network performance improvement more straightforward | - Real-world network applicability<br>- Have more applications |
 | **Approach** | - Strict layer-by-layer architecture<br>- Strict function definition<br>- Strictly communicate only with adjacent layers | - Flexible architecture<br>- Layers are not strictly separated<br>- Two different random layers can interact |
 | **Error<br>Handling** | - At data link layer (frame errors)<br>- At transport layer (end-to-end reliability) | - TCP |
 
@@ -24,7 +24,7 @@ tags: [network, OSI, TCP, IP, DHCP, CIDR, Wireshark]
 
 | | IPv4 | IPv6 |
 | - | - | - |
-| Address<br>Configuration | - DHCP<br>- Manual Configuration | - DHCPv6 <br>- SLAAC (Stateless Autoconfiguration, devices can generate their addresses based on network prefixes) |
+| Address<br>Configuration | - DHCP<br>- Manual Configuration | - DHCPv6 <br>- SLAAC (**S**tate**L**ess **A**ddress **A**uto**C**onfiguration, devices can generate their addresses based on network prefixes) |
 | NAT | Good / Conserve address with private + public IP address spaces | Bad / Already have abundant address space, devices can have globally routable addresses |
 | Header<br>Complexity | Variable-length (20 ~ 60 bytes[^2])<br>(Extensibility ↑, Packet processing ↓) | Fixed-length (40 bytes), streamlined<br>(Extensibility ↓, Packet processing ↑) |
 
