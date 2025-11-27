@@ -33,8 +33,8 @@ tags: [network, OSI, TCP, IP, DHCP, CIDR, Wireshark]
 ![IPv4 vs IPv6 Header Comparison](/assets/images/2025-11-24-network-study-challenge-day-1/header_comparison.png)
 
 # Stateful vs Stateless
-## Stateful
-Coffee Shop A → Stateful (this is like DHCP)
+## Stateful (DHCP)
+Coffee Shop A → Stateful
 
 You walk in → the barista looks at a notebook and says:
 “Ah, it’s you again! Your usual seat is #5, here’s your regular latte.”
@@ -48,8 +48,8 @@ It keeps a little notebook (the lease database) that says
 “this laptop’s MAC address → I gave it 192.168.1.100 until Friday”.
 So we call it stateful = the network has to remember things about each device.
 
-## Stateless
-Coffee Shop B → Stateless (this is like SLAAC in IPv6)
+## Stateless (SLAAC)
+Coffee Shop B → Stateless
 
 You walk in → there is a big sign on the wall:
 “Help yourself! Any empty seat that starts with number 200 is yours today.
