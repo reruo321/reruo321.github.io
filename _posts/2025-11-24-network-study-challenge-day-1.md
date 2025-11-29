@@ -3,7 +3,7 @@ title: Network Study Challenge Day 1
 layout: post
 date: 2025-11-24
 categories: network
-tags: [network, OSI, TCP, IP, DHCP, CIDR, Wireshark]
+tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 ---
 
 # OSI Model vs TCP/IP Model
