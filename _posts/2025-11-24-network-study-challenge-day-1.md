@@ -34,7 +34,7 @@ tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 
 # Stateful vs Stateless
 ## Stateful (DHCP)
-Coffee Shop A
+Let's talk about a stateful coffee shop A.
 
 You walk in → the barista looks at a notebook and says:
 “Ah, it’s you again! Your usual seat is #5, here’s your regular latte.”
@@ -49,7 +49,7 @@ It keeps a little notebook (the lease database) that says
 So we call it stateful = the network has to remember things about each device.
 
 ## Stateless (SLAAC)
-Coffee Shop B
+Let's talk about a stateless coffee shop B.
 
 You walk in → there is a big sign on the wall:
 “Help yourself! Any empty seat that starts with number 200 is yours today.
