@@ -51,7 +51,7 @@ So we call it stateful = the network has to remember things about each device.
 ## Stateless (SLAAC)
 Let's talk about a stateless coffee shop B.
 
-You walk in → there is a big sign on the wall:
+You walk in the shop → there is a big sign on the wall:
 “Help yourself! Any empty seat that starts with number 200 is yours today.
 Write your own name on the cup.”
 You pick seat 237, write your name, and sit down.
