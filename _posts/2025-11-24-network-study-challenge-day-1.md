@@ -61,7 +61,7 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 → The shop keeps no records, no memory, no “state”.
 
 # Subnet Mask
-Subnet mask
+* Network Address
 
 # Reference
 * [The Difference Between IPv4 and IPv6](https://aws.amazon.com/compare/the-difference-between-ipv4-and-ipv6/)
