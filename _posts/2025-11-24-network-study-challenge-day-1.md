@@ -61,9 +61,9 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 → The shop keeps no records, no memory, no “state”.
 
 # Subnet Mask
-* Network Address
-* Host Range
-* Broadcast Address
+* **Network Address**
+* **Host Range**
+* **Broadcast Address**
 
 
 # Reference
