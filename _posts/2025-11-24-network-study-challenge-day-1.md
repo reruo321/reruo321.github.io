@@ -61,9 +61,9 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 → The shop keeps no records, no memory, no “state”.
 
 # Subnet Mask
-* **Network Address**: Identifier of the subnet
-* **Host Address**: Identifier of the devivce of the subnet
-* **Broadcast Address**
+* **Network Address**: The unique identifier of the specific network segment
+* **Host Address**: 
+* **Broadcast Address**: 
 
 # Reference
 * [The Difference Between IPv4 and IPv6](https://aws.amazon.com/compare/the-difference-between-ipv4-and-ipv6/)
