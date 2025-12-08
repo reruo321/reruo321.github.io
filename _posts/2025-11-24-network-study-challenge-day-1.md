@@ -62,7 +62,7 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 
 # Subnet Mask
 * **Network Address**: Identifier of the subnet
-* **Host Address**
+* **Host Address**: Identifier of the devivce of the subnet
 * **Broadcast Address**
 
 # Reference
