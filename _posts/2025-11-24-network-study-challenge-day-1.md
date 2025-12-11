@@ -62,7 +62,7 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 
 # Subnet Mask
 * **Network Address**: The unique identifier of the specific network segment
-* **Host Address**: The uique identifier for a specific device (PC, phone, etc.) within a subnet
+* **Host Address**: The unique identifier for a specific device (PC, phone, etc.) within a subnet
 * **Broadcast Address**: 
 
 # Reference
