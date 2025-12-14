@@ -32,6 +32,8 @@ tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 
 ![IPv4 vs IPv6 Header Comparison](/assets/images/2025-11-24-network-study-challenge-day-1/header_comparison.png)
 
+# DHCP
+
 # Stateful vs Stateless
 ## Stateful (DHCP)
 Let's talk about a stateful coffee shop A.
