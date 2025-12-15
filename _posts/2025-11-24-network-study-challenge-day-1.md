@@ -67,6 +67,8 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 * **Host Address**: The unique identifier for a specific device (PC, phone, etc.) within a subnet
 * **Broadcast Address**: A special address to send data to all devices on the local segment simultaneously
 
+## IPv4 Subnet
+
 # CIDR
 
 # Wireshark
