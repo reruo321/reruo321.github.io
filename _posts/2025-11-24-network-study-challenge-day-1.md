@@ -70,6 +70,8 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 
 ## IPv4 Subnet Calculation
 
+## IPv6 Subnet Calculation
+
 # CIDR
 **Classless Inter-Domain Routing**
 
