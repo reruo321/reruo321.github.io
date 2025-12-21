@@ -36,7 +36,8 @@ tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 **Dynamic Host Configuration Protocol**
 
 # Stateful vs Stateless
-## Stateful (DHCP)
+
+## Stateful (DHCP, DHCPv6)
 Let's talk about a stateful coffee shop A.
 
 You walk in → the barista looks at a notebook and says:
@@ -69,6 +70,7 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 * **Broadcast Address**: A special address to send data to all devices on the local segment simultaneously
 
 ## IPv4 Subnet Calculation
+
 
 ## IPv6 Subnet Calculation
 
