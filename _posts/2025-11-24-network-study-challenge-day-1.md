@@ -65,6 +65,8 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 → The shop keeps no records, no memory, no “state”.
 
 # Subnet Mask
+Determine
+
 * **Network Address**: The unique identifier of the specific network segment
 * **Host Address**: The unique identifier for a specific device (PC, phone, etc.) within a subnet
 * **Broadcast Address**: A special address to send data to all devices on the local segment simultaneously
