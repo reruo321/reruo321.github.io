@@ -65,7 +65,7 @@ Tomorrow the sign will say the same thing, and you just pick another seat (or th
 → The shop keeps no records, no memory, no “state”.
 
 # Subnet Mask
-Determine
+**Subnet mask** is a 32-bit number to divide an IP address into network ID and host ID. It divides a large network into smaller sub-networks (subnets).
 
 * **Network Address**: The unique identifier of the specific network segment
 * **Host Address**: The unique identifier for a specific device (PC, phone, etc.) within a subnet
