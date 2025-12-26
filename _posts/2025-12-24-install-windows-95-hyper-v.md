@@ -19,5 +19,7 @@ Because I preferred the good performance to the real vintage Windows 95 experien
 
 Also, I decided to use **Hyper-V** for most virtualization including Windows 95. I had used Virtualbox for 5 years, but recently Grok suggested Hyper-V so I tried it for my Ubuntu 22.04 migration. And WOW! It is x2 ~ x3 faster than Virtualbox! Now I am a big fan of type 1 hypervisors.[^2] That's why I am installing Windows 95 with Hyper-V.
 
+## Installation
+
 [^1]: [Difference between Virtualization and Emulation - GeeksforGeeks](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
 [^2]: [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
