@@ -26,7 +26,7 @@ Here is the table to compare virtual machine with emulator.[^2]
 | Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
 | Environment | Isolated | Shared |
 | Hardware Accessibility | Direct access | Requires software bridge |
-| Operating Cost | △ | ○ |
+| Operating Cost | △<br>(Higher than emulator) | ○ |
 | Backup | ○ | △ |
 | Speed | ○ | △ |
 
@@ -37,7 +37,7 @@ Also, I decided to use **Hyper-V** for most virtualization including Windows 95.
 Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 
 ## Installation
-
+To install Windows 95,
 
 [^1]: [What is virtualization?](https://www.ibm.com/think/topics/virtualization)
 [^2]: [Difference Between Virtualization and Emulation - GeeksforGeeks](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
