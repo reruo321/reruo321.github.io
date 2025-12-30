@@ -37,6 +37,8 @@ Also, I decided to use **Hyper-V** for most virtualization including Windows 95.
 Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 
 ## Prerequisites
+1. Windows 95 Floppy disk file - Download it from somewhere for free, and change its extension from .img to .vfd.
+2. Windows 95 Disk
 
 ## Installation
 
