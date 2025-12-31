@@ -26,7 +26,7 @@ Here is the table to compare virtual machine with emulator.[^2]
 | Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
 | Environment | Isolated | Shared |
 | Hardware Accessibility | Direct access | Requires software bridge |
-| Operating Cost | △<br>(Higher than emulator) | ○ |
+| Operating Cost | △<br>(More expensive) | ○ |
 | Backup | ○ | △ |
 | Speed | ○ | △ |
 
@@ -37,8 +37,13 @@ Also, I decided to use **Hyper-V** for most virtualization including Windows 95.
 Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 
 ## Prerequisites
-1. Windows 95 Floppy disk file - Download it from somewhere for free, and change its extension from .img to .vfd.
-2. Windows 95 Disk
+1. Microsoft Hyper-V - Basically provided in Windows Server, or Windows 10/11 Pro/Enterprise Edition.
+2. Windows 95 floppy disk file - Download it for free online, and change its extension name to `.vfd` if it is `.img`.
+3. Windows 95 image file - Download it for free online. Its extension should be `.iso`.
+
+```html
+wow
+```
 
 ## Installation
 
