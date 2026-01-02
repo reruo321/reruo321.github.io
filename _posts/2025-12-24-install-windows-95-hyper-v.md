@@ -2,9 +2,9 @@
 title: Installing Windows 95 with Hyper-V
 layout: post
 date: 2025-12-24
-media_subpath: /fig/2025-12-24-install-windows-95-hyper-v/    
+media_subpath: /pics/2025-12-24-install-windows-95-hyper-v/    
 image:
-    path: win95-boot-00.png
+    path: win95-fdisk-00.png
 description: Learn how to virtualize Windows 95 with Microsoft Hyper-V.
 categories: etc
 tags: [Windows 95, Hyper-V, virtual machine]

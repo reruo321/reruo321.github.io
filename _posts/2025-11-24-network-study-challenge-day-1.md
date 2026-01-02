@@ -2,15 +2,16 @@
 title: Network Study Challenge Day 1
 layout: post
 date: 2025-11-24
+media_subpath: /pics/2025-11-24-network-study-challenge-day-1/
 image:
-    path: /fig/2025-11-24-network-study-challenge-day-1/osi_tcpip_model.png
+    path: osi_tcpip_model.png
 description: Learn about OSI vs TCP/IP, IPv4 vs IPv6, DHCP, CIDR, and Wireshark.
 categories: network
 tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 ---
 
 # OSI Model vs TCP/IP Model
-![OSI vs TCP/IP](/fig/2025-11-24-network-study-challenge-day-1/osi_tcpip_model.png)
+![OSI vs TCP/IP](osi_tcpip_model.png)
 
 | | OSI Model | TCP/IP Model |
 | - | - | - |
@@ -23,7 +24,7 @@ tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 [^1]: The OSI model's protocol independence and higher degree of modularity & layer granularity makes it easier to adopt new network technologies than the TCP/IP model. The OSI model easily adopts them as long as they adhere to the standardized interfaces between layers, but the TCP/IP model requires them to interoperate with the model's specific set of core protocols. The isolation from modularity and layer granularity of the OSI model also makes the adoption easier at one layer, while the TCP/IP model can make it harder because of its possibly larger impacts on multiple grouped functions or broader system adjustments.
 
 # IPv4 vs IPv6
-![IPv4 vs IPv6](/fig/2025-11-24-network-study-challenge-day-1/ipv4_ipv6.png)
+![IPv4 vs IPv6](ipv4_ipv6.png)
 
 | | IPv4 | IPv6 |
 | - | - | - |
@@ -33,7 +34,7 @@ tags: [network, OSI, TCP, IP, IPv4, IPv6, DHCP, CIDR, Wireshark]
 
 [^2]: Basically 20 bytes, and can increase up to 60 bytes when optional fields and flags are added.
 
-![IPv4 vs IPv6 Header Comparison](/fig/2025-11-24-network-study-challenge-day-1/header_comparison.png)
+![IPv4 vs IPv6 Header Comparison](header_comparison.png)
 
 # DHCP
 **Dynamic Host Configuration Protocol**
