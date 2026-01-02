@@ -2,8 +2,9 @@
 title: Installing Windows 95 with Hyper-V
 layout: post
 date: 2025-12-24
+media_subpath: /fig/2025-12-24-install-windows-95-hyper-v/    
 image:
-    path: /fig/2025-12-24-install-windows-95-hyper-v/win95-boot-00.png
+    path: win95-boot-00.png
 description: Learn how to virtualize Windows 95 with Microsoft Hyper-V.
 categories: etc
 tags: [Windows 95, Hyper-V, virtual machine]
@@ -60,29 +61,29 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 ## Installation
 ### Hyper-V Virtual Machine Wizard
 1. On the 'Actions' pane select 'Create Virtual Machine'.
-![Create Virtual Machine](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-00.png)
+![Create Virtual Machine](hyper-v-virtual-machine-wizard-00.png)
 2. Click 'Next'.
-![Virtual Machine Wizard 1](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-01.png)
+![Virtual Machine Wizard 1](hyper-v-virtual-machine-wizard-01.png)
 3. Specify the name and location of the virtual machine and click 'Next'.
-![Virtual Machine Wizard 2](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-02.png)
+![Virtual Machine Wizard 2](hyper-v-virtual-machine-wizard-02.png)
 4. **IMPORTANT: Set Generation 1** and click 'Next'.
-![Virtual Machine Wizard 3](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-03.png)
+![Virtual Machine Wizard 3](hyper-v-virtual-machine-wizard-03.png)
 5. Set the startup memory and click 'Next'.
-![Virtual Machine Wizard 4](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-04.png)
+![Virtual Machine Wizard 4](hyper-v-virtual-machine-wizard-04.png)
 6. Set the network connection and click 'Next'.
-![Virtual Machine Wizard 5](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-05.png)
+![Virtual Machine Wizard 5](hyper-v-virtual-machine-wizard-05.png)
 7. Check 'Create a virtual hard disk', configure, and click 'Next'.
-![Virtual Machine Wizard 6](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-06.png)
+![Virtual Machine Wizard 6](hyper-v-virtual-machine-wizard-06.png)
 8. Check 'Install an operating system from a bootable floppy disk', select `.vfd` file, and click 'Next'.
-![Virtual Machine Wizard 7](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-07.png)
+![Virtual Machine Wizard 7](hyper-v-virtual-machine-wizard-07.png)
 9. Click 'Finish'.
-![Virtual Machine Wizard 8](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-08.png)
+![Virtual Machine Wizard 8](hyper-v-virtual-machine-wizard-08.png)
 10. Select 'Connect' to open a connection to the VM.
-![Virtual Machine Wizard 9](/fig/2025-12-24-install-windows-95-hyper-v/hyper-v-virtual-machine-wizard-09.png)
+![Virtual Machine Wizard 9](hyper-v-virtual-machine-wizard-09.png)
 11. You will see this window.
-![Virtual Machine OFF](/fig/2025-12-24-install-windows-95-hyper-v/win95-virtual-machine-off-00.png)
+![Virtual Machine OFF](win95-virtual-machine-off-00.png)
 12. On the VM's menu click 'Media' → 'DVD Drive' → 'Insert Disk', and select `.iso` file. Then select 'Start' to run the VM.
-![Attaching the ISO image](/fig/2025-12-24-install-windows-95-hyper-v/win95-virtual-machine-off-01.png)
+![Attaching the ISO image](win95-virtual-machine-off-01.png)
 
 ### Disk Partitioning with `FDISK`
 
