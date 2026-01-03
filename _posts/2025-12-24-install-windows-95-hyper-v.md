@@ -58,6 +58,7 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 2. Windows 95 floppy disk file - Download it for free online, and change its extension name to `.vfd` if it is `.img`.
 3. Windows 95 image file - Download it for free online. Its extension should be `.iso`.
 
+
 ## Installation
 ### Hyper-V Virtual Machine Wizard
 1. On the 'Actions' pane select 'Create Virtual Machine'.
@@ -80,12 +81,19 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 ![Virtual Machine Wizard 8](hyper-v-virtual-machine-wizard-08.png)
 10. Select 'Connect' to open a connection to the VM.
 ![Virtual Machine Wizard 9](hyper-v-virtual-machine-wizard-09.png)
-11. You will see this window.
+
+
+### Inserting CD-ROM
+1. You will see this window.
 ![Virtual Machine OFF](win95-virtual-machine-off-00.png)
-12. On the VM's menu click 'Media' → 'DVD Drive' → 'Insert Disk', and select `.iso` file. Then select 'Start' to run the VM.
+2. On the VM's menu click 'Media' → 'DVD Drive' → 'Insert Disk', and select `.iso` file. Then select 'Start' to run the VM.
 ![Attaching the ISO image](win95-virtual-machine-off-01.png)
 
+
 ### Disk Partitioning with `FDISK`
+1. Type '1' to select 'Load NEC IDE CDROM driver'.
+![Load NEC IDE CDROM driver](win95-fdisk-00.png)
+2. You'll see `MSCDEX` and `A:\>` on the DOS screen. You can check if the CD-ROM directory is available, by typing `C:` (or any other drive name written next to the copyright line) and then `DIR`. Now type `FDISK` to start disk partitioning, since .
 
 
 ## Notes
