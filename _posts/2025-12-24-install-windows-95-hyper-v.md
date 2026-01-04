@@ -93,8 +93,18 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 ### Disk Partitioning with `FDISK`
 1. Type '1' to select 'Load NEC IDE CDROM driver'.
 ![Load NEC IDE CDROM driver](win95-fdisk-00.png)
-2. You'll see `MSCDEX` and `A:\>` on the DOS screen. You can check if the CD-ROM directory is available, by typing `C:` (or any other drive name written next to the copyright line) and then `DIR`. Now type `FDISK` to start disk partitioning, since .
-
+2. You'll see `MSCDEX` and `A:\>` on the DOS screen. You can check if the CD-ROM directory is available, by typing `C:` (or any other drive name written next to the copyright line) and then `DIR`. Now type `FDISK` to start disk partitioning.
+![FDISK](win95-fdisk-01.png)
+3. If you set disk space larger than 512MB from the Hyper-V virtual machine wizard, you will see this screen. Type `Y` or `N` to enable/disable large disk support. (I enabled it by tying `Y`.)
+![Large Disk Support](win95-fdisk-02.png)
+4. Type `1` to select 'Create DOS partition or Logical DOS Drive'.
+![DOS Partition](win95-fdisk-03.png)
+5. Type `1` to select 'Create Primary DOS Partition'.
+![Primary DOS Partition](win95-fdisk-04.png)
+6. Type `Y` to use the maximum available size for a Primary DOS Partition and make the partition active.
+![Activating Partition](win95-fdisk-05.png)
+7. Restart the VM to take effect on the disk partition.
+![Restart](win95-fdisk-06.png)
 
 ## Notes
 
