@@ -1,19 +1,41 @@
 ---
-title: Installing Windows 95 with Hyper-V
+title: Virtual Machine Migration from VirtualBox to Hyper-V
 layout: post
 date: 2025-12-24
-media_subpath: /pics/2025-12-24-install-windows-95-hyper-v/    
-image:
-    path: win95-fdisk-00.png
-description: Learn how to virtualize Windows 95 with Microsoft Hyper-V.
-categories: etc
-tags: [Windows 95, Hyper-V, virtual machine]
+media_subpath: /pics/2025-12-24-migration-from-virtualbox-to-hyper-v/    
+# image:
+#     path: 
+description: Learn how to migrate a VirtualBox virtual machine to Hyper-V.
+categories: OS
+tags: [Ubuntu, VirtualBox, Hyper-V, virtual machine]
 ---
 
 # Introduction
-Today I want to share how I could manage to virtualize Windows 95 with Microsoft Hyper-V.
+Today I want to share how I could move Ubuntu 22.04 virtual machine from Oracle VirtualBox to Microsoft Hyper-V.
 
-I wanted to try an old-school Japanese CD-ROM game, but the game installation failed in my Korean Windows 11, even with the Windows 95 Compatibility Mode. While the installation, I could not totally understand what the Japanese error said, and what the garbled text (mojibake) was. So I thought installing proper environment would be better than struggling with the alien letters and my modern OS.
+Recently, I heard from Grok that Microsoft Hyper-V performs way better than VirtualBox to virtualize Ubuntu 22.04 in Windows 11. The biggest difference between them is while Hyper-V is type 1 hypervisor, VirtualBox is type 2 hypervisor. In a nutshell, Hyper-V can make use of PC resources much better as if it is running on the bare-metal hardware.
+
+## Prerequisites
+1. **Microsoft Hyper-V** - Basically provided in Windows Server and Windows 10/11 Pro/Enterprise Edition.
+2. **Oracle VM VirtualBox** - Download it for free online. You need this for converting `.vdi` to `.vhd`.
+3. **A VirtualBox Virtual Machine** - Your virtual machine.
+
+# Trivia
+I also tried to virtualize Japanese Windows 95 with Hyper-V, but failed since Hyper-V is too modern to work with that old-school OS. Not only the OS rejected any mouse/keyboard inputs once I click inside the Windows 95 VM, it was also too weak to accept Hyper-V's generalized Generation 1 VM settings. Waste of time! Take 86Box or PCem, or any other emulator or virtual machine instead. Many old hardware configurations are available for such emulators.
+
+I succeed to run Windows 95 with PCem and this guide: [EmulatorResources/PCem/Windows/Configurations/95 - TASVideos](https://tasvideos.org/EmulatorResources/PCem/Windows/Configurations/95)
+
+There are some modern features that would have blocked the old Windows working on Hyper-V:
+
+1. **Hardware Emulation**: This might be the biggest annoying stuff that blocks Hyper-V users to try Windows 95. While the old Windows expects real legacy hardware like PS/2 mouse, Hyper-V uses virtualized hardware. So the drivers might have been crashed and all OS inputs were paralyzed.
+2. **Memory Handling**: Windows 95 cannot accept memory more than 512 MB. Dynamic memory or large memory allocation from Hyper-V caused bugs.
+3. **CPU**: Modern host CPUs are too fast so multi-core would not appropriate for old Windows. I could not fix the protection error even if I limited the virtual processor number to 1. (There is a patch like `FIX95CPU` to resolve this problem.)
+
+# What We Learned
+> Learn about virtual machine below.
+{: .prompt-info }
+
+## Emulator vs Virtual Machine
 
 There are mainly two options for this situation:
 1. **Virtual Machine**: **Virtualization** is a technology that enables the creation of virtual environments from a single physical machine. And a **virtual machine** is a virtual environment that simulates a physical computer in software form.[^1]
@@ -34,10 +56,7 @@ Here is the table to compare virtual machine with emulator.[^2]
 | Backup | ○ | △ |
 | Speed | ○ | △ |
 
-Because I preferred the good performance to the real vintage Windows 95 experience, I chose **1. Virtual Machine** that can directly make use of my good PC resources!
-
-Also, I decided to use **Hyper-V** for most virtualization including Windows 95. I had used Virtualbox for 5 years, but recently Grok suggested Hyper-V so I tried it for my Ubuntu 22.04 migration. And WOW! It is x2 ~ x3 faster than Virtualbox! Now I am a big fan of type 1 hypervisors. That's why I am installing Windows 95 with Hyper-V.
-
+## Hypervisor
 The hypervisor is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
 A type 1 hypervisor, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A type 2 hypervisor, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
 
@@ -51,60 +70,6 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.[^3]
 | Ease of Management | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
 | Performance | ○ | △ |
 | Isolation | ○ | △ |
-
-
-## Prerequisites
-1. Microsoft Hyper-V - Basically provided in Windows Server and Windows 10/11 Pro/Enterprise Edition.
-2. Windows 95 floppy disk file - Download it for free online, and change its extension name to `.vfd` if it is `.img`.
-3. Windows 95 image file - Download it for free online. Its extension should be `.iso`.
-
-
-## Installation
-### Hyper-V Virtual Machine Wizard
-1. On the 'Actions' pane select 'Create Virtual Machine'.
-![Create Virtual Machine](hyper-v-virtual-machine-wizard-00.png)
-2. Click 'Next'.
-![Virtual Machine Wizard 1](hyper-v-virtual-machine-wizard-01.png)
-3. Specify the name and location of the virtual machine and click 'Next'.
-![Virtual Machine Wizard 2](hyper-v-virtual-machine-wizard-02.png)
-4. **IMPORTANT: Set Generation 1** and click 'Next'.
-![Virtual Machine Wizard 3](hyper-v-virtual-machine-wizard-03.png)
-5. Set the startup memory and click 'Next'.
-![Virtual Machine Wizard 4](hyper-v-virtual-machine-wizard-04.png)
-6. Set the network connection and click 'Next'.
-![Virtual Machine Wizard 5](hyper-v-virtual-machine-wizard-05.png)
-7. Check 'Create a virtual hard disk', configure, and click 'Next'.
-![Virtual Machine Wizard 6](hyper-v-virtual-machine-wizard-06.png)
-8. Check 'Install an operating system from a bootable floppy disk', select `.vfd` file, and click 'Next'.
-![Virtual Machine Wizard 7](hyper-v-virtual-machine-wizard-07.png)
-9. Click 'Finish'.
-![Virtual Machine Wizard 8](hyper-v-virtual-machine-wizard-08.png)
-10. Select 'Connect' to open a connection to the VM.
-![Virtual Machine Wizard 9](hyper-v-virtual-machine-wizard-09.png)
-
-
-### Inserting CD-ROM
-1. You will see this window.
-![Virtual Machine OFF](win95-virtual-machine-off-00.png)
-2. On the VM's menu click 'Media' → 'DVD Drive' → 'Insert Disk', and select `.iso` file. Then select 'Start' to run the VM.
-![Attaching the ISO image](win95-virtual-machine-off-01.png)
-
-
-### Disk Partitioning with `FDISK`
-1. Type '1' to select 'Load NEC IDE CDROM driver'.
-![Load NEC IDE CDROM driver](win95-fdisk-00.png)
-2. You'll see `MSCDEX` and `A:\>` on the DOS screen. You can check if the CD-ROM directory is available, by typing `C:` (or any other drive name written next to the copyright line) and then `DIR`. Now type `FDISK` to start disk partitioning.
-![FDISK](win95-fdisk-01.png)
-3. If you set disk space larger than 512MB from the Hyper-V virtual machine wizard, you will see this screen. Type `Y` or `N` to enable/disable large disk support. (I enabled it by tying `Y`.)
-![Large Disk Support](win95-fdisk-02.png)
-4. Type `1` to select 'Create DOS partition or Logical DOS Drive'.
-![DOS Partition](win95-fdisk-03.png)
-5. Type `1` to select 'Create Primary DOS Partition'.
-![Primary DOS Partition](win95-fdisk-04.png)
-6. Type `Y` to use the maximum available size for a Primary DOS Partition and make the partition active.
-![Activating Partition](win95-fdisk-05.png)
-7. Restart the VM to take effect on the disk partition.
-![Restart](win95-fdisk-06.png)
 
 ## Notes
 
