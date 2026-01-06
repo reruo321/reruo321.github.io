@@ -40,7 +40,7 @@ Since Hyper-V does not support VDI, at least we need to convert it to VHD.
 
 (2) Hard disk file type and format - **IMPORTANT: Select VHD.**
 
-(3) Full size pre-allocation - It depends on your case
+(3) Full size pre-allocation - It depends on your case.
 
 ![VirtualBox](virtualbox-02.png)
 
