@@ -299,6 +299,7 @@ The NT kernel has been always hybrid. It is a mixture of monolithic efficiency w
 
 ### History of OS
 ![OS](https://preview.redd.it/azoeztp0a2a81.png?width=1080&crop=smart&auto=webp&s=054696af3c1c3b05bfb6265a4ce7251b2540d662)
+_Simple History of OS - Reddit_
 
 ### ISA
 An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware. It generally defines the instructions, data types, registers, and the programming interface for managing main memory such as addressing modes, virtual memory, and memory consistency mechanisms.
