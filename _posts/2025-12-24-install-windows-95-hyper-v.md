@@ -242,14 +242,14 @@ _The GUID Partition Table Scheme - Wikipedia_
 > [GUID Partition Table - Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
 ### Boot sector
-![Boot sector](https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/GNU_GRUB_components.svg/500px-GNU_GRUB_components.svg.png)
+![Boot Sector](https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/GNU_GRUB_components.svg/500px-GNU_GRUB_components.svg.png)
 _GNU GRUB 2 components distributed over sectors of a hard disk - Wikipedia_
 
 **Boot sector** is sector of a persistent data storage device (e.g., hard disk, floppy disk, optical disc, etc.) which contains machine code to be loaded into random-access memory (RAM) and then executed by a computer system's built-in firmware (e.g., the BIOS).
 
 The figure shows boot.img is written into the boot sector of the hard disk where GRUB is installed.
 
-> [Boot sector - Wikipedia](https://en.wikipedia.org/wiki/Boot_sector)
+> [Boot Sector - Wikipedia](https://en.wikipedia.org/wiki/Boot_sector)
 
 ### UEFI
 ![UEFI](https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Logo_of_the_UEFI_Forum.svg/120px-Logo_of_the_UEFI_Forum.svg.png)
@@ -281,9 +281,9 @@ Some example of kernel architectures are:
 
 > [Microkernel - Wikipedia](https://en.wikipedia.org/wiki/Microkernel)
 
-> [Monolithic kernel - Wikipedia](https://en.wikipedia.org/wiki/Monolithic_kernel)
+> [Monolithic Kernel - Wikipedia](https://en.wikipedia.org/wiki/Monolithic_kernel)
 
-> [Hybrid kernel - Wikipedia](https://en.wikipedia.org/wiki/Hybrid_kernel)
+> [Hybrid Kernel - Wikipedia](https://en.wikipedia.org/wiki/Hybrid_kernel)
 
 #### NT Kernel
 ![NT 3.1](https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/NT_3.1_layers.png/640px-NT_3.1_layers.png)
@@ -301,6 +301,25 @@ The NT kernel has been always hybrid. It is a mixture of monolithic efficiency w
 ![OS](https://preview.redd.it/azoeztp0a2a81.png?width=1080&crop=smart&auto=webp&s=054696af3c1c3b05bfb6265a4ce7251b2540d662)
 
 ### ISA
-An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware.
+An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware. It generally defines the instructions, data types, registers, and the programming interface for managing main memory such as addressing modes, virtual memory, and memory consistency mechanisms.
 
-> [Instruction set architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
+#### CISC vs RISC
+A common classification for ISA is by architectural complexity. We can classify a computer by CISC or RISC with this method.
+
+* **CISC**: **Complex Instruction Set Computer**
+* **RISC**: **Reduced Instruction Set Computer**
+
+> [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
+
+> [Complex Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Complex_instruction_set_computer)
+
+> [Reduced Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Reduced_instruction_set_computer)
+
+### UAC
+![UAC](https://upload.wikimedia.org/wikipedia/en/thumb/7/72/User_Account_Control.png/330px-User_Account_Control.png)
+
+**User Account Control** is a mandatory access control enforcement feature introduced with Microsoft's Windows Vista. It aims to improve the security of Windows by limiting application software to standard user privileges until an administrator authorises an increase or elevation.
+
+> [User Account Control - Wikipedia](https://en.wikipedia.org/wiki/User_Account_Control)
+
+> [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
