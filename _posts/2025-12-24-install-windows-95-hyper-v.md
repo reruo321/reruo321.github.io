@@ -13,7 +13,7 @@ tags: [Ubuntu, VirtualBox, Hyper-V, virtual machine]
 # Introduction
 Today I want to share how I could move Ubuntu 22.04 virtual machine from Oracle VirtualBox to Microsoft Hyper-V.
 
-Recently, I heard from Grok that Microsoft Hyper-V performs way better than VirtualBox to virtualize Ubuntu 22.04 in Windows 11. The biggest difference between them is while Hyper-V is type 1 hypervisor, VirtualBox is type 2 hypervisor. In a nutshell, Hyper-V can make use of PC resources much better as if it is running on the bare-metal hardware.
+Recently, I heard from Grok that Microsoft Hyper-V performs way better than VirtualBox to virtualize Ubuntu 22.04 in Windows 11. The biggest difference between them is while Hyper-V is type 1 hypervisor, VirtualBox is type 2 hypervisor. In a nutshell, Hyper-V can make use of PC resources much better as if it is a native OS running bare metal.
 
 ## Prerequisites
 1. **Microsoft Hyper-V** - Basically provided in Windows Server and Windows 10/11 Pro/Enterprise Edition.
@@ -114,8 +114,8 @@ Almost done! Now let's move on to create a new virtual machine.
 
 ![Hyper-V](hyper-v-15.png)
 
-## 4. Secure Boot Setting
-There is one more setting to check before running the Ubuntu VM!
+## 4. Secure Boot Setting for Ubuntu
+Especially for an Ubuntu VM, there is one more setting to check before running it!
 
 1) Select your VM and click 'Settings' on the right bottom of the Hyper-V Manager.
 
@@ -152,176 +152,4 @@ There are some modern features that would have blocked the old Windows working o
 2. **Memory Handling**: Windows 95 cannot accept memory more than 512 MB. Dynamic memory or large memory allocation from Hyper-V caused bugs.
 3. **CPU**: Modern host CPUs are too fast so multi-core would not appropriate for old Windows. I could not fix the protection error even if I limited the virtual processor number to 1. (There are some patches like `FIX95CPU` to resolve such problem.)
 
-# What We Learn
-> Let's learn on virtual machine.
-{: .prompt-info }
-
-## Emulator vs Virtual Machine
-
-There are mainly two options for this situation:
-1. **Virtual Machine**: **Virtualization** is a technology that enables the creation of virtual environments from a single physical machine. And a **virtual machine** is a virtual environment that simulates a physical computer in software form.
-    * Ex) Microsoft Hyper-V, Oracle Virtualbox, Broadcom VMware, ...
-2. **Emulator**: **Emulator** is a software to simulate another kind of device.
-    * Ex) 86Box, PCjs, PCEM, ...
-
-Here is the table to compare virtual machine with emulator.
-
-| | Virtual Machine | Emulator |
-|-| -------------- | --------- |
-| Definition | Virtual environment | Device simulator |
-| Capacity | Full capacity of physical machines | Runs software |
-| Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
-| Environment | Isolated | Shared |
-| Hardware Accessibility | Direct access | Requires software bridge |
-| Operating Cost | △<br>(More expensive) | ○ |
-| Backup | ○ | △ |
-| Speed | ○ | △ |
-
-> [What is virtualization?](https://www.ibm.com/think/topics/virtualization)
-
-> [Difference Between Virtualization and Emulation - GeeksforGeeks](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
-
-## Hypervisor
-The hypervisor is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
-A type 1 hypervisor, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A type 2 hypervisor, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
-
-Here is the table to compare type 1 hypervisors with type 2 hypervisors.
-
-| | Type 1 Hypervisor | Type 2 Hypervisor |
-|-| ----------------- | ----------------- |
-| Synonym | Bare Metal Hypervisor | Hosted Hypervisor |
-| Host Machine<br>Hardware Interaction | Directly | Indirectly<br>(Through the host machine's OS) |
-| Resource Allocation | Directly access underlying machine resources | Negotitate resource allocation with the OS |
-| Ease of Management | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
-| Performance | ○ | △ |
-| Isolation | ○ | △ |
-
-> [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
-
-## Old Windows vs Modern Windows
-Some major differences are available between old Windows (95/98/Me) and modern Windows (10/11).
-
-| | Old | Modern |
-|-| --- | ------ |
-| Boot | Legacy BIOS with MBR<br>2 TB drive limit<br>Requires floppy/CD for installation | UEFI with GPT<br>Secure Boot<br>USB/ISO for installation |
-| Kernel | DOS-based 16-bit/32-bit mixed kernel (95/98)<br>Consumer NT kernel (Me) | Fully 64-bit NT kernel |
-| ISA | x86 (CISC) | x86-64 (CISC)<br>ARM (RISC) |
-| Bit Width | 32-bit | 64-bit |
-| Cores | Single-core | Multi-core |
-| Parallelism | Sequential | Hyper-threading |
-| Permission | Run everything as admin | UAC prompt |
-| File System | FAT16/FAT32 | NTFS (+ ReFS for servers) |
-
-![x86](https://www.allaboutcircuits.com/uploads/articles/cpu_block_diagram.png)
-_A Rundown of x86 Processor Architecture - Technical Articles_
-
-![Single-core vs Multi-core](https://www.researchgate.net/profile/Abhishek-Sharma-174/publication/274902722/figure/fig1/AS:294779112968199@1447292225763/Block-Diagram-of-Single-core-and-Multi-core-Processor.png)
-_Block Diagram of Single-core and Multi-core Processor - Researchgate_
-
-## Terminology
-
-### BIOS
-![Boot Process](https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Legacy_BIOS_boot_process_fixed.png/500px-Legacy_BIOS_boot_process_fixed.png)
-_Boot process - Wikipedia_
-
-**Basic Input/Output System** is a type of firmware used to provide runtime services for operating systems and programs and to perform hardware initialization during the booting process (power-on startup).
-
-> [BIOS - Wikipedia](https://en.wikipedia.org/wiki/BIOS)
-
-### MBR
-**Master Boot Record** is a type of boot sector in the first block of partitioned computer mass storage devices like fixed disks or removable drives intended for use with IBM PC-compatible systems and beyond.
-
-> [Master Boot Record - Wikipedia](https://en.wikipedia.org/wiki/Master_boot_record)
-
-### GPT
-![GPT Scheme](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/330px-GUID_Partition_Table_Scheme.svg.png)
-_The GUID Partition Table Scheme - Wikipedia_
-
-**GUID Partition Table** is a standard for the layout of partition tables of a physical computer storage device, such as hard disk driveor solid-state drive. It is a part of the UEFI standard.
-
-> [GUID Partition Table - Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
-
-### Boot sector
-![Boot Sector](https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/GNU_GRUB_components.svg/500px-GNU_GRUB_components.svg.png)
-_GNU GRUB 2 components distributed over sectors of a hard disk - Wikipedia_
-
-**Boot sector** is sector of a persistent data storage device (e.g., hard disk, floppy disk, optical disc, etc.) which contains machine code to be loaded into random-access memory (RAM) and then executed by a computer system's built-in firmware (e.g., the BIOS).
-
-The figure shows boot.img is written into the boot sector of the hard disk where GRUB is installed.
-
-> [Boot Sector - Wikipedia](https://en.wikipedia.org/wiki/Boot_sector)
-
-### UEFI
-![UEFI](https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Logo_of_the_UEFI_Forum.svg/120px-Logo_of_the_UEFI_Forum.svg.png)
-_UEFI Logo - Wikipedia_
-
-**Unified Extensible Firmware Interface** is a specification for the firmware architecture of a computing platform. When a computer is powered on, the UEFI implementation is typically the first that runs, before starting the operating system.
-
-> [UEFI - Wikipedia](https://en.wikipedia.org/wiki/UEFI)
-
-### Secure Boot
-The UEFI specification defines a protocol known as **Secure Boot**, which can secure the boot process by preventing the loading of UEFI drivers or OS boot loaders that are not signed with an acceptable digital signature.
-
-> [Secure Boot - Wikipedia](https://en.wikipedia.org/wiki/UEFI#Secure_Boot)
-
-### Kernel
-![Kernel](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/250px-Kernel_Layout.svg.png)
-_A kernel connecting applications to the hardware of a computer - Wikipedia_
-![Kernel Architecture](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/OS-structure2.svg/960px-OS-structure2.svg.png)
-
-A **kernel** is a computer program at the core of a computer's operating system that always has complete control over everything in the system.
-
-Some example of kernel architectures are:
-* **Microkernel**: Near-minimum amount of software including low-level address space management, thread management, and inter-process communication (IPC)
-* **Monolithic kernel**: An operating system architecture with the entire operating system running in kernel space
-* **Hybrid Kernel**: Microkernel + Monolithic Kernel
-    * Examples: NT kernel, XNU kernel, ...
-
-> [Kernel - Wikipedia](https://en.wikipedia.org/wiki/Kernel_(operating_system))
-
-> [Microkernel - Wikipedia](https://en.wikipedia.org/wiki/Microkernel)
-
-> [Monolithic Kernel - Wikipedia](https://en.wikipedia.org/wiki/Monolithic_kernel)
-
-> [Hybrid Kernel - Wikipedia](https://en.wikipedia.org/wiki/Hybrid_kernel)
-
-#### NT Kernel
-![NT 3.1](https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/NT_3.1_layers.png/640px-NT_3.1_layers.png)
-_The architecture of Windows NT 3.1, the very first version of the Windows NT family - Wikipedia_
-![NT Architecture](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Windows_2000_architecture.svg/330px-Windows_2000_architecture.svg.png)
-_The Windows NT operating system family's architecture - Wikipedia_
-
-The architecture of Windows NT is a layered design that consists of two main components, user mode and kernel mode. It is a preemptive, reentrant multitasking operating system, which has been designed to work with uniprocessor and symmetrical multiprocessor (SMP)-based computers. To process I/O requests, it uses packet-driven I/O, which utilizes I/O request packets (IRPs) and asynchronous I/O.
-
-The NT kernel has been always hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While those modern Windows has 64-bit kernel, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
-
-> [Architecture of Windows NT - Wikipedia](https://en.wikipedia.org/wiki/Architecture_of_Windows_NT)
-
-### History of OS
-![OS](https://preview.redd.it/azoeztp0a2a81.png?width=1080&crop=smart&auto=webp&s=054696af3c1c3b05bfb6265a4ce7251b2540d662)
-_Simple History of OS - Reddit_
-
-### ISA
-An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware. It generally defines the instructions, data types, registers, and the programming interface for managing main memory such as addressing modes, virtual memory, and memory consistency mechanisms.
-
-#### CISC vs RISC
-A common classification for ISA is by architectural complexity. We can classify a computer by CISC or RISC with this method.
-
-* **CISC**: **Complex Instruction Set Computer**
-* **RISC**: **Reduced Instruction Set Computer**
-
-> [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
-
-> [Complex Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Complex_instruction_set_computer)
-
-> [Reduced Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Reduced_instruction_set_computer)
-
-### UAC
-![UAC](https://upload.wikimedia.org/wikipedia/en/thumb/7/72/User_Account_Control.png/330px-User_Account_Control.png)
-_User Account Control "Windows Security" - Wikipedia_
-
-**User Account Control** is a mandatory access control enforcement feature introduced with Microsoft's Windows Vista. It aims to improve the security of Windows by limiting application software to standard user privileges until an administrator authorises an increase or elevation.
-
-> [User Account Control - Wikipedia](https://en.wikipedia.org/wiki/User_Account_Control)
-
-> [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
+# See also

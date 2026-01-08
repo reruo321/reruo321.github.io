@@ -1,0 +1,271 @@
+---
+title: Concepts in Virtualization and OS
+layout: post
+date: 2026-01-09
+media_subpath: /pics/2026-01-09-concepts-in-virtualization-and-os/    
+# image:
+#     path: https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/250px-Kernel_Layout.svg.png
+description: Learn concepts on virtualizations and OS.
+categories: OS
+tags: [virtual machine, emulator, hypervisor, Windows, OS, file system]
+---
+
+# Introduction
+> Let's learn on virtual machine.
+{: .prompt-info }
+
+# Contents
+
+## Emulator vs Virtual Machine
+
+There are mainly two options for this situation:
+1. **Virtual Machine**: **Virtualization** is a technology that enables the creation of virtual environments from a single physical machine. And a **virtual machine** is a virtual environment that simulates a physical computer in software form.
+    * Ex) Microsoft Hyper-V, Oracle Virtualbox, Broadcom VMware, ...
+2. **Emulator**: **Emulator** is a software to simulate another kind of device.
+    * Ex) 86Box, PCjs, PCEM, ...
+
+Here is the table to compare virtual machine with emulator.
+
+| | Virtual Machine | Emulator |
+|-| -------------- | --------- |
+| Definition | Virtual environment | Device simulator |
+| Capacity | Full capacity of physical machines | Runs software |
+| Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
+| Environment | Isolated | Shared |
+| Hardware Accessibility | Direct access | Requires software bridge |
+| Operating Cost | △<br>(More expensive) | ○ |
+| Backup | ○ | △ |
+| Speed | ○ | △ |
+
+> [What is virtualization?](https://www.ibm.com/think/topics/virtualization)
+
+> [Difference Between Virtualization and Emulation - GeeksforGeeks](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
+
+## Hypervisor
+The hypervisor is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
+A type 1 hypervisor, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A type 2 hypervisor, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
+
+Here is the table to compare type 1 hypervisors with type 2 hypervisors.
+
+| | Type 1 Hypervisor | Type 2 Hypervisor |
+|-| ----------------- | ----------------- |
+| Synonym | Bare Metal Hypervisor | Hosted Hypervisor |
+| Host Machine<br>Hardware Interaction | Directly | Indirectly<br>(Through the host machine's OS) |
+| Resource Allocation | Directly access underlying machine resources | Negotitate resource allocation with the OS |
+| Ease of Management | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
+| Performance | ○ | △ |
+| Isolation | ○ | △ |
+
+> [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
+
+## Old Windows vs Modern Windows
+Some major differences are available between old Windows (95/98/Me) and modern Windows (10/11).
+
+| | Old | Modern |
+|-| --- | ------ |
+| Boot | Legacy BIOS with MBR<br>2 TB drive limit<br>Requires floppy/CD for installation | UEFI with GPT<br>Secure Boot<br>USB/ISO for installation |
+| Kernel | DOS-based 16-bit/32-bit mixed kernel (95/98)<br>Consumer NT kernel (Me) | Fully 64-bit NT kernel |
+| ISA | x86 (CISC) | x86-64 (CISC)<br>ARM (RISC) |
+| Bit Width | 32-bit | 64-bit |
+| Cores | Single-core | Multi-core |
+| Parallelism | Sequential | Hyper-threading |
+| Permission | Run everything as admin | UAC prompt |
+| File System | FAT16/FAT32 | NTFS (+ ReFS for servers) |
+
+![x86](https://www.allaboutcircuits.com/uploads/articles/cpu_block_diagram.png)
+_A Rundown of x86 Processor Architecture - Technical Articles_
+
+![Single-core vs Multi-core](https://www.researchgate.net/profile/Abhishek-Sharma-174/publication/274902722/figure/fig1/AS:294779112968199@1447292225763/Block-Diagram-of-Single-core-and-Multi-core-Processor.png)
+_Block Diagram of Single-core and Multi-core Processor - Researchgate_
+
+## BIOS
+![Boot Process](https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Legacy_BIOS_boot_process_fixed.png/500px-Legacy_BIOS_boot_process_fixed.png)
+_Boot process - Wikipedia_
+
+**Basic Input/Output System** is a type of firmware used to provide runtime services for operating systems and programs and to perform hardware initialization during the booting process (power-on startup).
+
+> [BIOS - Wikipedia](https://en.wikipedia.org/wiki/BIOS)
+
+## MBR
+**Master Boot Record** is a type of boot sector in the first block of partitioned computer mass storage devices like fixed disks or removable drives intended for use with IBM PC-compatible systems and beyond.
+
+> [Master Boot Record - Wikipedia](https://en.wikipedia.org/wiki/Master_boot_record)
+
+## GPT
+![GPT Scheme](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/330px-GUID_Partition_Table_Scheme.svg.png)
+_The GUID Partition Table Scheme - Wikipedia_
+
+**GUID Partition Table** is a standard for the layout of partition tables of a physical computer storage device, such as hard disk driveor solid-state drive. It is a part of the UEFI standard.
+
+> [GUID Partition Table - Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
+
+## Boot sector
+![Boot Sector](https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/GNU_GRUB_components.svg/500px-GNU_GRUB_components.svg.png)
+_GNU GRUB 2 components distributed over sectors of a hard disk - Wikipedia_
+
+**Boot sector** is sector of a persistent data storage device (e.g., hard disk, floppy disk, optical disc, etc.) which contains machine code to be loaded into random-access memory (RAM) and then executed by a computer system's built-in firmware (e.g., the BIOS).
+
+The figure shows boot.img is written into the boot sector of the hard disk where GRUB is installed.
+
+> [Boot Sector - Wikipedia](https://en.wikipedia.org/wiki/Boot_sector)
+
+## UEFI
+![UEFI](https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Logo_of_the_UEFI_Forum.svg/120px-Logo_of_the_UEFI_Forum.svg.png)
+_UEFI Logo - Wikipedia_
+
+**Unified Extensible Firmware Interface** is a specification for the firmware architecture of a computing platform. When a computer is powered on, the UEFI implementation is typically the first that runs, before starting the operating system.
+
+> [UEFI - Wikipedia](https://en.wikipedia.org/wiki/UEFI)
+
+## Secure Boot
+The UEFI specification defines a protocol known as **Secure Boot**, which can secure the boot process by preventing the loading of UEFI drivers or OS boot loaders that are not signed with an acceptable digital signature.
+
+> [Secure Boot - Wikipedia](https://en.wikipedia.org/wiki/UEFI#Secure_Boot)
+
+## Kernel
+![Kernel](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/250px-Kernel_Layout.svg.png)
+_A kernel connecting applications to the hardware of a computer - Wikipedia_
+![Kernel Architecture](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/OS-structure2.svg/960px-OS-structure2.svg.png)
+_Structure of three types of kernels - Wikipedia_
+
+A **kernel** is a computer program at the core of a computer's operating system that always has complete control over everything in the system.
+
+Some example of kernel architectures are:
+* **Microkernel**: Near-minimum amount of software including low-level address space management, thread management, and inter-process communication (IPC)
+* **Monolithic kernel**: An operating system architecture with the entire operating system running in kernel space
+* **Hybrid Kernel**: Microkernel + Monolithic Kernel
+    * Examples: NT kernel, XNU kernel, ...
+
+> [Kernel - Wikipedia](https://en.wikipedia.org/wiki/Kernel_(operating_system))
+
+> [Microkernel - Wikipedia](https://en.wikipedia.org/wiki/Microkernel)
+
+> [Monolithic Kernel - Wikipedia](https://en.wikipedia.org/wiki/Monolithic_kernel)
+
+> [Hybrid Kernel - Wikipedia](https://en.wikipedia.org/wiki/Hybrid_kernel)
+
+### NT Kernel
+![NT 3.1](https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/NT_3.1_layers.png/640px-NT_3.1_layers.png)
+_The architecture of Windows NT 3.1, the very first version of the Windows NT family - Wikipedia_
+![NT Architecture](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Windows_2000_architecture.svg/330px-Windows_2000_architecture.svg.png)
+_The Windows NT operating system family's architecture - Wikipedia_
+
+The architecture of Windows NT is a layered design that consists of two main components, user mode and kernel mode. It is a preemptive, reentrant multitasking operating system, which has been designed to work with uniprocessor and symmetrical multiprocessor (SMP)-based computers. To process I/O requests, it uses packet-driven I/O, which utilizes I/O request packets (IRPs) and asynchronous I/O.
+
+The NT kernel has been always hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While those modern Windows has 64-bit kernel, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
+
+> [Architecture of Windows NT - Wikipedia](https://en.wikipedia.org/wiki/Architecture_of_Windows_NT)
+
+## History of OS
+![OS](https://preview.redd.it/azoeztp0a2a81.png?width=1080&crop=smart&auto=webp&s=054696af3c1c3b05bfb6265a4ce7251b2540d662)
+_Simple History of OS - Reddit_
+
+## ISA
+An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware. It generally defines the instructions, data types, registers, and the programming interface for managing main memory such as addressing modes, virtual memory, and memory consistency mechanisms.
+
+### CISC vs RISC
+A common classification for ISA is by architectural complexity. We can classify a computer by CISC or RISC with this method.
+
+* **CISC**: **Complex Instruction Set Computer**
+* **RISC**: **Reduced Instruction Set Computer**
+
+|   | CISC | RISC |
+| - | ---- | ---- |
+| Instruction Set | Large set of complex instructions | Small set of simple, basic instructions |
+| Instruction<br>Execution Time | Often multiple clock cycles | Mostly one clock cycle |
+| Code Size | Fewer instructions | More instuctions |
+| Design | Simplify programming or compilers | Fast execution, easier pipelining, lower power use |
+| Advantages | Easier for high-level languages,<br>Good for complex tasks | Higher speed per cycle,<br>Energy-efficient |
+| Examples | x86, x86_64 | ARM, RISC-V, MIPS |
+
+> [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
+
+> [Complex Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Complex_instruction_set_computer)
+
+> [Reduced Instruction Set Computer - Wikipedia](https://en.wikipedia.org/wiki/Reduced_instruction_set_computer)
+
+## Bit Width
+**Bit width** or **bit length** is the number of binary digits, called bits. Computer processors are often designed to process data grouped into words of a given length of bits. The bit length of each word defines, for one thing, how many memory locations can be independently addressed by the processor.
+
+## Parallelism
+![Parallelism](https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/IBM_Blue_Gene_P_supercomputer.jpg/500px-IBM_Blue_Gene_P_supercomputer.jpg)
+_Large supercomputers designed to heavily exploit parallelism - Wikipedia_
+
+**Parallelism** in computer science or **Parallel computing** is a type of computation in which many calculations or processes are carried out simultaneously. Large problems can often be divided into smaller ones, which can then be solved at the same time. There are several different forms of parallel computing: bit-level, instruction-level, data, and task parallelism.
+
+![Parallelism vs Concurrency](https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Parallelism_vs_concurrency.png/250px-Parallelism_vs_concurrency.png)
+_Parallelism vs Concurrency - Wikipedia_
+
+Parallelism and concurrency are two different things: a parallel program uses multiple CPU cores, ech core performing a task independently. On the other hand, concurrency enables a program to deal with multiple tasks even on a single CPU core; the core switches between tasks (i.e. threads) without necessarily completing each one. A program can have both, neither of a combination of parallelism and concurrency characteristics.
+
+> [Parallel Computing - Wikipedia](https://en.wikipedia.org/wiki/Parallel_computing)
+
+### Hyper-Threading Technology
+![Hyper-Threading](https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Hyper-threaded_CPU.png/500px-Hyper-threaded_CPU.png)
+_High-level depiction of Hyper-Threading Technology - Wikipedia_
+
+**Hyper-Threading Technology** is Intel's proprietary[^1] simultaneous multithreading (SMT) implementation used to improve parallelization of computations (doing multiple tasks at once) performed on x86 microprocessors.
+
+While multi-threading is a software concept to split a program into multiple threads that can run at the same time, HTT is a hardware feature to use one physical core like two logical cores, so that the OS can schedule two threads on it more efficiently.
+
+> [Hyper-Threading - Wikipedia](https://en.wikipedia.org/wiki/Hyper-threading)
+
+## SMT
+**Simultaneous Multithreading** is a technique for improving the overall efficiency of superscalar CPUs with hardware multithreading. SMT permits multiple independent threads of execution to better use the resources provided by modern processor architectures.
+
+In a nutshell, HTT is the SMT owned by Intel.
+
+> [Simultaneous Multithreading](https://en.wikipedia.org/wiki/Simultaneous_multithreading)
+
+## UAC
+![UAC](https://upload.wikimedia.org/wikipedia/en/thumb/7/72/User_Account_Control.png/330px-User_Account_Control.png)
+_User Account Control "Windows Security" - Wikipedia_
+
+**User Account Control** is a mandatory access control enforcement feature introduced with Microsoft's Windows Vista. It aims to improve the security of Windows by limiting application software to standard user privileges until an administrator authorises an increase or elevation.
+
+> [User Account Control - Wikipedia](https://en.wikipedia.org/wiki/User_Account_Control)
+
+## FAT
+**File Allocation Table** is a file system developed for personal computers and was the default file system for the DOS and Windows 9x operating systems. FAT was replaced with NTFS as the default file system on Microsoft operating systems starting with Windows XP. Nevertheless, FAT continues to be commonly used on relatively small capacity solid-state storage technologies such as USB flash drives, SD cards, MultiMediaCards (MMC) and eMMC because of its compatibility across operating systems and embedded systems, and ease of implementation.
+
+**FAT16** has 16-bit cluster addresses (maximum 65,536 clusters per volume), and **FAT32** has 32 bit clusters addresses.
+
+> [FAT - Wikipedia](https://en.wikipedia.org/wiki/File_Allocation_Table)
+
+## NTFS
+**NT File System** is a proprietary journaling file system developed by Microsoft in the 1990s. Unlike FAT32 without journaling, NTFS logs changes before applying them. This greatly reduces the risk of data corruption during unexpected shutdowns—a common problem with FAT systems.
+
+> [NTFS - Wikipedia](https://en.wikipedia.org/wiki/NTFS)
+
+## Journaling File System
+A **journaling file system** is a file system that keeps track of changes not yet committed to the file system's main part by recording the goal of such changes in a data structure known as a "journal", which is usually a circular log. In the event of a system crash or power failure, such file systems can be brought back online more quickly with a lower likelihood of becoming corrupted.
+
+> [Journaling File System - Wikipedia](https://en.wikipedia.org/wiki/Journaling_file_system)
+
+## Disk
+![Disk Structures](wiki/disk-structures.png)
+
+| Track | A full ring on one side of the platter (the spinning disk inside HDD). |
+| Sector | The smallest unit the disk hardware can read/write. Fixed-size pie slice of a track. |
+| Cluster | A group of consecutive[^2] sectors that the file system uses as one unit. |
+
+## Track
+A disk drive **track** is a circular path on the surface of a disk or diskette on which information is magnetically recorded and from which recorded information is read.
+
+> [Track (Disk Drive) - Wikipedia](https://en.wikipedia.org/wiki/Track_(disk_drive))
+
+## Sector
+In computer disk storage, a **sector** is a subdivision of a track on a magnetic disk or optical disc. For most disks, each sector stores a fixed amount of user-accessible data, traditionally 512 bytes for hard disk drives (HDDs), and 2048 bytes for CD-ROMs, DVD-ROMs and BD-ROMs.
+
+> [Disk Sector - Wikipedia](https://en.wikipedia.org/wiki/Disk_sector)
+
+## Cluster
+In computer file systems, a **cluster** (sometimes also called allocation unit or block) is a unit of disk space allocation for files and directories. To reduce the overhead of managing on-disk data structures, the filesystem does not allocate individual disk sectors by default, but contiguous groups of sectors, called clusters.
+
+Note that clusters are not limited to one track, they can cross tracks if needed.
+
+> [Cluster - Wikipedia](https://en.wikipedia.org/wiki/Disk_sector#Cluster)
+
+## Notes
+[^1]: "proprietary" means "unique". It does not mean to pay royalty for using it, but its design and branding is owned by the Intel company.
+[^2]: following each other continuously
