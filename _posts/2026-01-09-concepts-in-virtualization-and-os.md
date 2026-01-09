@@ -3,8 +3,8 @@ title: Concepts in Virtualization and OS
 layout: post
 date: 2026-01-09
 media_subpath: /pics/2026-01-09-concepts-in-virtualization-and-os/    
-# image:
-#     path: https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/250px-Kernel_Layout.svg.png
+image:
+    path: https://docs.aws.amazon.com/images/whitepapers/latest/security-design-of-aws-nitro-system/images/virtualization-architecture.png
 description: Learn concepts in virtualization and OS.
 categories: OS
 tags: [study, virtual machine, emulator, hypervisor, Windows, OS, file system]
