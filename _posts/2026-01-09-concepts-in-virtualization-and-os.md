@@ -78,10 +78,10 @@ Some major differences are available between old Windows (95/98/Me) and modern W
 | File System | FAT16/FAT32 | NTFS (+ ReFS for servers) |
 
 ![x86](https://www.allaboutcircuits.com/uploads/articles/cpu_block_diagram.png)
-_A Rundown of x86 Processor Architecture - Technical Articles_
+_A rundown of x86 processor architecture - Technical Articles_
 
 ![Single-core vs Multi-core](https://www.researchgate.net/profile/Abhishek-Sharma-174/publication/274902722/figure/fig1/AS:294779112968199@1447292225763/Block-Diagram-of-Single-core-and-Multi-core-Processor.png)
-_Block Diagram of Single-core and Multi-core Processor - Researchgate_
+_Block diagram of single-core and multi-core processor - Researchgate_
 
 ## BIOS
 ![Boot Process](https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Legacy_BIOS_boot_process_fixed.png/500px-Legacy_BIOS_boot_process_fixed.png)
@@ -98,7 +98,7 @@ _Boot process - Wikipedia_
 
 ## GPT
 ![GPT Scheme](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/330px-GUID_Partition_Table_Scheme.svg.png)
-_The GUID Partition Table Scheme - Wikipedia_
+_The GUID partition table scheme - Wikipedia_
 
 **GUID Partition Table** is a standard for the layout of partition tables of a physical computer storage device, such as hard disk drive or solid-state drive. It is a part of the UEFI standard.
 
@@ -116,7 +116,7 @@ The figure shows boot.img is written into the boot sector of the hard disk where
 
 ## UEFI
 ![UEFI](https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Logo_of_the_UEFI_Forum.svg/120px-Logo_of_the_UEFI_Forum.svg.png)
-_UEFI Logo - Wikipedia_
+_UEFI logo - Wikipedia_
 
 **Unified Extensible Firmware Interface** is a specification for the firmware architecture of a computing platform. When a computer is powered on, the UEFI implementation is typically the first that runs, before starting the operating system.
 
@@ -163,7 +163,7 @@ The NT kernel has always been hybrid. It is a mixture of monolithic efficiency w
 
 ## History of OS
 ![OS](https://preview.redd.it/azoeztp0a2a81.png?width=1080&crop=smart&auto=webp&s=054696af3c1c3b05bfb6265a4ce7251b2540d662)
-_Simple History of OS - Reddit_
+_Simple history of OS - Reddit_
 
 ## ISA
 An **Instruction Set Architecture** is an abstract model that defines the programmable interface of the CPU of a computer, defining how software interacts with hardware. It generally defines the instructions, data types, registers, and the programming interface for managing main memory such as addressing modes, virtual memory, and memory consistency mechanisms.
@@ -249,6 +249,7 @@ A **journaling file system** is a file system that keeps track of changes not ye
 
 ## Disk
 ![Disk Structures](wiki/disk-structures.png)
+_Disk structures - Wikipedia_
 
 | Track | A full ring on one side of the platter (the spinning disk inside HDD). |
 | Sector | The smallest unit the disk hardware can read/write. Fixed-size pie slice of a track. |
