@@ -47,8 +47,8 @@ Here is the table to compare virtual machine with emulator.
 ![Hypervisor](https://docs.aws.amazon.com/images/whitepapers/latest/security-design-of-aws-nitro-system/images/virtualization-architecture.png)
 _Virtualization architecture - AWS_
 
-The hypervisor is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
-A type 1 hypervisor, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A type 2 hypervisor, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
+The **hypervisor** is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
+A **type 1 hypervisor**, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A **type 2 hypervisor**, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
 
 Here is the table to compare type 1 hypervisors with type 2 hypervisors.
 
@@ -155,9 +155,9 @@ _The architecture of Windows NT 3.1, the very first version of the Windows NT fa
 ![NT Architecture](https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Windows_2000_architecture.svg/330px-Windows_2000_architecture.svg.png)
 _The Windows NT operating system family's architecture - Wikipedia_
 
-The architecture of Windows NT is a layered design that consists of two main components, user mode and kernel mode. It is a preemptive, reentrant multitasking operating system, which has been designed to work with uniprocessor and symmetrical multiprocessor (SMP)-based computers. To process I/O requests, it uses packet-driven I/O, which utilizes I/O request packets (IRPs) and asynchronous I/O.
+**The architecture of Windows NT** is a layered design that consists of two main components, user mode and kernel mode. It is a preemptive, reentrant multitasking operating system, which has been designed to work with uniprocessor and symmetrical multiprocessor (SMP)-based computers. To process I/O requests, it uses packet-driven I/O, which utilizes I/O request packets (IRPs) and asynchronous I/O.
 
-The NT kernel has always been hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While modern Windows versions have 64-bit kernels, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
+The **NT kernel** has always been hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While modern Windows versions have 64-bit kernels, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
 
 > [Architecture of Windows NT - Wikipedia](https://en.wikipedia.org/wiki/Architecture_of_Windows_NT)
 
