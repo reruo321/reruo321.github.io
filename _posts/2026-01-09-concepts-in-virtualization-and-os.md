@@ -1,8 +1,8 @@
 ---
 title: Concepts in Virtualization and OS
 layout: post
-date: 2026-01-09
-media_subpath: /pics/2026-01-09-concepts-in-virtualization-and-os/    
+date: 2026-01-08
+media_subpath: /pics/2026-01-08-concepts-in-virtualization-and-os/    
 image:
     path: https://docs.aws.amazon.com/images/whitepapers/latest/security-design-of-aws-nitro-system/images/virtualization-architecture.png
 description: Learn concepts in virtualization and OS.
@@ -14,7 +14,7 @@ tags: [study, virtual machine, emulator, hypervisor, Windows, OS, file system]
 {: .prompt-info }
 
 # Introduction
-Here I took notes on computer science concepts that I learned while migrating my Ubuntu virtual machine from VirtualBox to Hyper-V in this previous post: [Virtual Machine Migration from VirtualBox to Hyper-V](/posts/2025-12-24-virtual-machine-migration-from-virtualbox-to-hyper-v)
+Here I took notes on computer science concepts that I learned while migrating my Ubuntu virtual machine from VirtualBox to Hyper-V in this previous post: [Virtual Machine Migration from VirtualBox to Hyper-V](/posts/virtual-machine-migration-from-virtualbox-to-hyper-v)
 
 # Contents
 
@@ -30,14 +30,14 @@ Here is the table to compare virtual machine with emulator.
 
 | | Virtual Machine | Emulator |
 |-| -------------- | --------- |
-| Definition | Virtual environment | Device simulator |
-| Performance/Capacity | Near full host performance | Limited/Slower than host |
-| Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
-| Environment | Isolated | Shared |
-| Hardware Accessibility | Direct access | Requires software bridge |
-| Operating Cost | ↑ | ↓ |
-| Backup | ○ | △ |
-| Speed | ○ | △ |
+| **Definition** | Virtual environment | Device simulator |
+| **Performance/Capacity** | Near full host performance | Limited/Slower than host |
+| **Purpose** | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
+| **Environment** | Isolated | Shared |
+| **Hardware Accessibility** | Direct access | Requires software bridge |
+| **Operating Cost** | ↑ | ↓ |
+| **Backup** | ○ | △ |
+| **Speed** | ○ | △ |
 
 > [What is virtualization?](https://www.ibm.com/think/topics/virtualization)
 
@@ -54,12 +54,12 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.
 
 | | Type 1 Hypervisor | Type 2 Hypervisor |
 |-| ----------------- | ----------------- |
-| Synonym | Bare Metal Hypervisor | Hosted Hypervisor |
-| Host Machine<br>Hardware Interaction | Directly | Indirectly<br>(Through the host machine's OS) |
-| Resource Allocation | Directly access underlying machine resources | Negotiate resource allocation with the OS |
-| Ease of Management | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
-| Performance | ○ | △ |
-| Isolation | ○ | △ |
+| **Synonym** | Bare Metal Hypervisor | Hosted Hypervisor |
+| **Host Machine<br>Hardware Interaction** | Directly | Indirectly<br>(Through the host machine's OS) |
+| **Resource Allocation** | Directly access underlying machine resources | Negotiate resource allocation with the OS |
+| **Ease of Management** | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
+| **Performance** | ○ | △ |
+| **Isolation** | ○ | △ |
 
 > [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://aws.amazon.com/compare/the-difference-between-type-1-and-type-2-hypervisors/)
 
@@ -68,14 +68,14 @@ Some major differences are available between old Windows (95/98/Me) and modern W
 
 | | Old | Modern |
 |-| --- | ------ |
-| Boot | Legacy BIOS with MBR<br>2 TB drive limit<br>Requires floppy/CD for installation | UEFI with GPT<br>Secure Boot<br>USB/ISO for installation |
-| Kernel | DOS-based 16-bit/32-bit mixed kernel (95/98)<br>Consumer NT kernel (Me) | Fully 64-bit NT kernel |
-| ISA | x86 (CISC) | x86-64 (CISC)<br>ARM (RISC) |
-| Bit Width | 32-bit | 64-bit |
-| Cores | Single-core | Multi-core |
-| Parallelism | Sequential | Hyper-threading |
-| Permission | Run everything as admin | UAC prompt |
-| File System | FAT16/FAT32 | NTFS (+ ReFS for servers) |
+| **Boot** | Legacy BIOS with MBR<br>2 TB drive limit<br>Requires floppy/CD for installation | UEFI with GPT<br>Secure Boot<br>USB/ISO for installation |
+| **Kernel** | DOS-based 16-bit/32-bit mixed kernel (95/98)<br>Consumer NT kernel (Me) | Fully 64-bit NT kernel |
+| **ISA** | x86 (CISC) | x86-64 (CISC)<br>ARM (RISC) |
+| **Bit Width** | 32-bit | 64-bit |
+| **Cores** | Single-core | Multi-core |
+| **Parallelism** | Sequential | Hyper-threading |
+| **Permission** | Run everything as admin | UAC prompt |
+| **File System** | FAT16/FAT32 | NTFS (+ ReFS for servers) |
 
 ![x86](https://www.allaboutcircuits.com/uploads/articles/cpu_block_diagram.png)
 _A rundown of x86 processor architecture - Technical Articles_
@@ -176,12 +176,12 @@ A common classification for ISA is by architectural complexity. We can classify 
 
 |   | CISC | RISC |
 | - | ---- | ---- |
-| Instruction Set | Large set of complex instructions | Small set of simple, basic instructions |
-| Instruction<br>Execution Time | Often multiple clock cycles | Mostly one clock cycle |
-| Code Size | Fewer instructions | More instructions |
-| Design | Simplify programming or compilers | Fast execution, easier pipelining, lower power use |
-| Advantages | Easier for high-level languages,<br>Good for complex tasks | Higher speed per cycle,<br>Energy-efficient |
-| Examples | x86, x86_64 | ARM, RISC-V, MIPS |
+| **Instruction Set** | Large set of complex instructions | Small set of simple, basic instructions |
+| **Instruction<br>Execution Time** | Often multiple clock cycles | Mostly one clock cycle |
+| **Code Size** | Fewer instructions | More instructions |
+| **Design** | Simplify programming or compilers | Fast execution, easier pipelining, lower power use |
+| **Advantages** | Easier for high-level languages,<br>Good for complex tasks | Higher speed per cycle,<br>Energy-efficient |
+| **Examples** | x86, x86_64 | ARM, RISC-V, MIPS |
 
 > [Instruction Set Architecture - Wikipedia](https://en.wikipedia.org/wiki/Instruction_set_architecture)
 
@@ -248,12 +248,12 @@ A **journaling file system** is a file system that keeps track of changes not ye
 > [Journaling File System - Wikipedia](https://en.wikipedia.org/wiki/Journaling_file_system)
 
 ## Disk
-![Disk Structures](wiki/disk-structures.png)
+![Disk Structures](disk-structures.png)
 _Disk structures - Wikipedia_
 
-| Track | A full ring on one side of the platter (the spinning disk inside HDD). |
-| Sector | The smallest unit the disk hardware can read/write. Fixed-size pie slice of a track. |
-| Cluster | A group of consecutive[^2] sectors that the file system uses as one unit. |
+| **Track** | A full ring on one side of the platter (the spinning disk inside HDD). |
+| **Sector** | The smallest unit the disk hardware can read/write. Fixed-size pie slice of a track. |
+| **Cluster** | A group of consecutive[^2] sectors that the file system uses as one unit. |
 
 ## Track
 A disk drive **track** is a circular path on the surface of a disk or diskette on which information is magnetically recorded and from which recorded information is read.

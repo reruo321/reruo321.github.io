@@ -180,4 +180,4 @@ There are some modern features that would have blocked the old Windows working o
 3. **CPU**: Modern host CPUs are too fast so multi-core settings would not be appropriate for old Windows. I could not fix the protection error even if I limited the virtual processor number to 1. (There are some patches like `FIX95CPU` to resolve such problem.)
 
 # See also
-[Concepts in Virtualization and OS](/posts/2026-01-09-concepts-in-virtualization-and-os/)
+[Concepts in Virtualization and OS](/posts/concepts-in-virtualization-and-os/)
