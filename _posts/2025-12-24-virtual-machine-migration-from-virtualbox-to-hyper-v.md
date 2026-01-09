@@ -2,7 +2,7 @@
 title: Virtual Machine Migration from VirtualBox to Hyper-V
 layout: post
 date: 2025-12-24
-media_subpath: /pics/2025-12-24-migration-from-virtualbox-to-hyper-v/    
+media_subpath: /pics/2025-12-24-virtual-machine-migration-from-virtualbox-to-hyper-v/    
 image:
     path: ubuntu-01.png
 description: Learn how to migrate a VirtualBox virtual machine to Hyper-V.
@@ -11,13 +11,13 @@ tags: [Ubuntu, VirtualBox, Hyper-V, virtual machine]
 ---
 
 # Introduction
-Today I want to share how I could move Ubuntu 22.04 virtual machine from Oracle VirtualBox to Microsoft Hyper-V.
+Today I want to share how I migrated my Ubuntu 22.04 virtual machine from Oracle VirtualBox to Microsoft Hyper-V.
 
-Recently, I heard from Grok that Microsoft Hyper-V performs way better than VirtualBox to virtualize Ubuntu 22.04 in Windows 11. The biggest difference between them is while Hyper-V is type 1 hypervisor, VirtualBox is type 2 hypervisor. In a nutshell, Hyper-V can make use of PC resources much better as if it is a native OS running bare metal.
+Recently, I heard from Grok that Microsoft Hyper-V performs much better than VirtualBox when running Ubuntu 22.04 on Windows 11. The biggest difference is that Hyper-V is a type 1 hypervisor, while VirtualBox is a type 2 hypervisor. In a nutshell, Hyper-V can make use of PC resources much better as if it were a native OS running directly on bare metal.
 
 ## Prerequisites
 1. **Microsoft Hyper-V** - Basically provided in Windows Server and Windows 10/11 Pro/Enterprise Edition.
-2. **Oracle VM VirtualBox** - Download it for free online. You need this for converting `.vdi` to `.vhd`.
+2. **Oracle VM VirtualBox** - Download it online for free. You need this for converting `.vdi` to `.vhd`.
 3. **A VirtualBox Virtual Machine** - Your virtual machine to migrate.
 
 # Guide
@@ -40,12 +40,12 @@ Since Hyper-V does not support VDI, at least we need to convert it to VHD.
 
 (2) Hard disk file type and format - **IMPORTANT: Select VHD.**
 
-(3) Full size pre-allocation - It depends on your case.
+(3) Pre-allocate the full disk size (optional, depending on your needs)
 
 ![VirtualBox](virtualbox-02.png)
 
 ## 2. (Optional) VHD to VHDX on Hyper-V
-Hyper-V says while VHD supports virtual hard disks up to 2,040 GB, VHDX supports up to 64TB and is resilient to consistency issues. Therefore I also converted VHD to VHDX. Note that VHDX is not supported in OS earlier than Windows 8.
+Hyper-V documentation notes that while VHD supports virtual hard disks up to 2,040 GB, VHDX supports up to 64TB and is resilient to consistency issues. Therefore I also converted VHD to VHDX. Note that VHDX is not supported in OS earlier than Windows 8.
 
 1) Launch Hyper-V Manager, and select 'Edit Disk' from the right side 'Actions' pane.
 
@@ -67,7 +67,7 @@ Hyper-V says while VHD supports virtual hard disks up to 2,040 GB, VHDX supports
 
 ![Hyper-V](hyper-v-04.png)
 
-6) Decide full size pre-allocation by yourself and click Next. I chose to do it as before.
+6) Choose whether to pre-allocate the full disk size, and click Next. I kept the same setting as before.
 
 ![Hyper-V](hyper-v-05.png)
 
@@ -137,19 +137,47 @@ All settings are finished! Click 'Start' to run your VM.
 DONE!
 
 # Performance Comparison
-By comparing with the same Ubuntu 22.04 VM, Hyper-V 10.0 was ×3 faster than VirtualBox 7.2.4.
+By comparing with the same Ubuntu 22.04 VM, Hyper-V was ×3 faster than VirtualBox.
 
 {% include embed/youtube.html id='17keF-YGaCQ' %}
 
-# Trivia
-I also tried to virtualize Japanese Windows 95 with Hyper-V, but failed since Hyper-V is too modern to work with that old-school OS. Not only the OS rejected any mouse/keyboard inputs once I click inside the Windows 95 VM, it was also too weak to accept Hyper-V's generalized Generation 1 VM settings. Waste of time! Take 86Box or PCem, or any other emulator or virtual machine instead. Many old hardware configurations are available for such emulators.
+```
+VM Configuration:
+Guest OS: Ubuntu 22.04.5 LTS Desktop
+RAM: 4GB
+CPU: 4 cores (with hardware virtualization enabled)
+Storage: 50GB fixed-size VDI (VirtualBox) / VHDX (Hyper-V)
+Network: NAT (default)
 
-I succeed to run Windows 95 with PCem following this guide: [EmulatorResources/PCem/Windows/Configurations/95 - TASVideos](https://tasvideos.org/EmulatorResources/PCem/Windows/Configurations/95)
+Hyper-V Specific Settings:
+Version: 10.0
+Generation 2
+Secure Boot: Microsoft UEFI Certificate Authority
+Enhanced Session: Enabled
+
+VirtualBox Specific Settings:
+Version: 7.2.4
+Guest Additions: Installed
+Video Memory: 128MB
+Graphic Controller: VMSVGA
+3D Acceleration: Enabled
+
+Tests:
+Boot time from power-on to desktop
+Application launch (Firefox)
+General desktop responsiveness
+```
+
+# Trivia
+I also tried to virtualize Japanese Windows 95 with Hyper-V, but failed since Hyper-V is too modern to work with that old-school OS. Not only the OS rejected any mouse/keyboard inputs once I click inside the Windows 95 VM, it was also too weak to accept Hyper-V's generalized Generation 1 VM settings. It was a waste of time! Use an emulator like 86Box or PCem instead. Many old hardware configurations are available for such emulators.
+
+I succeeded in running Windows 95 with PCem following this guide: [EmulatorResources/PCem/Windows/Configurations/95 - TASVideos](https://tasvideos.org/EmulatorResources/PCem/Windows/Configurations/95)
 
 There are some modern features that would have blocked the old Windows working on Hyper-V:
 
-1. **Hardware Emulation**: This is the biggest annoying stuff for Hyper-V that blocks Hyper-V users to try Windows 95. While the old Windows expects real legacy hardware like PS/2 mouse, Hyper-V uses virtualized hardware. So the drivers may have been crashed and all OS inputs were paralyzed on the GUI screen.
+1. **Hardware Emulation**: This is the biggest issue for Hyper-V that blocks Hyper-V users to try Windows 95. While the old Windows expects real legacy hardware like PS/2 mouse, Hyper-V uses virtualized hardware, causing the drivers to crash and paralyzing all OS inputs on the GUI screen.
 2. **Memory Handling**: Windows 95 cannot accept memory more than 512 MB. Dynamic memory or large memory allocation from Hyper-V caused bugs.
-3. **CPU**: Modern host CPUs are too fast so multi-core would not appropriate for old Windows. I could not fix the protection error even if I limited the virtual processor number to 1. (There are some patches like `FIX95CPU` to resolve such problem.)
+3. **CPU**: Modern host CPUs are too fast so multi-core settings would not be appropriate for old Windows. I could not fix the protection error even if I limited the virtual processor number to 1. (There are some patches like `FIX95CPU` to resolve such problem.)
 
 # See also
+[Concepts in Virtualization and OS](/posts/2026-01-09-concepts-in-virtualization-and-os/)

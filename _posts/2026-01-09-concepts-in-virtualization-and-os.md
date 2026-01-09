@@ -5,14 +5,16 @@ date: 2026-01-09
 media_subpath: /pics/2026-01-09-concepts-in-virtualization-and-os/    
 # image:
 #     path: https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/250px-Kernel_Layout.svg.png
-description: Learn concepts on virtualizations and OS.
+description: Learn concepts in virtualization and OS.
 categories: OS
-tags: [virtual machine, emulator, hypervisor, Windows, OS, file system]
+tags: [study, virtual machine, emulator, hypervisor, Windows, OS, file system]
 ---
 
-# Introduction
-> Let's learn on virtual machine.
+> In this post, we'll learn some key concepts in virtualization and OS.
 {: .prompt-info }
+
+# Introduction
+Here I took notes on computer science concepts that I learned while migrating my Ubuntu virtual machine from VirtualBox to Hyper-V in this previous post: [Virtual Machine Migration from VirtualBox to Hyper-V](/posts/2025-12-24-virtual-machine-migration-from-virtualbox-to-hyper-v)
 
 # Contents
 
@@ -29,11 +31,11 @@ Here is the table to compare virtual machine with emulator.
 | | Virtual Machine | Emulator |
 |-| -------------- | --------- |
 | Definition | Virtual environment | Device simulator |
-| Capacity | Full capacity of physical machines | Runs software |
+| Performance/Capacity | Near full host performance | Limited/Slower than host |
 | Purpose | Centralizes administrative tasks | Unites interface and characteristics of subsystems |
 | Environment | Isolated | Shared |
 | Hardware Accessibility | Direct access | Requires software bridge |
-| Operating Cost | △<br>(More expensive) | ○ |
+| Operating Cost | ↑ | ↓ |
 | Backup | ○ | △ |
 | Speed | ○ | △ |
 
@@ -42,6 +44,9 @@ Here is the table to compare virtual machine with emulator.
 > [Difference Between Virtualization and Emulation - GeeksforGeeks](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
 
 ## Hypervisor
+![Hypervisor](https://docs.aws.amazon.com/images/whitepapers/latest/security-design-of-aws-nitro-system/images/virtualization-architecture.png)
+_Virtualization architecture - AWS_
+
 The hypervisor is the coordination layer in virtualization technology. It supports multiple virtual machines (VMs) running at once.
 A type 1 hypervisor, or a bare metal hypervisor, interacts directly with the underlying machine hardware. Meanwhile, A type 2 hypervisor, or hosted hypervisor, interacts with the underlying host machine hardware through the host machine's operating system.
 
@@ -51,12 +56,12 @@ Here is the table to compare type 1 hypervisors with type 2 hypervisors.
 |-| ----------------- | ----------------- |
 | Synonym | Bare Metal Hypervisor | Hosted Hypervisor |
 | Host Machine<br>Hardware Interaction | Directly | Indirectly<br>(Through the host machine's OS) |
-| Resource Allocation | Directly access underlying machine resources | Negotitate resource allocation with the OS |
+| Resource Allocation | Directly access underlying machine resources | Negotiate resource allocation with the OS |
 | Ease of Management | △<br>(Requires system administrator-level knowledge) | ○<br>(Like an application of an OS) |
 | Performance | ○ | △ |
 | Isolation | ○ | △ |
 
-> [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://www.geeksforgeeks.org/software-engineering/difference-between-virtualization-and-emulation/)
+> [What’s the Difference Between Type 1 and Type 2 Hypervisors? - AWS](https://aws.amazon.com/compare/the-difference-between-type-1-and-type-2-hypervisors/)
 
 ## Old Windows vs Modern Windows
 Some major differences are available between old Windows (95/98/Me) and modern Windows (10/11).
@@ -95,7 +100,7 @@ _Boot process - Wikipedia_
 ![GPT Scheme](https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/GUID_Partition_Table_Scheme.svg/330px-GUID_Partition_Table_Scheme.svg.png)
 _The GUID Partition Table Scheme - Wikipedia_
 
-**GUID Partition Table** is a standard for the layout of partition tables of a physical computer storage device, such as hard disk driveor solid-state drive. It is a part of the UEFI standard.
+**GUID Partition Table** is a standard for the layout of partition tables of a physical computer storage device, such as hard disk drive or solid-state drive. It is a part of the UEFI standard.
 
 > [GUID Partition Table - Wikipedia](https://en.wikipedia.org/wiki/GUID_Partition_Table)
 
@@ -152,7 +157,7 @@ _The Windows NT operating system family's architecture - Wikipedia_
 
 The architecture of Windows NT is a layered design that consists of two main components, user mode and kernel mode. It is a preemptive, reentrant multitasking operating system, which has been designed to work with uniprocessor and symmetrical multiprocessor (SMP)-based computers. To process I/O requests, it uses packet-driven I/O, which utilizes I/O request packets (IRPs) and asynchronous I/O.
 
-The NT kernel has been always hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While those modern Windows has 64-bit kernel, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
+The NT kernel has always been hybrid. It is a mixture of monolithic efficiency with some microkernel modularity, including the Executive services, HAL for hardware portability, and drivers running in kernel mode. The hybrid nature started with NT 3.1 in 1993 and remains today in Windows 10/11. While modern Windows versions have 64-bit kernels, they can support 32-bit apps via WoW64 (Windows-on-Windows 64-bit emulation layer).
 
 > [Architecture of Windows NT - Wikipedia](https://en.wikipedia.org/wiki/Architecture_of_Windows_NT)
 
@@ -173,7 +178,7 @@ A common classification for ISA is by architectural complexity. We can classify 
 | - | ---- | ---- |
 | Instruction Set | Large set of complex instructions | Small set of simple, basic instructions |
 | Instruction<br>Execution Time | Often multiple clock cycles | Mostly one clock cycle |
-| Code Size | Fewer instructions | More instuctions |
+| Code Size | Fewer instructions | More instructions |
 | Design | Simplify programming or compilers | Fast execution, easier pipelining, lower power use |
 | Advantages | Easier for high-level languages,<br>Good for complex tasks | Higher speed per cycle,<br>Energy-efficient |
 | Examples | x86, x86_64 | ARM, RISC-V, MIPS |
@@ -196,7 +201,7 @@ _Large supercomputers designed to heavily exploit parallelism - Wikipedia_
 ![Parallelism vs Concurrency](https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Parallelism_vs_concurrency.png/250px-Parallelism_vs_concurrency.png)
 _Parallelism vs Concurrency - Wikipedia_
 
-Parallelism and concurrency are two different things: a parallel program uses multiple CPU cores, ech core performing a task independently. On the other hand, concurrency enables a program to deal with multiple tasks even on a single CPU core; the core switches between tasks (i.e. threads) without necessarily completing each one. A program can have both, neither of a combination of parallelism and concurrency characteristics.
+Parallelism and concurrency are two different things: a parallel program uses multiple CPU cores, each core performing a task independently. On the other hand, concurrency enables a program to deal with multiple tasks even on a single CPU core; the core switches between tasks (i.e. threads) without necessarily completing each one. A program can be parallel (uses multiple cores), concurrent (handles multiple tasks by switching), both, or neither.
 
 > [Parallel Computing - Wikipedia](https://en.wikipedia.org/wiki/Parallel_computing)
 
@@ -228,7 +233,7 @@ _User Account Control "Windows Security" - Wikipedia_
 ## FAT
 **File Allocation Table** is a file system developed for personal computers and was the default file system for the DOS and Windows 9x operating systems. FAT was replaced with NTFS as the default file system on Microsoft operating systems starting with Windows XP. Nevertheless, FAT continues to be commonly used on relatively small capacity solid-state storage technologies such as USB flash drives, SD cards, MultiMediaCards (MMC) and eMMC because of its compatibility across operating systems and embedded systems, and ease of implementation.
 
-**FAT16** has 16-bit cluster addresses (maximum 65,536 clusters per volume), and **FAT32** has 32 bit clusters addresses.
+**FAT16** has 16-bit cluster addresses (maximum 65,536 clusters per volume), and **FAT32** has 32-bit cluster addresses.
 
 > [FAT - Wikipedia](https://en.wikipedia.org/wiki/File_Allocation_Table)
 
@@ -262,7 +267,7 @@ In computer disk storage, a **sector** is a subdivision of a track on a magnetic
 ## Cluster
 In computer file systems, a **cluster** (sometimes also called allocation unit or block) is a unit of disk space allocation for files and directories. To reduce the overhead of managing on-disk data structures, the filesystem does not allocate individual disk sectors by default, but contiguous groups of sectors, called clusters.
 
-Note that clusters are not limited to one track, they can cross tracks if needed.
+Note that a cluster is not limited to one track, and it can cross tracks if needed.
 
 > [Cluster - Wikipedia](https://en.wikipedia.org/wiki/Disk_sector#Cluster)
 
