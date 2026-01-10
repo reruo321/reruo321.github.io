@@ -1,0 +1,20 @@
+---
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+code {
+  background-color: #2e3440 !important;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
+
+[data-mode="light"] code {
+  background-color: #d8dee9 !important;
+}
