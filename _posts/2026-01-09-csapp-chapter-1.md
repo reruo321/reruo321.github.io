@@ -16,7 +16,7 @@ _The compilation system. - CS:APP_
 
 Understanding the compilation system is important for three reasons:
 
-1. Optimizing program performace.
+1. Optimizing program performance.
 2. Understanding link-time errors.
 3. Avoiding security holes.
 
@@ -24,18 +24,18 @@ Understanding the compilation system is important for three reasons:
 1. **Preprocessing phase**: The preprocessor (`cpp`) modifies the original C program according to directives that begin with the '#' character (such as `#include <stdio.h>`).
 2. **Compilation phase**: The compiler (`cc1`) translates the text file `hello.i` into the text file `hello.s`, which contains an assembly-language program. Assembly language is useful because it provides a common output language for different compilers for different high-level languages.
 3. **Assembly phase**: The assembler (`as`) translates `hello.s` into machine-language instructions, packages them in a form known as a relocatable object program, and stores the result in the binary object file `hello.o`.
-4. **Linking phase**: The linker (`ld`) handles the merging of the precompiled object file `hello.o` with the `printf` function which is part of the standard C library provided by every C compiler. The result is the `hello` file, which is a binary executable object file (or simply executable) that is ready to be loaded into memory and executed by the system.
+4. **Linking phase**: The linker (`ld`) merges the object file `hello.o` with other object files, including those providing functions like `printf` from the standard C library (which comes with every C compiler installation). The result is the `hello` file, which is a binary executable object file (or simply executable) that is ready to be loaded into memory and executed by the system.
 
 ### Practice
 I'll use my Ubuntu 22.04 virtual machine for many CS:APP experiments.
 
 ![Ubuntu](/practice/compilation-system/1.png)
 
-To examine the compilation system, you can use either methods:
+To examine the compilation system, you can use either of these two methods:
 
 A. Use `cpp`, `cc1`, `as`, and `ld` as the book guides.
 
-B. Use `gcc`. It is the **GNU Compiler Collection** with many compilers, so it is more handy and you'll patronize it soon.
+B. Use `gcc`. It is the **GNU Compiler Collection** with many compilers, so it is handier and you'll use it a lot soon.
 
 Before you begin, you need to check whether you have the tools on your system by typing these:
 ```bash
@@ -67,7 +67,7 @@ int main() {
 }
 ```
 
-* Small tips for Ubuntu: Type `ls` on the terminal shows files in the directory. Especially `ls -al` shows all files (including files start with '.') in long listing format. Type `cd /path/to/go` to go to `/path/to/go`.
+* Small tips for Ubuntu: Type `ls` on the terminal shows files in the directory. Especially `ls -al` shows all files (including files starting with '.') in long listing format. Type `cd /path/to/go` to go to `/path/to/go`.
 
 * Small tips for Vim: Type `vim hello.c` on the terminal. It tries to open `hello.c`, or create the file if it does not exist. Press `i` key, write the source, press `ESC`, and type `:wq`. It will save the source and immediately exit Vim.
 
@@ -75,7 +75,7 @@ int main() {
 
 #### A. Using separate tools
 
-1) Use the C preprocessor `cpp`. It will include the header file `stdio.h`, recognised in the context of preprocessor directive starting with `#`.
+1) Use the C preprocessor `cpp`. It will include the header file `stdio.h`, recognized in the context of a preprocessor directive starting with `#`.
 
 ```bash
 cpp hello.c > hello.i
@@ -128,7 +128,7 @@ It will produce `hello.s`. When you open it, you will see a bunch of instruction
 
 ![hello.s](/practice/compilation-system/8.png)
 
-3) Use `as` to aseemble `hello.s`.
+3) Use `as` to assemble `hello.s`.
 
 ```bash
 as hello.s -o hello.o
@@ -160,24 +160,24 @@ Options:
 To find the directory of the codes for linking, run this command:
 
 ```bash
-find /usr/lib64/ -name ld-linux-x86-64.so.2
+find /lib64/ -name ld-linux-x86-64.so.2
 find /usr/lib -name crt1.o
 find /usr/lib -name crti.o
 find /usr/lib -name crtn.o
 ```
 
 ```bash
-ld -o hello -dynamic-linker /usr/lib64/ld-linux-x86-64.so.2 /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o hello.o /usr/lib/x86_64-linux-gnu/crtn.o -lc
+ld -o hello -dynamic-linker /lib64/ld-linux-x86-64.so.2 /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o hello.o /usr/lib/x86_64-linux-gnu/crtn.o -lc
 ```
 
 Options:
 * `-o hello`: Save output to `hello`.
-* `-dynamic-linker /lib64/ld-linux-x86-64.so.2`: Use `/usr/lib64/ld-linux-x86-64.so.2` as a dynamic linker.
+* `-dynamic-linker /lib64/ld-linux-x86-64.so.2`: Sets the dynamic linker (program interpreter) to `/lib64/ld-linux-x86-64.so.2`.
 * `/usr/lib/x86_64-linux-gnu/crt1.o`: **C RunTime startup code** (provides the program entry point). It contains the `_start` function, which sets up argc/argv/environment and eventually calls `__libc_start_main` (which handles more initialization before jumping to `main()`).
 * `/usr/lib/x86_64-linux-gnu/crti.o`: **CRT Initialization prologue**. It contains the prologue of the `_init` function (in the `.init` section) and the beginning of the `_fini` function (in the `.fini` section).[^1]
 * `hello.o`: The file to link.
 * `/usr/lib/x86_64-linux-gnu/crtn.o`: **CRT Initialization epilogue**. It contains the epilogue of the `_init` and `_fini` functions (finishing the `.init` and `.fini` sections started by crti.o).
-* `-lc` Link with `libc` (standard C library). We bring the `printf` definition from the library. It will find the symbolic link `libc.so.6` which links to the actual file `libc-x.xx-so`.
+* `-lc` Link with `libc` (standard C library). We bring the `printf` definition from the library. This links with the standard C library (`libc`), providing functions like `printf`. It uses `libc.so.6` (a symlink to the real file like `libc-x.xx-so`).
 
 The kernel loads the dynamic linker (`/lib64/ld-linux-x86-64.so.2`).
 The dynamic linker then loads shared libraries[^2] (such as `libc.so.6`) and resolves symbols at runtime.
@@ -231,11 +231,11 @@ gcc -v hello.c -o hello
 ---
 
 ## 1.4 Hardware Organization
-![Hardware Orgainization](hardware-organization.png)
+![Hardware Organization](hardware-organization.png)
 _Hardware organization of a typical system. - CS:APP_
 
 ### Buses
-**Buses** are electrical conduits running throughout the system. They are typically designed to carry fixed-size chunks of bytes known as words. Most machines today have word sizes of either 4 bytes (32 bits) or 8 bytes (64 bits).
+**Buses** are electrical conduits that run throughout the system. They typically carry fixed-size chunks of bytes known as **words**. Most machines today have word sizes of either 4 bytes (32 bits) or 8 bytes (64 bits).
 
 ### I/O Devices
 **Input/Output (I/O) devices** are the system's connection to the external world. Each I/O device is connected to the I/O bus by either a controller or an adapter. While a controller is a chipset in the device itself or on the system's main printed circuit board, an adapter is a card that plugs into a slot on the motherboard.
@@ -256,11 +256,11 @@ The **register file** is a small storage device that consists of a collection of
 The **arithmetic logic unit (ALU)** computes new data and address values.
 
 ### Running the hello Program
-Look at the Figure 1.5 from Page 11 for more details. It uses **direct memory access (DMA)**, the technique to travel the data directly from disk to main memory, without passing through the processor.
+Look at the Figure 1.5 from Page 11 for more details. It uses **direct memory access (DMA)**, a technique that transfers data directly from disk to main memory without passing through the processor.
 
 1. When we type `./hello`, the shell reads each character into a register, and then stores it in memory.
 2. When we hit the ENTER key, the shell executes instructions to copy the code and data in the executable `hello` file from disk to main memory. 
-3. The processor begins executing the machine-language instructions in the `hello` program's main routine.
+3. The processor begins executing the machine-language instructions in the main routine of the `hello` program.
 
 ---
 
@@ -321,7 +321,7 @@ A file is a sequence of bytes. Every I/O device is modeled as a file. All input 
 ---
 
 ## 1.8 Systems Communicate with Other Systems Using Networks
-In practice, modern systems are often linked to other systems by networks. As we can see from the telnet figure, the exchange between clients and servers is typical of all network applications.
+In practice, modern systems are often linked to other systems by networks. As shown in the telnet example (Figure 1.18), the exchange between clients and servers is typical of all network applications.
 
 ---
 
@@ -368,7 +368,7 @@ With threads, we can have multiple control flows executing within a single proce
 * **Uniprocessor**: A single processor computing even if that processor had to switch among multiple tasks.
 * **Multiprocessor**: A system consisting of multiple processors all under the control of a single operating system kernel.
 * **Multi-core Processor**: Several CPUs (referred to as "cores") integrated onto a single integrated-circuit chip. The Figure 1.17 shows a typical multi-core processor where the chip has four CPU cores.
-* **Hyperthreaded Processor**: It sometimes called simultaneous multi-threading. It is a technique that allows a single CPU to execute multiple flows of control. It decides which of its threads to execute on a cycle-by-cycle basis, unlike a conventional processor requires around 20,000 clock cycles to shift between different threads.
+* **Hyperthreaded Processor**: It is sometimes called **simultaneous multi-threading (SMT)**. It is a technique that allows a single CPU to execute multiple flows of control. It decides which of its threads to execute on a cycle-by-cycle basis, unlike a conventional processor, which requires around 20,000 clock cycles to switch between different threads.
 
 #### Advantage of Multiprocessing
 1. It reduces the need to simulate concurrency when performing multiple tasks.
@@ -390,16 +390,16 @@ Many modern processors have special hardware that allows a single instruction to
 
 A → B: A provides an abstraction of B
 
-* **Processor** side: The Instruction Set Architecture (ISA) → Actual Processor Hardware
+* **Processor** side: The Instruction Set Architecture (ISA) → Actual processor hardware
 * **Operating System** side:
 	* Files → I/O devices
-	* Virtual Memory → Program Memory
-	* Processes → Running program
-	* Virtual Machine → Entire Computer
+	* Virtual memory → Program memory (main memory + disk)
+	* Processes → A running program (with CPU + memory)
+	* Virtual machine → The entire computer system
 
 ---
 
 # Notes
 [^1]: The `.init` section contains executable code that runs **before** `main()` to initialize the process (e.g., calling global constructors in C++). The `.fini` section contains executable code that runs **after** `main()` returns (or on normal exit) for cleanup (e.g., calling global destructors).
-[^2]: A **shared library** (.so file on Linux) is a library of executable code that can be loaded into memory and used by **multiple programs** (processes) at the same time. For example, `libc.so.6` contains `printf()` and it can be used by Firefox, Chrome, and your `hello` program - almost everything! It saves memory because all processes map the **same physical RAM pages** for the read-only code part. (Note: Windows uses **DLL** files for the same idea. On Linux, we use **.so** files — "Shared Object". The **SONAME** is a special field inside the .so file that acts as its official name, e.g., `libc.so.6`.)
+[^2]: A **shared library** (.so file on Linux) is a library of executable code that can be loaded into memory and used by **multiple programs** (processes) at the same time. For example, `libc.so.6` contains `printf()` and is used by Firefox, Chrome, your `hello` program — almost everything! It saves memory because all processes map the **same physical RAM pages** for the read-only code part. (Note: Windows uses **DLL** files for the same idea. On Linux, we use **.so** files — "Shared Object". The **SONAME** is a special field inside the .so file that acts as its official name, e.g., `libc.so.6`.)
 
