@@ -18,3 +18,10 @@ code {
 [data-mode="light"] code {
   background-color: #d8dee9 !important;
 }
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #9ca3af, transparent);
+  margin: 3rem 0;
+}
