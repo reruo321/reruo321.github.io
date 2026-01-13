@@ -1,0 +1,307 @@
+---
+title: CS:APP Chapter 2
+description: 2. Representing and Manipulating Information
+layout: post
+date: 2026-01-12
+media_subpath: /pics/2026-01-12-csapp-chapter-2/
+image:
+    path: https://csapp.cs.cmu.edu/3e/images/csapp3e-cover.jpg
+categories: computer-system
+tags: [CS:APP]
+math: true
+---
+
+# 2. Representing and Manipulating Information
+## 2.1 Information Storage
+Rather than accessing individual bits in memory, most computers use block of 8 bits, or **bytes**, as the smallest addressable unit of memory. A machine-level program views memory as a very large array of bytes, referred to as **virtual memory**. Every byte of memory is identified by a unique number, known as its **address**, and the set of all possible addresses is known as the **virtual address space**.
+
+![Specifying C Version](2-1.png)
+_Figure 2.1 Specifying different versions of C to GCC. - CS:APP_
+
+---
+
+## 2.1.1 Hexadecimal Notation
+![Hex](2-2.png)
+
+A single byte consists of 8 bits. In **binary** notation, its value ranges from 00000000₂ to 11111111₂. When viewed as a **decimal** integer, its value ranges from 0₁₀ to 255₁₀. Written in **hexadecimal**, the value of a single byte can range from 00₁₆ to FF₁₆.
+
+In C, numeric constants starting with **0x** or **0X** are interpreted as being in hexadecimal.
+
+![Decimal to Hexadecimal](decimal-to-hex.png)
+
+Converting between decimal and hexadecimal representation requires using multiplication or division to handle the general case. To convert a decimal number $x$ to hexadecimal, we can repeatedly divide $x$ by 16, giving a quotient $q$ and a remainder $r$, such that
+
+$$
+x = q · 16 + r
+$$
+
+---
+
+## 2.1.2 Data Sizes
+For a machine with a $w$-bit word size, the virtual addresses can range from 0 to $2^w-1$, giving the program access to at most $2^w$ bytes.
+
+Most 64-bit machines can also run programs compiled for use on 32-bit machines, a form of backward compatibility.
+
+```bash
+# This 32-bit program will run correctly on either 32-bit or a 64-bit machine.
+gcc -m32 prog.c
+
+# This 64-bit program will only run correctly on a 64-bit machine.
+gcc -m64 prog.c
+```
+
+Computers and compilers support multiple data formats using different ways to encode data, such as integers and floating point, as well as different lengths.
+
+![2-3](2-3.png)
+
+To avoid the vagaries of relying on "typical" sizes and different compiler setthings, ISO C99 introduced a class of data types where the data sizes are fixed regardless of compiler and machine settings. Among these are data types `int32_t` and `int64_t`, having exactly 4 and 8 bytes. Using fixed-size integer types is the best way for programmers to have close control over data representations.
+
+Most of the data types encode signed values, unless prefixed by the keyword `unsigned` or using the specific unsigned declaration for fixed-size data types. The exception to this is data type `char`. Although most compilers and machines treat these as signed signed data, the C standard does not guarantee this. The programmer should use the declaration `signed char` to guarantee a 1-byte signed value.
+
+![char](char.png)
+
+All of the following declarations have identical meaning:
+
+```c
+unsigned long
+unsigned long int
+long unsigned
+long unsigned int
+```
+
+A pointer uses the full word size of the program.
+
+Most machines also support two different floating-point formats: single precision, declared in C as `float`, and double precision, declared in C as `double`.
+
+One aspect of program portability is to make it insensitive to the exact sizes of the different data types. The C standards set lower bounds on the numeric ranges of the different data types, but there are no upper bounds (except with the fixed-size types). Many hidden word size dependencies have arisen as bugs in migrating 32-bit programs to new 64-bit machines.
+
+---
+
+## 2.1.3 Addressing and Byte Ordering
+For program objects that span multiple bytes, we must establish two conventions: what the address of the object will be, and how we will order the bytes in memory. In virtually all machines, a multi-byte object is stored as a contiguous sequence of bytes, with the address of the object given by the smallest address of the bytes used.
+
+For ordering the bytes representing an object, there are two common conventions.
+
+![Endian](endian.png)
+
+**NOTE: Endianness only matters for multi-byte values.** This means while multi-byte data types such as `int`, `short`, `long`, `float`, and `double` are affected by endianness, `char` and string sequences of 1-byte characters are not affected by it.
+
+Byte ordering becomes an issue in these three situtations:
+
+### When Byte Ordering Matters 1
+When binary data are communicated over a network between different machine. The sending machine should convert its internal representation to the network standard, and the receiving machine convert the network standard to its internal representation.
+
+### When Byte Ordering Matters 2
+When looking at the byte sequences representing integer data, inspecting machine-level programs.
+
+```gas
+4004d3: 01 05 43 0b 20 00     add %eax, 0x200b43 (%rip)
+```
+
+Having bytes appear in reverse order is a common occurrence when reading machine-level program representations generated for little-endian machines such as this one. The value `0x200b43` is represented as `43 0b 20 00` in the instruction.
+
+### When Byte Ordering Matters 3
+When programs are written that circumvent the normal type system. In the C language, this can be done using a cast or a `union` to allow an object to be referenced according to a different data type from which it was created. Such coding tricks are strongly discouraged for most application programming, but they can be quite useful and even necessary for system-level programming.
+
+![2-5-2-6](2-5-2-6.png)
+
+As we can see from the Figure 2.6, only the Sun machine has different byte ordering from Linux 32, Linux 64, and Windows. Since 12,345 is 0x3039 in hexadecimal representation, we can confirm the Sun machine is a big-endian machine, while the others are little-endian machines.
+
+Here's the example C source to check the byte representation in our system:
+
+```c
+#include <stdio.h>
+
+typedef unsigned char *byte_pointer;
+
+void show_bytes(byte_pointer start, size_t len) {
+    int i;
+    for (i = 0; i < len; i++)
+        printf(" %.2x", start[i]);
+    printf("\n");
+}
+
+void show_int(int x) {
+    show_bytes((byte_pointer) &x, sizeof(int));
+}
+
+void show_float(float x) {
+    show_bytes((byte_pointer) &x, sizeof(float));
+}
+
+void show_pointer(void *x) {
+    show_bytes((byte_pointer) &x, sizeof(void *));
+}
+
+void test_show_bytes(int val) {
+    int ival = val;
+    float fval = (float) ival;
+    int *pval = &ival;
+    show_int(ival);
+    show_float(fval);
+    show_pointer(pval);
+}
+
+int main() {
+
+    test_show_bytes(12345);
+
+    return 0;
+}
+```
+
+Compile it and run the program.
+
+```bash
+gcc byte.c -o byte
+./byte
+```
+
+![Byte](byte_c.png)
+
+My Ubuntu 22.04 shows the same byte ordering of "Linux 64" for `int` and `float` types, as in the Figure 2.6 table.
+
+Meanwhile, integer and the floating-point data encoding the same numeric value 12,345 have some matching bits.
+
+![Matching Bits](integer-floating-point.png)
+
+---
+
+## 2.1.4 Representing Strings
+A string in C is encoded by an array of characters terminated by the null (having value 0) character. Each character is represented by some standard encoding, with the most common being the ASCII character code.
+
+---
+
+## 2.1.5 Representing Code
+Different machine types use different and incompatible instructions and encodings. Even identical processors running different operating systems have differences in their coding conventions and hence are not binary compatible.
+
+---
+
+## 2.1.6. Introduction to Boolean Algebra
+The simplest Boolean algebra is defined over thw two-element set {0, 1}.
+
+![Boolean Algebra](2-7.png)
+
+| Boolean Operation | Logical Operation  | Symbol |
+| ----------------- | ------------------ | ------ |
+| ~                 | NOT                | ¬      |
+| &                 | AND                | ∧      |
+| \|                | OR                 | ∨      |
+| ^                 | XOR (EXCLUSIVE-OR) | ⊕     |
+
+The Boolean operations `~`, `&`, and `|` operating on bit vectors of length $w$ form a Boolean algebra, for any integer $w > 0$. Boolean algebra has many of the same properties as arithmetic over integers.
+* Boolean operation `&` distributes over `|`. So $a·(b+c) = (a·b)+(a·c)$ is also applied to Boolean algebra, `a & (b | c) = (a & b) | (a & c)`.
+* Boolean operation `|` distributes over `&`. While we cannot say that $a+(b·c) = (a+b)·(a+c)$ holds for all integers, we can write `a | (b & c) = (a | b) & (a | c)`.
+
+When we consider operations `~`, `&`, and `^` operating on bit vectos of length $w$, we get a different mathematical form, known as a **Boolean ring**.
+* One property of integer arithmetic is that every value $x$ has an additive inverse $-x$, such as $x + -x = 0$. A similar property holds for Boolean rings, where `^` is the "addition" operation, but in this case each element is its own additive. That is, `a ^ a = 0` for any value `a`, where we use 0 here to represent a bit vector of all zeros. And so `(a ^ b) ^ a = b`.
+
+One useful application of bit vectors is to represent finite sets.
+* `~`: Complement
+* `&`: Intersection
+* `|`: Union
+
+---
+
+## 2.1.7 Bit-Level Operations in C
+One useful features of C is that it supports bitwise Boolean operations. The symbols we have used for the Boolean operations are exactly those used by C, and these can be applied to any "integral" data type.
+
+---
+
+## Tips on C
+
+### Pointer
+
+```c
+// p is a pointer variable, pointing to an object of type T.
+T *p;
+
+// Declaration of a pointer to an object of type char.
+char *p;
+```
+
+### typedef
+```c
+// Giving a name to a data type using the typedef declaration
+typedef int *int_pointer;
+int_pointer ip;
+
+// Or directly declare it as
+int *ip;
+```
+
+### printf
+`printf`, `fprintf`, and `sprintf` has the first argument as a format string, while any remaining arguments are values to be printed.
+
+* Character sequence starting with `%`: How to format the next argument
+    * `%d`: Decimal integer
+    * `%f`: Floating-point number
+    * `%c`: Character
+
+### Pointers and Arrays
+In C, we can dereference a pointer with array notation, and we can reference array elements with pointer notation.
+
+```c
+typedef unsigned char *byte_pointer;
+
+void show_bytes(byte_pointer start, size_t len) {
+    int i;
+    for (i = 0; i < len; i++)
+        printf(" %.2x", start[i]);   // HERE
+    printf("\n");
+}
+```
+
+In the example, the reference `start[i]` indicates that we want to read the byte that is `i` positions beyond the location pointed to by start.
+
+### Pointer Creation and Dereferencing
+```c
+show_bytes((byte_pointer) &x, sizeof(int));      // &x: int *
+show_bytes((byte_pointer) &x, sizeof(float));    // &x: float *
+show_bytes((byte_pointer) &x, sizeof(void *));   // &x: void **
+```
+
+The C "address of" operator `&` creates a pointer. The expression in the `&x` creates a point to the location holding the object indicated by variable `x`. Data type `void *` is a special kind of pointer with no associated type information.
+
+The cast (`byte_pointer`) `&x` converts all those pointers of three types (`int`, `float`, `void *`) to data of type `unsigned char`. It simply direct the compiler to refer to the data being pointed to according to the new data type.
+
+---
+
+## Other Tips
+* `man ascii` on the terminal generates an ASCII table.
+
+---
+
+## Problems
+### Problem 2.1
+![Problem](practice/2-1.png)
+
+### Problem 2.2
+![Problem](practice/2-2.png)
+
+### Problem 2.3
+![Problem](practice/2-3.png)
+
+### Problem 2.4
+![Problem](practice/2-4.png)
+
+### Problem 2.5
+![Problem](practice/2-5.png)
+
+### Problem 2.6
+![Problem](practice/2-6.png)
+
+### Problem 2.7
+![Problem](practice/2-7.png)
+
+### Problem 2.8
+![Problem](practice/2-8.png)
+
+### Problem 2.9
+![Problem](practice/2-9.png)
+
+### Problem 2.10
+![Problem](practice/2-10.png)
+
+### Problem 2.11
+![Problem](practice/2-11.png)

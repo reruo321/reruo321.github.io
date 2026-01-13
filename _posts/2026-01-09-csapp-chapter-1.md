@@ -1,15 +1,17 @@
 ---
 title: CS:APP Chapter 1
+description: 1. A Tour of Computer Systems
 layout: post
 date: 2026-01-09
 media_subpath: /pics/2026-01-09-csapp-chapter-1/
 image:
     path: https://csapp.cs.cmu.edu/3e/images/csapp3e-cover.jpg
 categories: computer-system
-tags: [CSAPP]
+tags: [CS:APP]
 math: true
 ---
 
+# 1. A Tour of Computer Systems
 ## 1.2 Compilation System
 ![Compilation System](compilation-system.png)
 _The compilation system. - CS:APP_
@@ -29,7 +31,7 @@ Understanding the compilation system is important for three reasons:
 ### Practice
 I'll use my Ubuntu 22.04 virtual machine for many CS:APP experiments.
 
-![Ubuntu](/practice/compilation-system/1.png)
+![Ubuntu](practice/compilation-system/1.png)
 
 To examine the compilation system, you can use either of these two methods:
 
@@ -54,7 +56,7 @@ sudo apt update
 sudo apt install build-essential
 ```
 
-![Tools Check](/practice/compilation-system/2.png)
+![Tools Check](practice/compilation-system/2.png)
 
 And write a simple C source code `hello.c` with your favorite editor. I'll use Vim for it.
 
@@ -71,7 +73,7 @@ int main() {
 
 * Small tips for Vim: Type `vim hello.c` on the terminal. It tries to open `hello.c`, or create the file if it does not exist. Press `i` key, write the source, press `ESC`, and type `:wq`. It will save the source and immediately exit Vim.
 
-![hello.c](/practice/compilation-system/3.png)
+![hello.c](practice/compilation-system/3.png)
 
 #### A. Using separate tools
 
@@ -84,13 +86,13 @@ cpp hello.c > hello.i
 Options:
 * `> hello.i`: Save output to `hello.i`.
 
-![cpp](/practice/compilation-system/4.png)
+![cpp](practice/compilation-system/4.png)
 
 It will produce `hello.i`. When you open it, you will see `stdio.h` source is included.
 
-![hello.i](/practice/compilation-system/5.png)
+![hello.i](practice/compilation-system/5.png)
 
-![hello.i](/practice/compilation-system/5a.png)
+![hello.i](practice/compilation-system/5a.png)
 
 2) Use `cc1` to compile `hello.i`.
 
@@ -120,13 +122,13 @@ Options:
 * `-o hello.s`: Save output to `hello.s`.
 * `-Og`: Optimize for debugging.
 
-![cc1](/practice/compilation-system/6.png)
+![cc1](practice/compilation-system/6.png)
 
-![hello.s](/practice/compilation-system/7.png)
+![hello.s](practice/compilation-system/7.png)
 
 It will produce `hello.s`. When you open it, you will see a bunch of instructions in assembly language.
 
-![hello.s](/practice/compilation-system/8.png)
+![hello.s](practice/compilation-system/8.png)
 
 3) Use `as` to assemble `hello.s`.
 
@@ -137,12 +139,12 @@ as hello.s -o hello.o
 Options:
 * `-o hello.o`: Save output to `hello.o`.
 
-![as](/practice/compilation-system/9.png)
+![as](practice/compilation-system/9.png)
 
 It will produce `hello.o`. From this phase a binary file is created instead of a text file. Therefore, if you open it with a text editor, you will see lots of unreadable garbled characters. 
 But...
 
-![binary](/practice/compilation-system/10.png)
+![binary](practice/compilation-system/10.png)
 
 Surprise! You can read it using `objdump`! It is used as a disassembler to view an object file or an executable in assembly form.
 
@@ -153,7 +155,7 @@ objdump -d hello.o
 Options:
 * `-d hello.o`: Disassemble `hello.o`.
 
-![objdump](/practice/compilation-system/objdump1.png)
+![objdump](practice/compilation-system/objdump1.png)
 
 4) Use `ld` to link `ld` with library and create the final executable, `hello`.
 
@@ -192,23 +194,23 @@ gcc hello.o -o hello
 Option:
 * `-o hello`: Save output to `hello`.
 
-![ld](/practice/compilation-system/12.png)
+![ld](practice/compilation-system/12.png)
 
 It will produce `hello`. It is a binary executable, so you can see the instructions with `objdump` or execute the program.
 
-![binary](/practice/compilation-system/13.png)
+![binary](practice/compilation-system/13.png)
 
 ```bash
 objdump -d hello
 ```
 
-![objdump](/practice/compilation-system/objdump2.png)
+![objdump](practice/compilation-system/objdump2.png)
 
 ```bash
 ./hello
 ```
 
-![hello](/practice/compilation-system/14.png)
+![hello](practice/compilation-system/14.png)
 
 #### B. Using GCC
 
@@ -224,9 +226,9 @@ You can also see verbose (what GCC internally does) with `-v` option.
 gcc -v hello.c -o hello
 ```
 
-![gcc](/practice/compilation-system/f1.png)
+![gcc](practice/compilation-system/f1.png)
 
-![verbose](/practice/compilation-system/f2.png)
+![verbose](practice/compilation-system/f2.png)
 
 ---
 
@@ -346,13 +348,6 @@ $$
 S = \frac{1}{(1-\alpha) + \alpha / k}
 $$
 
-### Practice
-#### Problem 1.1
-![Amdahl](/practice/1-1.png)
-
-#### Problem 1.2
-![Amdahl](/practice/1-2.png)
-
 ---
 
 ## 1.9.2 Concurrency and Parallelism
@@ -399,7 +394,15 @@ A → B: A provides an abstraction of B
 
 ---
 
-# Notes
+## Problems
+### Problem 1.1
+![Amdahl](practice/1-1.png)
+
+### Problem 1.2
+![Amdahl](practice/1-2.png)
+
+---
+
+## Notes
 [^1]: The `.init` section contains executable code that runs **before** `main()` to initialize the process (e.g., calling global constructors in C++). The `.fini` section contains executable code that runs **after** `main()` returns (or on normal exit) for cleanup (e.g., calling global destructors).
 [^2]: A **shared library** (.so file on Linux) is a library of executable code that can be loaded into memory and used by **multiple programs** (processes) at the same time. For example, `libc.so.6` contains `printf()` and is used by Firefox, Chrome, your `hello` program — almost everything! It saves memory because all processes map the **same physical RAM pages** for the read-only code part. (Note: Windows uses **DLL** files for the same idea. On Linux, we use **.so** files — "Shared Object". The **SONAME** is a special field inside the .so file that acts as its official name, e.g., `libc.so.6`.)
-
