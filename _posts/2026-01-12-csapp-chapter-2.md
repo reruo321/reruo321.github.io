@@ -204,7 +204,30 @@ One useful application of bit vectors is to represent finite sets.
 ---
 
 ## 2.1.7 Bit-Level Operations in C
-One useful features of C is that it supports bitwise Boolean operations. The symbols we have used for the Boolean operations are exactly those used by C, and these can be applied to any "integral" data type.
+One useful features of C is that it supports **bitwise** Boolean operations. The symbols we have used for the Boolean operations are exactly those used by C, and these can be applied to any "integral" data type.
+
+---
+
+## 2.1.8 Logical Operations in C
+C also provides a set of **logical** operators.
+* `!`: NOT
+* `&&`: AND
+* `||`: OR
+
+Their behavior is quite different from bit-level operations' behavior. The logical operations treat any nonzero argument as representing TRUE and argument 0 as representing FALSE.
+
+And the logical operators do not evaluate their second argument if the result of the expression can be determined by evaluating the first argument. Thus, for example, the expression `a && 5/a` will never cause a division by zero, and the expression `p && *p++` will never cause the dereferencing of a null pointer.
+
+---
+
+## 2.1.9 Shift Operations in C
+
+C also provides a set of **shift** operations for shifting bit patterns to the left and to the right.
+
+* `x << k`: **Left shift**. `x` is shifted `k` bits to the left, dropping off the `k` most significant bits and filling the right end with `k` zeros.
+* `x >> k`: **Right shift**. Two forms of right shift are supported by machines. 
+    1. **Logical**: Fills the left end with `k` zeros.
+    2. **Arithmetic**: Fills the left end with `k` repetitions of the most significant bit. This is useful for operating on signed integer data.
 
 ---
 
@@ -305,3 +328,16 @@ The cast (`byte_pointer`) `&x` converts all those pointers of three types (`int`
 
 ### Problem 2.11
 ![Problem](practice/2-11.png)
+
+### Problem 2.12
+![Problem](practice/2-12.png)
+
+### Problem 2.13
+![Problem](practice/2-13.png)
+
+### Problem 2.14
+![Problem](practice/2-14.png)
+
+### Problem 2.15
+![Problem](practice/2-15.png)
+
