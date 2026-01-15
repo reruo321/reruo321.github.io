@@ -229,6 +229,37 @@ C also provides a set of **shift** operations for shifting bit patterns to the l
     1. **Logical**: Fills the left end with `k` zeros.
     2. **Arithmetic**: Fills the left end with `k` repetitions of the most significant bit. This is useful for operating on signed integer data.
 
+Although the C standards do not precisely define which type of right shift should be used with signed numbers, almost all compiler/machine combinations use **arithmetic right shifts** for signed data. In contrast to C, Java has precise definition of the right shifts. `x >> k` shifts `x` arithmetically by `k` positions, while `x >>> k` shifts it logically.
+
+For a data type consisting of $w$ bits, what should be the effect of shifting by some value $k≥w$? The C standars carefully avoid stating that. On many machines, the shift instructions consider only the lower $log_2w$ bits of the shift amount when shifting a $w$-bit value, and so the shift amount is computed as $k$ mod $w$. While the behavior is not guaranteed in C. Java, on the other hand, specifically requires that shift amounts should be computed in the modular fashion.
+
+```c
+int       lval = 0xFEDCBA98  << 32;   // 32 mod 32 = 0, << 0 (lval = 0xFEDCBA98)
+unsigned  uval = 0xFEDCBA98u >> 40;   // 40 mod 32 = 8, >> 8 (uval = 0x00FEDCBA)
+```
+
+**CAUTION:** In C, addition (and subtraction) have higher precedence than shifts. So `1 << 2 + 3 << 4` is equivaluent to `1 << (2+3) << 4`. **When in doubt, put in parentheses!**
+
+---
+
+## 2.2 Integer Representations
+
+![Terminology](2-8.png)
+
+## 2.2.1 Integral Data Types
+![2-9](2-9.png)
+
+![2-10](2-10.png)
+
+C supports a variety of integral data types ― ones that represent finite ranges of integers. Based on the byte allocations, the different sizes allow different ranges of values to be represented. The only machine-dependent range indicated is for size designator `long`. Most 64-bit programs use an 8-byte representation, giving a much wider range of values than the 4-byte representation used with 32-bit programs.
+
+One important feature to note in figures is that the ranges are not symmetric ― the range of negative numbers extends one further than the range of positive numbers.
+
+Guaranteed ranges for C integral data types are affected by these two historical reasons:
+1. Portability across all possible machines, such as 8-bit CPUs, 12-bit or 16-bit word sizes.
+2. Allowing one's complement of early computers, besides two's complement of modern computers. This made some minimum ranges to be 
+
+
 ---
 
 ## Tips on C
@@ -287,6 +318,10 @@ show_bytes((byte_pointer) &x, sizeof(void *));   // &x: void **
 The C "address of" operator `&` creates a pointer. The expression in the `&x` creates a point to the location holding the object indicated by variable `x`. Data type `void *` is a special kind of pointer with no associated type information.
 
 The cast (`byte_pointer`) `&x` converts all those pointers of three types (`int`, `float`, `void *`) to data of type `unsigned char`. It simply direct the compiler to refer to the data being pointed to according to the new data type.
+
+### Signed and Unsigned Numbers
+Both C and C++ support (the default) signed and unsigned numbers. However, Java supports only signed numbers.
+
 
 ---
 
