@@ -255,9 +255,11 @@ C supports a variety of integral data types ― ones that represent finite range
 
 One important feature to note in figures is that the ranges are not symmetric ― the range of negative numbers extends one further than the range of positive numbers.
 
-Guaranteed ranges for C integral data types are affected by these two historical reasons:
-1. Portability across all possible machines, such as 8-bit CPUs, 12-bit or 16-bit word sizes.
-2. Allowing one's complement of early computers, besides two's complement of modern computers. This made some minimum ranges to be 
+Guaranteed ranges for C integer data types are influenced by two important historical reasons:
+1. **Portability** across all possible machines, such as 8-bit CPUs, 12-bit, or 16-bit machines.
+2. Support for **one's complement** representation used in early computers (in addition to two's complement used in modern systems). This is why the minimum guaranteed negative range is set to **$-(2^{w_{min}-1}-1)$** instead of $-(2^{w_{min}-1})$.
+
+## 2.2.2 Unsigned Encodings
 
 
 ---
