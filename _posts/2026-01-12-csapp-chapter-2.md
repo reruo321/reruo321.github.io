@@ -260,6 +260,8 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 2. Support for **one's complement** representation used in early computers (in addition to two's complement used in modern systems). This is why the minimum guaranteed negative range is set to **$-(2^{w_{min}-1}-1)$** instead of $-(2^{w_{min}-1})$.
 
 ## 2.2.2 Unsigned Encodings
+![2-12](2-12.png)
+
 
 
 ---
