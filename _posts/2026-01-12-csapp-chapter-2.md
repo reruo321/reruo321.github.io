@@ -262,7 +262,17 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 ## 2.2.2 Unsigned Encodings
 ![2-12](2-12.png)
 
+![b2u](b2u.png)
 
+![b2u_umax](b2u_umax.png)
+
+![b2u_u2b](b2u_u2b.png)
+
+![b2t](b2t.png)
+
+![b2t_t2b](b2t_t2b.png)
+
+![b2t_trick](b2t_trick.png)
 
 ---
 
