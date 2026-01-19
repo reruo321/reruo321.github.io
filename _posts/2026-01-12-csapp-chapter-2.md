@@ -251,6 +251,8 @@ unsigned  uval = 0xFEDCBA98u >> 40;   // 40 mod 32 = 8, >> 8 (uval = 0x00FEDCBA)
 
 ![2-10](2-10.png)
 
+![2-11](2-11.png)
+
 C supports a variety of integral data types ― ones that represent finite ranges of integers. Based on the byte allocations, the different sizes allow different ranges of values to be represented. The only machine-dependent range indicated is for size designator `long`. Most 64-bit programs use an 8-byte representation, giving a much wider range of values than the 4-byte representation used with 32-bit programs.
 
 One important feature to note in figures is that the ranges are not symmetric ― the range of negative numbers extends one further than the range of positive numbers.
@@ -268,11 +270,36 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 
 ![b2u_u2b](b2u_u2b.png)
 
+## 2.2.3 Two's-Complement Encodings
+![2-13](2-13.png)
+
 ![b2t](b2t.png)
 
 ![b2t_t2b](b2t_t2b.png)
 
 ![b2t_trick](b2t_trick.png)
+
+![2-14](2-14.png)
+
+* **The two's-complement range is asymmetric**: **$\|TMin\| = \|TMax\| + 1$**. This asymmetry arises because half the bit patterns represent negative numbers, while half **including 0** represent nonnegative numbers.
+* **The maximum unsigned value is just over twice the maximum two's-complement value**: **$UMax = 2TMax + 1$**.
+* **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros.
+
+### More on fixed-size integer types
+![2-15](2-15.png)
+
+For some programs, it is essential that data types be encoded using representations with specific sizes.
+
+* Example: when writing programs to enable a machine to communicate over the Internet according to a standard protocol.
+
+The C standards do not require single integers to be represented in two's complement form, but nearly all machines do so. Programmers who are concerned with maximizing portability across all possible machines should not assume any particular range of representable values nor should they assume any particular representation of signed numbers. On the other hand, many programmers are written assuming a two's-complement representation of signed numbers, and the "typical" ranges, and these prorgrams are portable across a broad range of machines and compilers. The file `<limits.h>` in the C library defines a set of constants delimiting the ranges of the different integer data types for the particular machine on which the compiler is running. Meanwhile, the Java standard is quite specific about integer data type ranges and representations.
+
+For more C tips on the fixed-size integer types, see [here](#fixed-size-integer-types).
+
+## 2.2.4 Conversions between Signed and Unsigned
+C allows casting between numeric data types. The expression `(unsigned) x` converts the value of `x` to an unsigned value, and `(int) u` converts the value of `u` to a signed integer. Converting a negative value to unsigned in the most implementations of C is based on a bit-level perspective.
+
+![cast](cast.png)
 
 ---
 
@@ -336,6 +363,46 @@ The cast (`byte_pointer`) `&x` converts all those pointers of three types (`int`
 ### Signed and Unsigned Numbers
 Both C and C++ support (the default) signed and unsigned numbers. However, Java supports only signed numbers.
 
+### Fixed-size Integer Types
+The ISO C99 standard introduces the class of integer types in the file `stdint.h`. There is also a set of macros defining the minimum and maximum values for each value of $N$, such as `INT32_MIN`, `INT32_MAX`, and `UINT32_MAX`.
+
+Formatted printing with fixed-width types requires use of macros that expand into format strings in a system-dependent manner. `inttypes.h` provides the portable `printf`/`scanf` format macros.
+
+```c
+printf("x = %" PRId32 ", y = %" PRIu64 "\n", x, y);
+```
+
+When compiled as a 64-bit program, macro `PRId32` expands to the string "d", while `PRId64` expands to the pair of strings "l" "u". When the C preprocessor enconters a sequence of string constants separated only by spaces (or other whitespace characters), it concatenates them together. Thus, the above call to `printf` becomes:
+
+```c
+printf("x = %d, y = %lu\n", x, y);
+```
+
+| Integer Type | Macro (decimal) | Macro (HEX) | Macro (Octal) |
+| ------------ | --------------- | ----------- | ------------- |
+| `int8_t`     | `PRId8`         | `PRIx8`     | `PRIo8`       |
+| `uint8_t`    | `PRIu8`         | `PRIx8`     | `PRIo8`       |
+| `int16_t`    | `PRId16`        | `PRIx16`    | `PRIo16`      |
+| `uint16_t`   | `PRIu16`        | `PRIx16`    | `PRIo16`      |
+| `int32_t`    | `PRId32`        | `PRIx32`    | `PRIo32`      |
+| `uint32_t`   | `PRIu32`        | `PRIx32`    | `PRIo32`      |
+| `int64_t`    | `PRId64`        | `PRIx64`    | `PRIo64`      |
+| `uint64_t`   | `PRIu64`        | `PRIx64`    | `PRIo64`      |
+
+* For HEX macros, use `x` for lowercase alphabets or `X` for uppercase alphabets.
+
+#### What the Macros Actually Expand to
+
+| Macro    | Linux/macOS (64-bit)    | Windows (MSVC, 64-bit)    |
+| -------- | ----------------------- | ------------------------- |
+| `PRId32` | `d`                     | `d`                       |
+| `PRIu32` | `u`                     | `u`                       |
+| `PRId64` | `lld`                   | `I64d`                    |
+| `PRIu64` | `llu`                   | `I64u`                    |
+| `PRIx64` | `llx`                   | `I64x`                    |
+
+* Using `X` instead of `x` for `PRIx64` expands it to `llX`/`I64X`.
+* No difference between 32-bit and 64-bit compilation on the same OS, same macro.
 
 ---
 
