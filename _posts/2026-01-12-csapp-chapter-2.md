@@ -301,6 +301,8 @@ C allows casting between numeric data types. The expression `(unsigned) x` conve
 
 ![cast](cast.png)
 
+![conversion](conversion.png)
+
 ---
 
 ## Tips on C
@@ -457,3 +459,14 @@ printf("x = %d, y = %lu\n", x, y);
 ### Problem 2.15
 ![Problem](practice/2-15.png)
 
+### Problem 2.16
+![Problem](practice/2-16.png)
+
+### Problem 2.17
+![Problem](practice/2-17.png)
+
+### Problem 2.18
+![Problem](practice/2-18.png)
+
+### Problem 2.19
+![Problem](practice/2-19.png)
