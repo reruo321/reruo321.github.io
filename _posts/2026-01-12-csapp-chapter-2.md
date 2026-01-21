@@ -264,8 +264,14 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 ## 2.2.2 Unsigned Encodings
 ![2-12](2-12.png)
 
+### Equation (2.1)
+
 ![b2u](b2u.png)
 
+### Equation (2.2)
+![b2u_map](b2u_map.png)
+
+### Uniqueness of Unsigned Encoding
 ![b2u_umax](b2u_umax.png)
 
 ![b2u_u2b](b2u_u2b.png)
@@ -273,10 +279,17 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 ## 2.2.3 Two's-Complement Encodings
 ![2-13](2-13.png)
 
+### Equation (2.3)
 ![b2t](b2t.png)
+
+### Equation (2.4)
+![b2t_map](b2t_map.png)
+
+### Uniqueness of Two's-Complement Encoding
 
 ![b2t_t2b](b2t_t2b.png)
 
+### B2T Tip
 ![b2t_trick](b2t_trick.png)
 
 ![2-14](2-14.png)
@@ -297,11 +310,95 @@ The C standards do not require single integers to be represented in two's comple
 For more C tips on the fixed-size integer types, see [here](#fixed-size-integer-types).
 
 ## 2.2.4 Conversions between Signed and Unsigned
+![2-16](2-16.png)
+
+![2-17](2-17.png)
+
+![2-18](2-18.png)
+
 C allows casting between numeric data types. The expression `(unsigned) x` converts the value of `x` to an unsigned value, and `(int) u` converts the value of `u` to a signed integer. Converting a negative value to unsigned in the most implementations of C is based on a bit-level perspective.
 
 ![cast](cast.png)
 
+### Equation (2.5)
 ![conversion](conversion.png)
+
+### Equation (2.6)
+![b2u_t2b](b2u_t2b.png)
+
+### Equation (2.7)
+![u2t](u2t.png)
+
+### Equation (2.8)
+![u2t Derivation](u2t-derivation.png)
+
+## 2.2.5 Signed versus Unsigned in C
+Although the C standard does not specify a particular representation of signed numbers, almost all machines use two's complement. Generally, most numbers are signed by default. C allows conversion between unsigned and signed.
+
+Conversions can happen due to explicit casting:
+
+```c
+int tx, ty;
+unsigned ux, uy;
+
+tx = (int) ux;
+uy = (unsigned) ty;
+```
+
+Or implicitly:
+
+```c
+int tx, ty;
+unsigned ux, uy;
+
+tx = ux; /* Cast to signed */
+uy = ty; /* Cast to unsigned */
+```
+
+`printf` does not make use of any type information, and so it is possible to print a value of type `int` with directive `%u` and a value of type `unsigned` with directive `%d`.
+
+```c
+int x = -1;
+unsigned u = 2147483648; /* 2 to the 31th */
+
+printf("x = %u = %d\n", x, x);
+printf("u = %u = %d\n", u, u);
+```
+
+When compiled as a 32-bit program, it prints the following:
+```
+x = 4294967295 = -1
+u = 2147483648 = -2147483648
+```
+
+![2-19](2-19.png)
+_Figure 2.19 Effects of C promotion rules. - CS:APP_
+
+When an operation is performed where one operand is signed and the other is unsigned, C implicitly casts the signed argument to unsigned and performs the operations assuming the numbers are nonnegative.
+
+## 2.2.6 Expanding the Bit Representation of a Number
+![Zero Extension](zero-extension.png)
+
+![Sign Extension](sign-extension.png)
+
+```c
+short sx = -12345;   /* -12345   */
+unsigned uy = sx;    /* Mystery! */
+
+printf("uy = %u:\t", uy);
+show_bytes((byte_pointer) &uy, sizeof(unsigned));
+```
+
+When the code above is run on a big-endian machine, it prints:
+
+```
+uy = 4294954951:     ff ff cf c7
+```
+
+This shows that, when converting from `short` to `unsigned`, the program first changes the size and then the type.
+
+## 2.2.7 Truncating Numbers
+
 
 ---
 
@@ -331,7 +428,10 @@ int *ip;
 `printf`, `fprintf`, and `sprintf` has the first argument as a format string, while any remaining arguments are values to be printed.
 
 * Character sequence starting with `%`: How to format the next argument
-    * `%d`: Decimal integer
+    * Integer
+        * `%d`: Signed decimal
+        * `%u`: Unsigned decimal
+        * `%x`: Hexadecimal
     * `%f`: Floating-point number
     * `%c`: Character
 
@@ -405,6 +505,15 @@ printf("x = %d, y = %lu\n", x, y);
 
 * Using `X` instead of `x` for `PRIx64` expands it to `llX`/`I64X`.
 * No difference between 32-bit and 64-bit compilation on the same OS, same macro.
+
+### DATA: TMIN
+A curious interaction between the asymmetry of the two's-complement representation and the conversion rules of C forces us to write $TMin_{32}$ in the unusual way.
+
+```c
+/* Minimum and maximum values a 'signed int' can hold. */
+#define INT_MAX   2147483647
+#define INT_MIN   (-INT_MAX - 1)
+```
 
 ---
 
