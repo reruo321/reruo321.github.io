@@ -296,7 +296,7 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 
 * **The two's-complement range is asymmetric**: **$\|TMin\| = \|TMax\| + 1$**. This asymmetry arises because half the bit patterns represent negative numbers, while half **including 0** represent nonnegative numbers.
 * **The maximum unsigned value is just over twice the maximum two's-complement value**: **$UMax = 2TMax + 1$**.
-* **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros.
+* **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros. sss
 
 ### More on fixed-size integer types
 ![2-15](2-15.png)
