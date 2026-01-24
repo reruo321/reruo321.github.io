@@ -296,7 +296,7 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 
 * **The two's-complement range is asymmetric**: **$\|TMin\| = \|TMax\| + 1$**. This asymmetry arises because half the bit patterns represent negative numbers, while half **including 0** represent nonnegative numbers.
 * **The maximum unsigned value is just over twice the maximum two's-complement value**: **$UMax = 2TMax + 1$**.
-* **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros. sss
+* **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros.
 
 ### More on fixed-size integer types
 ![2-15](2-15.png)
@@ -398,7 +398,18 @@ uy = 4294954951:     ff ff cf c7
 This shows that, when converting from `short` to `unsigned`, the program first changes the size and then the type.
 
 ## 2.2.7 Truncating Numbers
+![trunc_u](trunc_u.png)
 
+![trunc_two](trunc_two.png)
+
+### Equation (2.9)
+![eq2-9](eq2-9.png)
+
+### Equation (2.10)
+![eq2-10](eq2-10.png)
+
+## 2.2.8 Advice on Signed versus Unsigned
+The implicit casting of signed to unsigned leads to some nonintuitive behavior. Nonintuitive features often lead to program bugs, and ones involving the nuances of implicit casting can be especially difficult to see. See [Problem 2.25](#problem-225) and [Problem 2.26](#problem-226) for example subtle errors.
 
 ---
 
@@ -579,3 +590,24 @@ A curious interaction between the asymmetry of the two's-complement representati
 
 ### Problem 2.19
 ![Problem](practice/2-19.png)
+
+### Problem 2.20
+![Problem](practice/2-20.png)
+
+### Problem 2.21
+![Problem](practice/2-21.png)
+
+### Problem 2.22
+![Problem](practice/2-22.png)
+
+### Problem 2.23
+![Problem](practice/2-23.png)
+
+### Problem 2.24
+![Problem](practice/2-24.png)
+
+### Problem 2.25
+<!-- ![Problem](practice/2-25.png) -->
+
+### Problem 2.26
+<!-- ![Problem](practice/2-26.png) -->
