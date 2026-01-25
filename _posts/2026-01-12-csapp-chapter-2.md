@@ -411,6 +411,44 @@ This shows that, when converting from `short` to `unsigned`, the program first c
 ## 2.2.8 Advice on Signed versus Unsigned
 The implicit casting of signed to unsigned leads to some nonintuitive behavior. Nonintuitive features often lead to program bugs, and ones involving the nuances of implicit casting can be especially difficult to see. See [Problem 2.25](#problem-225) and [Problem 2.26](#problem-226) for example subtle errors.
 
+One way to avoid such bugs is to never use unsigned numbers. However, unsigned values are very useful in these two situations:
+1. When we want to think of words as just collections of bits with no numeric interpretation.
+    * Example: Flags
+2. When implementing mathematical packages for modular arithmetic and for multiprecision arithmetic, in which numbers are represented by arrays of words.
+    * Modular arithmetic: `mod`
+        * Example: Clock (11 + 2 = 1 o'clock ∵ 13 mod 12 = 1)
+    * Multiprecision arithmetic: processing big numbers that exceed the bit length a CPU can hold.
+        * Easier to process addition and multiplication than signed numbers because of easier carry/borrow and natural wrap-around (UMin underflows to UMax, UMax overflows to UMin).
+        * Example: 1024-bit number (often in encryption) - `uint64_t bignum[16];`
+
+```c
+// Addition of two (4 × 64)-bit big numbers
+void add_big(uint64_t a[4], uint64_t b[4], uint64_t result[4]) {
+    uint64_t carry = 0;
+    for (int i = 0; i < 4; i++) {
+        uint64_t sum = a[i] + b[i] + carry;
+        result[i] = sum;           // lower 64 bits
+        carry = (sum < a[i]) ? 1 : 0;   // if unsigned overflow → carry flag becomes ON
+    }
+    // if any carry remains → use bigger array OR overflows
+}
+```
+
+---
+
+## 2.3 Integer Arithmetic
+Understanding the nuances of finite nature of computer arithmetic (such as difference between `x < y` and `x-y < 0`) can help programmers write more reliable code.
+
+## 2.3.1 Unsigned Addition
+### Equation (2.11)
+![2-11](eq2-11.png)
+
+### Detecting overflow of unsigned addition
+![Overflow Detection](overflow-detection.png)
+
+### Equation (2.12)
+![2-12](eq2-12.png)
+
 ---
 
 ## Tips on C
