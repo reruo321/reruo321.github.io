@@ -403,10 +403,10 @@ This shows that, when converting from `short` to `unsigned`, the program first c
 ![trunc_two](trunc_two.png)
 
 ### Equation (2.9)
-![eq2-9](eq2-9.png)
+![Equation 2.9](eq2-9.png)
 
 ### Equation (2.10)
-![eq2-10](eq2-10.png)
+![Equation 2.10](eq2-10.png)
 
 ## 2.2.8 Advice on Signed versus Unsigned
 The implicit casting of signed to unsigned leads to some nonintuitive behavior. Nonintuitive features often lead to program bugs, and ones involving the nuances of implicit casting can be especially difficult to see. See [Problem 2.25](#problem-225) and [Problem 2.26](#problem-226) for example subtle errors.
@@ -441,13 +441,52 @@ Understanding the nuances of finite nature of computer arithmetic (such as diffe
 
 ## 2.3.1 Unsigned Addition
 ### Equation (2.11)
-![2-11](eq2-11.png)
+![Equation 2.11](eq2-11.png)
 
-### Detecting overflow of unsigned addition
+### Detecting Overflow of Unsigned Addition
 ![Overflow Detection](overflow-detection.png)
 
 ### Equation (2.12)
-![2-12](eq2-12.png)
+![Equation 2.12](eq2-12.png)
+
+### Aside: Security Vulnerability in getpeername
+```c
+/*
+ * Illustration of code vulnerability similar to that found in
+ * FreeBSD's implementation of getpeername()
+*/
+
+/* Declaration of library function memcpy */
+void *memcpy(void *dest, void *src, size_t n);
+
+/* Kernel memory region holding user-accessible data */
+#define KSIZE 1024
+char kbuf[KSIZE];
+
+/* Copy at most maxlen bytes from kernel region to user buffer */
+int copy_from_kernel(void *user_dest, int maxlen) {
+    /* Byte count len is minimum of buffer size and maxlen */
+    int len = KSIZE < maxlen ? KSIZE : maxlen;
+    memcpy(user_dest, kbuf, len);
+    return len;
+}
+```
+
+This was issued as "FreeBSD-SA-02:38.signed-error". If a malicious programmer writes code that calls `copy_from_kernel` with a negative value of `maxlen`, `memcpy` will treat the `unsigned n` as a very large positive number, and attemp to copy that many bytes from the kernel region to the user's buffer. It will not actually work because of invalid addresses in the process. However, the program could read regions of the kernel memory for which it is not authorized.
+
+The bug can be fixed by declaring both things:
+1. Parameter `maxlen` to `copy_from_kernel` to be of type `size_t`, to be consistent with parameter `n` of `memcpy`.
+2. Local variable `len` and the return value to be of type `size_t`. Although fixing `maxlen` might be okay to hide the issue, the compiler will give warnings like "comparison between signed and unsigned integer expressions". Fixing others ensures safety and consistency.
+
+## 2.3.2 Two's-Complement Addition
+### Equation (2.13)
+![Equation 2.13](eq2-13.png)
+
+### Equation (2.14)
+![Equation 2.14](eq2-14.png)
+
+### Detecting Overflow of Two's-Complement Addition
+![Overflow Detection](overflow-detection-two.png)
 
 ---
 
