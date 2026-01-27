@@ -115,7 +115,7 @@ Here's the example C source to check the byte representation in our system:
 typedef unsigned char *byte_pointer;
 
 void show_bytes(byte_pointer start, size_t len) {
-    int i;
+    size_t i;
     for (i = 0; i < len; i++)
         printf(" %.2x", start[i]);
     printf("\n");
@@ -488,6 +488,30 @@ The bug can be fixed by declaring both things:
 ### Detecting Overflow of Two's-Complement Addition
 ![Overflow Detection](overflow-detection-two.png)
 
+## 2.3.3 Two's-Complement Negation
+### Equation (2.15)
+![Equation 2.15](eq2-15.png)
+
+### Web Aside DATA: TNEG
+There are several clever ways to determine the two's-complement negation of a value represented at the bit level.
+1. Complement the bits and then increment the result. (`~x + 1`)
+2. Complement each bit to the left of bit position $k$, where $k$ is the position of the rightmost 1.
+
+![TNEG](tneg.png)
+
+## 2.3.4 Unsigned Multiplication
+### Equation (2.16)
+![Equation 2.16](eq2-16.png)
+
+### Equation (2.17)
+![Equation 2.17](eq2-17.png)
+
+### Bit-level Equivalence of Unsigned and Two's-Complement Multiplication
+![bit-eq-multiplication](bit-eq-multiplication.png)
+
+### Equation (2.18)
+![Equation 2.18](eq2-18.png)
+
 ---
 
 ## Tips on C
@@ -539,7 +563,7 @@ void show_bytes(byte_pointer start, size_t len) {
 
 In the example, the reference `start[i]` indicates that we want to read the byte that is `i` positions beyond the location pointed to by start.
 
-### Pointer Creation and Dereferencing
+### Pointer Creation and Casting
 ```c
 show_bytes((byte_pointer) &x, sizeof(int));      // &x: int *
 show_bytes((byte_pointer) &x, sizeof(float));    // &x: float *
