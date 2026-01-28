@@ -503,6 +503,7 @@ There are several clever ways to determine the two's-complement negation of a va
 ### Equation (2.16)
 ![Equation 2.16](eq2-16.png)
 
+## 2.3.5 Two's-Complement Multiplication
 ### Equation (2.17)
 ![Equation 2.17](eq2-17.png)
 
@@ -511,6 +512,25 @@ There are several clever ways to determine the two's-complement negation of a va
 
 ### Equation (2.18)
 ![Equation 2.18](eq2-18.png)
+
+### Aside: Security Vulnerability in the XDR Library
+![malloc](malloc.png)
+
+## 2.3.6 Multiplying by Constants
+![power-of-2](power-of-2.png)
+
+![power-of-2-u](power-of-2-u.png)
+
+![power-of-2=t](power-of-2-t.png)
+
+Note that multiplying by a power of 2 can cause overflow with either unsigned or two's-complement arithmetic. Also, integer multiplication is more costly than shifting and adding.
+
+## 2.3.7 Dividing by Powers of 2
+![div-power-u](div-power-u.png)
+
+![div-power-t-d](div-power-t-d.png)
+
+![div-power-t-u](div-power-t-u.png)
 
 ---
 
@@ -712,3 +732,7 @@ A curious interaction between the asymmetry of the two's-complement representati
 
 ### Problem 2.26
 <!-- ![Problem](practice/2-26.png) -->
+
+### Problem 2.37
+See [above](#aside-security-vulnerability-in-the-xdr-library) for the XDR code.
+
