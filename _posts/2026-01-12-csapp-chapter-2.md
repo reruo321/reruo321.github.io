@@ -532,6 +532,12 @@ Note that multiplying by a power of 2 can cause overflow with either unsigned or
 
 ![div-power-t-u](div-power-t-u.png)
 
+## 2.3.8 Final Thoughts on Integer Arithmetic
+* The "integer" arithmetic performed by computers is really a form of modular arithmetic.
+* The two's-complement representation provides a clever way to represent both negative and positive values, while using the same bit-level implementations as are used to perform unsigned arithmetic
+* Some of the conventions in the C language can yield some surprising results, and these can be sources of bugs that are hard to recognize or understand.
+* The `unsigned` data type, while conceptually straightforward, can lead to behaviors that even experienced programmers do not expect. It can also arise in unexpected ways.
+
 ---
 
 ## Tips on C
@@ -736,3 +742,61 @@ A curious interaction between the asymmetry of the two's-complement representati
 ### Problem 2.37
 See [above](#aside-security-vulnerability-in-the-xdr-library) for the XDR code.
 
+### Problem 2.42
+Answer:
+
+```c
+int div16(int x) {
+	int alpha = (x >> 31) & 15;
+	return (x + alpha) >> 4;
+}
+```
+
+Full validation:
+
+```c
+#include <stdio.h>
+#include <limits.h>
+
+#define SIXTEEN 16
+
+int div16(int x) {
+	int alpha = (x >> 31) & 15;
+	return (x + alpha) >> 4;
+}
+
+int main() {
+	int prev = INT_MIN;
+	int total = 0;
+	int wrong = 0;
+
+	for (int k = 0; k < 100001; ++k) {
+		++total;
+		int i = -50000 + k;
+		int answer = i / SIXTEEN;
+		int d = div16(i);
+		if (prev == INT_MIN)
+			prev = answer;
+		else if (prev != answer) {
+			printf("\n");
+			prev = answer;
+		}
+
+		printf("%11d / 16\t%10d\t%10d ----- ", i, answer, d);
+		if (answer == d)
+			printf("Correct!\n");
+		else {
+			printf("Oh.....\n");
+			++wrong;
+		}
+	}
+
+	printf("\n> Test Result: %d / %d\n", (total - wrong), total);
+	if (!wrong)
+		printf("WOW! Perfect!\n");
+	else
+		printf("Oh...... Something is wrong.\n");
+
+	return 0;
+}
+```
