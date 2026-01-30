@@ -20,7 +20,7 @@ _Figure 2.1 Specifying different versions of C to GCC. - CS:APP_
 
 ---
 
-## 2.1.1 Hexadecimal Notation
+### 2.1.1 Hexadecimal Notation
 ![Hex](2-2.png)
 
 A single byte consists of 8 bits. In **binary** notation, its value ranges from 00000000₂ to 11111111₂. When viewed as a **decimal** integer, its value ranges from 0₁₀ to 255₁₀. Written in **hexadecimal**, the value of a single byte can range from 00₁₆ to FF₁₆.
@@ -37,7 +37,7 @@ $$
 
 ---
 
-## 2.1.2 Data Sizes
+### 2.1.2 Data Sizes
 For a machine with a $w$-bit word size, the virtual addresses can range from 0 to $2^w-1$, giving the program access to at most $2^w$ bytes.
 
 Most 64-bit machines can also run programs compiled for use on 32-bit machines, a form of backward compatibility.
@@ -77,7 +77,7 @@ One aspect of program portability is to make it insensitive to the exact sizes o
 
 ---
 
-## 2.1.3 Addressing and Byte Ordering
+### 2.1.3 Addressing and Byte Ordering
 For program objects that span multiple bytes, we must establish two conventions: what the address of the object will be, and how we will order the bytes in memory. In virtually all machines, a multi-byte object is stored as a contiguous sequence of bytes, with the address of the object given by the smallest address of the bytes used.
 
 For ordering the bytes representing an object, there are two common conventions.
@@ -167,17 +167,17 @@ Meanwhile, integer and the floating-point data encoding the same numeric value 1
 
 ---
 
-## 2.1.4 Representing Strings
+### 2.1.4 Representing Strings
 A string in C is encoded by an array of characters terminated by the null (having value 0) character. Each character is represented by some standard encoding, with the most common being the ASCII character code.
 
 ---
 
-## 2.1.5 Representing Code
+### 2.1.5 Representing Code
 Different machine types use different and incompatible instructions and encodings. Even identical processors running different operating systems have differences in their coding conventions and hence are not binary compatible.
 
 ---
 
-## 2.1.6. Introduction to Boolean Algebra
+### 2.1.6. Introduction to Boolean Algebra
 The simplest Boolean algebra is defined over thw two-element set {0, 1}.
 
 ![Boolean Algebra](2-7.png)
@@ -203,12 +203,12 @@ One useful application of bit vectors is to represent finite sets.
 
 ---
 
-## 2.1.7 Bit-Level Operations in C
+### 2.1.7 Bit-Level Operations in C
 One useful features of C is that it supports **bitwise** Boolean operations. The symbols we have used for the Boolean operations are exactly those used by C, and these can be applied to any "integral" data type.
 
 ---
 
-## 2.1.8 Logical Operations in C
+### 2.1.8 Logical Operations in C
 C also provides a set of **logical** operators.
 * `!`: NOT
 * `&&`: AND
@@ -220,7 +220,7 @@ And the logical operators do not evaluate their second argument if the result of
 
 ---
 
-## 2.1.9 Shift Operations in C
+### 2.1.9 Shift Operations in C
 
 C also provides a set of **shift** operations for shifting bit patterns to the left and to the right.
 
@@ -246,7 +246,7 @@ unsigned  uval = 0xFEDCBA98u >> 40;   // 40 mod 32 = 8, >> 8 (uval = 0x00FEDCBA)
 
 ![Terminology](2-8.png)
 
-## 2.2.1 Integral Data Types
+### 2.2.1 Integral Data Types
 ![2-9](2-9.png)
 
 ![2-10](2-10.png)
@@ -261,7 +261,7 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 1. **Portability** across all possible machines, such as 8-bit CPUs, 12-bit, or 16-bit machines.
 2. Support for **one's complement** representation used in early computers (in addition to two's complement used in modern systems). This is why the minimum guaranteed negative range is set to **$-(2^{w_{min}-1}-1)$** instead of $-(2^{w_{min}-1})$.
 
-## 2.2.2 Unsigned Encodings
+### 2.2.2 Unsigned Encodings
 ![2-12](2-12.png)
 
 ### Equation (2.1)
@@ -276,7 +276,7 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 
 ![b2u_u2b](b2u_u2b.png)
 
-## 2.2.3 Two's-Complement Encodings
+### 2.2.3 Two's-Complement Encodings
 ![2-13](2-13.png)
 
 ### Equation (2.3)
@@ -309,7 +309,7 @@ The C standards do not require single integers to be represented in two's comple
 
 For more C tips on the fixed-size integer types, see [here](#fixed-size-integer-types).
 
-## 2.2.4 Conversions between Signed and Unsigned
+### 2.2.4 Conversions between Signed and Unsigned
 ![2-16](2-16.png)
 
 ![2-17](2-17.png)
@@ -332,7 +332,7 @@ C allows casting between numeric data types. The expression `(unsigned) x` conve
 ### Equation (2.8)
 ![u2t Derivation](u2t-derivation.png)
 
-## 2.2.5 Signed versus Unsigned in C
+### 2.2.5 Signed versus Unsigned in C
 Although the C standard does not specify a particular representation of signed numbers, almost all machines use two's complement. Generally, most numbers are signed by default. C allows conversion between unsigned and signed.
 
 Conversions can happen due to explicit casting:
@@ -376,7 +376,7 @@ _Figure 2.19 Effects of C promotion rules. - CS:APP_
 
 When an operation is performed where one operand is signed and the other is unsigned, C implicitly casts the signed argument to unsigned and performs the operations assuming the numbers are nonnegative.
 
-## 2.2.6 Expanding the Bit Representation of a Number
+### 2.2.6 Expanding the Bit Representation of a Number
 ![Zero Extension](zero-extension.png)
 
 ![Sign Extension](sign-extension.png)
@@ -397,7 +397,7 @@ uy = 4294954951:     ff ff cf c7
 
 This shows that, when converting from `short` to `unsigned`, the program first changes the size and then the type.
 
-## 2.2.7 Truncating Numbers
+### 2.2.7 Truncating Numbers
 ![trunc_u](trunc_u.png)
 
 ![trunc_two](trunc_two.png)
@@ -408,7 +408,7 @@ This shows that, when converting from `short` to `unsigned`, the program first c
 ### Equation (2.10)
 ![Equation 2.10](eq2-10.png)
 
-## 2.2.8 Advice on Signed versus Unsigned
+### 2.2.8 Advice on Signed versus Unsigned
 The implicit casting of signed to unsigned leads to some nonintuitive behavior. Nonintuitive features often lead to program bugs, and ones involving the nuances of implicit casting can be especially difficult to see. See [Problem 2.25](#problem-225) and [Problem 2.26](#problem-226) for example subtle errors.
 
 One way to avoid such bugs is to never use unsigned numbers. However, unsigned values are very useful in these two situations:
@@ -439,7 +439,7 @@ void add_big(uint64_t a[4], uint64_t b[4], uint64_t result[4]) {
 ## 2.3 Integer Arithmetic
 Understanding the nuances of finite nature of computer arithmetic (such as difference between `x < y` and `x-y < 0`) can help programmers write more reliable code.
 
-## 2.3.1 Unsigned Addition
+### 2.3.1 Unsigned Addition
 ### Equation (2.11)
 ![Equation 2.11](eq2-11.png)
 
@@ -478,7 +478,7 @@ The bug can be fixed by declaring both things:
 1. Parameter `maxlen` to `copy_from_kernel` to be of type `size_t`, to be consistent with parameter `n` of `memcpy`.
 2. Local variable `len` and the return value to be of type `size_t`. Although fixing `maxlen` might be okay to hide the issue, the compiler will give warnings like "comparison between signed and unsigned integer expressions". Fixing others ensures safety and consistency.
 
-## 2.3.2 Two's-Complement Addition
+### 2.3.2 Two's-Complement Addition
 ### Equation (2.13)
 ![Equation 2.13](eq2-13.png)
 
@@ -488,7 +488,7 @@ The bug can be fixed by declaring both things:
 ### Detecting Overflow of Two's-Complement Addition
 ![Overflow Detection](overflow-detection-two.png)
 
-## 2.3.3 Two's-Complement Negation
+### 2.3.3 Two's-Complement Negation
 ### Equation (2.15)
 ![Equation 2.15](eq2-15.png)
 
@@ -499,11 +499,11 @@ There are several clever ways to determine the two's-complement negation of a va
 
 ![TNEG](tneg.png)
 
-## 2.3.4 Unsigned Multiplication
+### 2.3.4 Unsigned Multiplication
 ### Equation (2.16)
 ![Equation 2.16](eq2-16.png)
 
-## 2.3.5 Two's-Complement Multiplication
+### 2.3.5 Two's-Complement Multiplication
 ### Equation (2.17)
 ![Equation 2.17](eq2-17.png)
 
@@ -516,7 +516,7 @@ There are several clever ways to determine the two's-complement negation of a va
 ### Aside: Security Vulnerability in the XDR Library
 ![malloc](malloc.png)
 
-## 2.3.6 Multiplying by Constants
+### 2.3.6 Multiplying by Constants
 ![power-of-2](power-of-2.png)
 
 ![power-of-2-u](power-of-2-u.png)
@@ -525,18 +525,29 @@ There are several clever ways to determine the two's-complement negation of a va
 
 Note that multiplying by a power of 2 can cause overflow with either unsigned or two's-complement arithmetic. Also, integer multiplication is more costly than shifting and adding.
 
-## 2.3.7 Dividing by Powers of 2
+### 2.3.7 Dividing by Powers of 2
 ![div-power-u](div-power-u.png)
 
 ![div-power-t-d](div-power-t-d.png)
 
 ![div-power-t-u](div-power-t-u.png)
 
-## 2.3.8 Final Thoughts on Integer Arithmetic
+### 2.3.8 Final Thoughts on Integer Arithmetic
 * The "integer" arithmetic performed by computers is really a form of modular arithmetic.
 * The two's-complement representation provides a clever way to represent both negative and positive values, while using the same bit-level implementations as are used to perform unsigned arithmetic
 * Some of the conventions in the C language can yield some surprising results, and these can be sources of bugs that are hard to recognize or understand.
 * The `unsigned` data type, while conceptually straightforward, can lead to behaviors that even experienced programmers do not expect. It can also arise in unexpected ways.
+
+---
+
+## 2.4 Floating Point
+### 2.4.1 Fractional Binary Numbers
+![eq2-19](eq2-19.png)
+
+### 2.4.2 IEEE Floating-Point Representation
+![precision](precision.png)
+
+
 
 ---
 
@@ -656,7 +667,25 @@ A curious interaction between the asymmetry of the two's-complement representati
 ---
 
 ## Other Tips
-* `man ascii` on the terminal generates an ASCII table.
+### ASCII Table
+`man ascii` on the terminal generates an ASCII table.
+
+### SDL
+Visual Studio will block you to compile and run some programs with specific warnings, if SDL(Security Development Lifecycle) is enabled.
+
+Check [the official Microsoft Learn document](https://learn.microsoft.com/en-us/cpp/build/reference/sdl-enable-additional-security-checks?view=msvc-180) first to confirm that you are intentionally making such warnings. To disable SDL, follow these figures. Note that I am using Visual Studio 2026. 
+
+![sdl_enabled](sdl_enabled.png)
+
+1) Right-click your project name, and click 'Properties'.
+
+![sdl_disable](sdl_disable.png)
+
+2) Select the Configuration Properties > C/C++ > General, and set the SDL checks to 'No(/sdl-)'. Choose Apply. 
+
+![sdl_result](sdl_result.png)
+
+Done!
 
 ---
 
