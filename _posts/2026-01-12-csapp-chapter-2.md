@@ -88,10 +88,10 @@ For ordering the bytes representing an object, there are two common conventions.
 
 Byte ordering becomes an issue in these three situtations:
 
-### When Byte Ordering Matters 1
+#### When Byte Ordering Matters 1
 When binary data are communicated over a network between different machine. The sending machine should convert its internal representation to the network standard, and the receiving machine convert the network standard to its internal representation.
 
-### When Byte Ordering Matters 2
+#### When Byte Ordering Matters 2
 When looking at the byte sequences representing integer data, inspecting machine-level programs.
 
 ```gas
@@ -100,7 +100,7 @@ When looking at the byte sequences representing integer data, inspecting machine
 
 Having bytes appear in reverse order is a common occurrence when reading machine-level program representations generated for little-endian machines such as this one. The value `0x200b43` is represented as `43 0b 20 00` in the instruction.
 
-### When Byte Ordering Matters 3
+#### When Byte Ordering Matters 3
 When programs are written that circumvent the normal type system. In the C language, this can be done using a cast or a `union` to allow an object to be referenced according to a different data type from which it was created. Such coding tricks are strongly discouraged for most application programming, but they can be quite useful and even necessary for system-level programming.
 
 ![2-5-2-6](2-5-2-6.png)
@@ -264,14 +264,14 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 ### 2.2.2 Unsigned Encodings
 ![2-12](2-12.png)
 
-### Equation (2.1)
+#### Equation (2.1)
 
 ![b2u](b2u.png)
 
-### Equation (2.2)
+#### Equation (2.2)
 ![b2u_map](b2u_map.png)
 
-### Uniqueness of Unsigned Encoding
+#### Uniqueness of Unsigned Encoding
 ![b2u_umax](b2u_umax.png)
 
 ![b2u_u2b](b2u_u2b.png)
@@ -279,17 +279,17 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 ### 2.2.3 Two's-Complement Encodings
 ![2-13](2-13.png)
 
-### Equation (2.3)
+#### Equation (2.3)
 ![b2t](b2t.png)
 
-### Equation (2.4)
+#### Equation (2.4)
 ![b2t_map](b2t_map.png)
 
-### Uniqueness of Two's-Complement Encoding
+#### Uniqueness of Two's-Complement Encoding
 
 ![b2t_t2b](b2t_t2b.png)
 
-### B2T Tip
+#### B2T Tip
 ![b2t_trick](b2t_trick.png)
 
 ![2-14](2-14.png)
@@ -298,7 +298,7 @@ Guaranteed ranges for C integer data types are influenced by two important histo
 * **The maximum unsigned value is just over twice the maximum two's-complement value**: **$UMax = 2TMax + 1$**.
 * **Representations of constants -1 and 0**: -1 has the same bit representation as $UMax$ ― a string of all ones. 0 is represented as a string of all zeros.
 
-### More on fixed-size integer types
+#### More on fixed-size integer types
 ![2-15](2-15.png)
 
 For some programs, it is essential that data types be encoded using representations with specific sizes.
@@ -320,16 +320,16 @@ C allows casting between numeric data types. The expression `(unsigned) x` conve
 
 ![cast](cast.png)
 
-### Equation (2.5)
+#### Equation (2.5)
 ![conversion](conversion.png)
 
-### Equation (2.6)
+#### Equation (2.6)
 ![b2u_t2b](b2u_t2b.png)
 
-### Equation (2.7)
+#### Equation (2.7)
 ![u2t](u2t.png)
 
-### Equation (2.8)
+#### Equation (2.8)
 ![u2t Derivation](u2t-derivation.png)
 
 ### 2.2.5 Signed versus Unsigned in C
@@ -402,10 +402,10 @@ This shows that, when converting from `short` to `unsigned`, the program first c
 
 ![trunc_two](trunc_two.png)
 
-### Equation (2.9)
+#### Equation (2.9)
 ![Equation 2.9](eq2-9.png)
 
-### Equation (2.10)
+#### Equation (2.10)
 ![Equation 2.10](eq2-10.png)
 
 ### 2.2.8 Advice on Signed versus Unsigned
@@ -440,16 +440,16 @@ void add_big(uint64_t a[4], uint64_t b[4], uint64_t result[4]) {
 Understanding the nuances of finite nature of computer arithmetic (such as difference between `x < y` and `x-y < 0`) can help programmers write more reliable code.
 
 ### 2.3.1 Unsigned Addition
-### Equation (2.11)
+#### Equation (2.11)
 ![Equation 2.11](eq2-11.png)
 
-### Detecting Overflow of Unsigned Addition
+#### Detecting Overflow of Unsigned Addition
 ![Overflow Detection](overflow-detection.png)
 
-### Equation (2.12)
+#### Equation (2.12)
 ![Equation 2.12](eq2-12.png)
 
-### Aside: Security Vulnerability in getpeername
+#### Aside: Security Vulnerability in getpeername
 ```c
 /*
  * Illustration of code vulnerability similar to that found in
@@ -479,20 +479,20 @@ The bug can be fixed by declaring both things:
 2. Local variable `len` and the return value to be of type `size_t`. Although fixing `maxlen` might be okay to hide the issue, the compiler will give warnings like "comparison between signed and unsigned integer expressions". Fixing others ensures safety and consistency.
 
 ### 2.3.2 Two's-Complement Addition
-### Equation (2.13)
+#### Equation (2.13)
 ![Equation 2.13](eq2-13.png)
 
-### Equation (2.14)
+#### Equation (2.14)
 ![Equation 2.14](eq2-14.png)
 
-### Detecting Overflow of Two's-Complement Addition
+#### Detecting Overflow of Two's-Complement Addition
 ![Overflow Detection](overflow-detection-two.png)
 
 ### 2.3.3 Two's-Complement Negation
-### Equation (2.15)
+#### Equation (2.15)
 ![Equation 2.15](eq2-15.png)
 
-### Web Aside DATA: TNEG
+#### Web Aside DATA: TNEG
 There are several clever ways to determine the two's-complement negation of a value represented at the bit level.
 1. Complement the bits and then increment the result. (`~x + 1`)
 2. Complement each bit to the left of bit position $k$, where $k$ is the position of the rightmost 1.
@@ -500,20 +500,20 @@ There are several clever ways to determine the two's-complement negation of a va
 ![TNEG](tneg.png)
 
 ### 2.3.4 Unsigned Multiplication
-### Equation (2.16)
+#### Equation (2.16)
 ![Equation 2.16](eq2-16.png)
 
 ### 2.3.5 Two's-Complement Multiplication
-### Equation (2.17)
+#### Equation (2.17)
 ![Equation 2.17](eq2-17.png)
 
-### Bit-level Equivalence of Unsigned and Two's-Complement Multiplication
+#### Bit-level Equivalence of Unsigned and Two's-Complement Multiplication
 ![bit-eq-multiplication](bit-eq-multiplication.png)
 
-### Equation (2.18)
+#### Equation (2.18)
 ![Equation 2.18](eq2-18.png)
 
-### Aside: Security Vulnerability in the XDR Library
+#### Aside: Security Vulnerability in the XDR Library
 ![malloc](malloc.png)
 
 ### 2.3.6 Multiplying by Constants
@@ -547,7 +547,10 @@ Note that multiplying by a power of 2 can cause overflow with either unsigned or
 ### 2.4.2 IEEE Floating-Point Representation
 ![precision](precision.png)
 
+![floating-point](floating-point.png)
 
+#### 8-bit Floating Point Example
+![8bit-floating-point](8bit-floating-point.png)
 
 ---
 
