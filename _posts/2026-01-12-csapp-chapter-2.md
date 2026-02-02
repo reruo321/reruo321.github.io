@@ -549,6 +549,7 @@ Note that multiplying by a power of 2 can cause overflow with either unsigned or
 
 ![floating-point](floating-point.png)
 
+### 2.4.3 Example Numbers
 #### 8-bit Floating Point Example
 ![8bit-floating-point](8bit-floating-point.png)
 
