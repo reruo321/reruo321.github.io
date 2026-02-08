@@ -555,6 +555,8 @@ Note that multiplying by a power of 2 can cause overflow with either unsigned or
 
 ### 2.4.4 Rounding
 
+
+
 ---
 
 ## Tips on C
