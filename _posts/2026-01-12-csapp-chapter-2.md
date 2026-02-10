@@ -771,10 +771,40 @@ Done!
 ![Problem](practice/2-24.png)
 
 ### Problem 2.25
-<!-- ![Problem](practice/2-25.png) -->
+![Problem](practice/2-25.png)
 
 ### Problem 2.26
-<!-- ![Problem](practice/2-26.png) -->
+![Problem](practice/2-26.png)
+
+### Problem 2.27
+![Problem](practice/2-27.png)
+
+### Problem 2.28
+![Problem](practice/2-28.png)
+
+### Problem 2.29
+![Problem](practice/2-29.png)
+
+### Problem 2.30
+![Problem](practice/2-30.png)
+
+### Problem 2.31
+![Problem](practice/2-31.png)
+
+### Problem 2.32
+![Problem](practice/2-32.png)
+
+### Problem 2.33
+![Problem](practice/2-33.png)
+
+### Problem 2.34
+![Problem](practice/2-34.png)
+
+### Problem 2.35
+![Problem](practice/2-35.png)
+
+### Problem 2.36
+![Problem](practice/2-36.png)
 
 ### Problem 2.37
 See [above](#aside-security-vulnerability-in-the-xdr-library) for the XDR code.
