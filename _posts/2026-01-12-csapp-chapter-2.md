@@ -809,6 +809,20 @@ Done!
 ### Problem 2.37
 See [above](#aside-security-vulnerability-in-the-xdr-library) for the XDR code.
 
+![Problem](practice/2-37.png)
+
+### Problem 2.38
+![Problem](practice/2-38.png)
+
+### Problem 2.39
+![Problem](practice/2-39.png)
+
+### Problem 2.40
+![Problem](practice/2-40.png)
+
+### Problem 2.41
+![Problem](practice/2-41.png)
+
 ### Problem 2.42
 Answer:
 
@@ -867,3 +881,6 @@ int main() {
 	return 0;
 }
 ```
+
+### Problem 2.43
+![Problem](practice/2-43.png)
