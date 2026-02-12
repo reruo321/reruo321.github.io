@@ -884,3 +884,12 @@ int main() {
 
 ### Problem 2.43
 ![Problem](practice/2-43.png)
+
+### Problem 2.44
+![Problem](practice/2-44.png)
+
+### Problem 2.45
+![Problem](practice/2-45.png)
+
+### Problem 2.46
+![Problem](practice/2-46.png)
