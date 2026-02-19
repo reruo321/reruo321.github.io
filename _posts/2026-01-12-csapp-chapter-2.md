@@ -907,3 +907,31 @@ int main() {
 ![Problem](practice/2-50.png)
 
 ### Problem 2.51
+![Problem](practice/2-51.png)
+
+### Problem 2.52
+![Problem](practice/2-52.png)
+
+### Problem 2.53
+```c
+#include <stdio.h>
+
+#define POS_INFINITY 2e500
+#define NEG_INFINITY -POS_INFINITY
+#define NEG_ZERO -1/POS_INFINITY
+
+int main(){
+    printf("%lf %lf %lf\n", POS_INFINITY, NEG_INFINITY, NEG_ZERO);
+    
+    return 0;
+}
+```
+
+![Problem](practice/2-53/solution.png)
+
+![Problem](practice/2-53/result.png)
+
+NOTE: This would work in 64-bit GCC build. Did not work in VS 2026 with MSVC.
+
+### Problem 2.54
+![Problem](practice/2-54.png)
