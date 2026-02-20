@@ -570,6 +570,14 @@ It avoids the statistical bias by other rounding modes in most real-life situati
 
 ![floating-point-multiplication](floating-point-multiplication.png)
 
+### 2.4.6 Floating Point in C
+Most systems provide a combination of include (.h) files and procedure libraries to provide access to change the rounding mode or to get special values such as -0, +∞, -∞, or NaN. For example, the GNU compiler GCC defines program constants `INFINITY` (for +∞) and `NAN` (for NaN) when the following sequence occurs in the program file:
+
+```c
+#define _GNU_SOURCE 1
+#include <math.h>
+```
+
 ---
 
 ## Tips on C
