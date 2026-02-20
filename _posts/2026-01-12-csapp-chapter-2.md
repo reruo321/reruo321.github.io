@@ -554,8 +554,21 @@ Note that multiplying by a power of 2 can cause overflow with either unsigned or
 ![8bit-floating-point](8bit-floating-point.png)
 
 ### 2.4.4 Rounding
+1. Round-to-even: Rounds the number either upward or downward such that the least significant digit orf the result is even. Thus, it rounds both $1.50 and $2.50 to $2.
+2. Round-toward-zero: Rounds positive numbers downward, and negative numbers upward.
+3. Round-down: Rounds both positive and negative numbers downward.
+4. Round-up: Rounds both positive and negative numbers upward.
 
+#### Why we need to use round-to-even?
+It avoids the statistical bias by other rounding modes in most real-life situations.
 
+![round-to-even](round-to-even.png)
+
+### 2.4.5 Floating-Point Operations
+
+![floating-point-addition](floating-point-addition.png)
+
+![floating-point-multiplication](floating-point-multiplication.png)
 
 ---
 
