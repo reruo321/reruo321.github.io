@@ -11,6 +11,10 @@ tags: [CS:APP]
 math: true
 ---
 
+<h2>
+※ DISCLAIMER: This post is written by a non-native English speaking student. It may contain any incorrect information or improper expressions.
+</h2>
+
 # 2. Representing and Manipulating Information
 ## 2.1 Information Storage
 Rather than accessing individual bits in memory, most computers use block of 8 bits, or **bytes**, as the smallest addressable unit of memory. A machine-level program views memory as a very large array of bytes, referred to as **virtual memory**. Every byte of memory is identified by a unique number, known as its **address**, and the set of all possible addresses is known as the **virtual address space**.
@@ -578,6 +582,15 @@ Most systems provide a combination of include (.h) files and procedure libraries
 #include <math.h>
 ```
 
+#### Casting
+Here O means "maybe", and X means "never".
+* `int` → `float`: Overflow - X / Round - O
+* `int` → `double`: Preserved
+* `float` → `int`: Overflow - O / Round - O (toward zero)
+* `float` → `double`: Preserved
+* `double` → `int`: Overflow - O / Round - O (toward zero)
+* `double` → `float`: Overflow - O (to +∞ or -∞) / Round - O
+
 ---
 
 ## Tips on C
@@ -956,3 +969,8 @@ NOTE: This would work in 64-bit GCC build. Did not work in VS 2026 with MSVC.
 
 ### Problem 2.54
 ![Problem](practice/2-54.png)
+
+### Problem 2.55
+![Problem](practice/2-55/vs.png)
+
+Both machines use x86-64, which is little endian.
