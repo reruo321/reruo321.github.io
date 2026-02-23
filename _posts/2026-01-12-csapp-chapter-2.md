@@ -971,6 +971,17 @@ NOTE: This would work in 64-bit GCC build. Did not work in VS 2026 with MSVC.
 ![Problem](practice/2-54.png)
 
 ### Problem 2.55
-![Problem](practice/2-55/vs.png)
+I got `show-bytes.c` from the official CS:APP homepage.
 
-Both machines use x86-64, which is little endian.
+![Problem](practice/2-55/windows11.png)
+_Tested with Visual Studio 2026 in Windows 11_
+
+![Problem](practice/2-55/ubuntu.png)
+_Tested with GCC in Ubuntu 22.04_
+
+The first integer 12345 is 0x3039 in hex, and the value was reversed in byte unit on Windows 11 and Ubuntu 22.04. Therefore, both machines use x86-64, which is little endian.
+
+### Problem 2.56
+![Problem](practice/2-56.png)
+
+### Problem 2.57
