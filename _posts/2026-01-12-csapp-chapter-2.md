@@ -971,7 +971,7 @@ NOTE: This would work in 64-bit GCC build. Did not work in VS 2026 with MSVC.
 ![Problem](practice/2-54.png)
 
 ### Problem 2.55
-I got `show-bytes.c` from the official CS:APP homepage.
+I got `show-bytes.c` from [the official CS:APP homepage](https://csapp.cs.cmu.edu/3e/code.html). And also I got a big-endian MIPS compiler on Ubuntu with [a simple setup](/posts/big-endian-mips-compiler-on-ubuntu/).
 
 ![Problem](practice/2-55/windows11.png)
 _Tested with Visual Studio 2026 in Windows 11_
@@ -981,7 +981,182 @@ _Tested with GCC in Ubuntu 22.04_
 
 The first integer 12345 is 0x3039 in hex, and the value was reversed in byte unit on Windows 11 and Ubuntu 22.04. Therefore, both machines use x86-64, which is little endian.
 
+![Problem](practice/2-55/mips.png)
+_Tested with MIPS GCC in Ubuntu 22.04_
+
+Meanwhile, the program compiled in MIPS GCC shows the values in order, which is the reverse of the little endian results. This means MIPS is big endian.
+
 ### Problem 2.56
-![Problem](practice/2-56.png)
+![Problem](practice/2-56/little.png)
+
+![Problem](practice/2-56/big.png)
 
 ### Problem 2.57
+```c
+void show_short(short x) {
+    show_bytes((byte_pointer)&x, sizeof(short));
+}
+
+void show_long(long x) {
+    show_bytes((byte_pointer)&x, sizeof(long));
+}
+
+void show_double(double x) {
+    show_bytes((byte_pointer)&x, sizeof(double));
+}
+```
+
+![Problem](practice/2-57.png)
+
+### Problem 2.58
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+int is_little_endian() {
+    uint16_t test = 1;
+    return *(unsigned char *) &test;
+}
+
+int main() {
+
+    printf("Result: %d\n", is_little_endian());
+
+    return 0;
+}
+```
+
+![Problem](practice/2-58.png)
+
+### Problem 2.59
+```c
+#include <stdio.h>
+#include <stdint.h>
+
+int main() {
+	uint32_t x = 0x89ABCDEF;
+	uint32_t y = 0x76543210;
+
+	uint32_t z = (y & ~0xFF) | (x & 0xFF);
+	printf("x = %X\ny = %X\nz = %X\n", x, y, z);
+
+	return 0;
+}
+```
+
+### Problem 2.60
+```c
+#include <stdio.h>
+
+unsigned replace_byte(unsigned x, int i, unsigned char b) {
+	unsigned y = x;
+	unsigned char* cp = (unsigned char*)(&y);
+	*(cp + i) = b;
+	return y;
+}
+
+int main() {
+
+	printf("%X\n%X\n", replace_byte(0x12345678, 2, 0xAB), replace_byte(0x12345678, 0, 0xAB));
+
+	return 0;
+}
+```
+
+### Problem 2.61
+```c
+#include <stdio.h>
+#include <assert.h>
+
+int answer[4] = { 0, 0, 0, 0 };
+int samples[16] = {
+	0x00000000, 0x000000FF, 0x0000FF00, 0x0000FFFF,
+	0x00FF0000, 0x00FF00FF, 0x00FFFF00, 0x00FFFFFF,
+	0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
+	0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF
+};
+
+/* Any bit of x equals 1. 0xFFFFFFFF */
+int A(int x) {
+	/* If any bit of x is 0, x ^ 0xFFFFFFFF != 0 */
+	return !(x ^ (unsigned)~0);
+}
+
+/* Any bit of x equals 0. 0x00000000 */
+int B(unsigned x) {
+	/* If any bit of x is 1, x != 0 */
+	return !x;
+}
+
+/* Any bit in the least significant byte of x equals 1. 0x______FF */
+int C(int x) {
+	unsigned y = x;
+	/* If any bit of the LSB is 0, LSB ^ 0xFF != 0 */
+	return !((*(unsigned char *) &y) ^ 0xFF);
+}
+
+/* Any bit in the most significant byte of x equals 0. 0x00______ */
+int D(int x) {
+	/* If any bit of the MSB is 1, MSB & 0xFF != 0 */
+	unsigned y = x;
+	return !(*(((unsigned char*)&y) + (sizeof(int) - 1)) & 0xFF);
+}
+
+void verification(int x) {
+	if (x == 0xFFFFFFFF)
+		answer[0] = 1;
+	else
+		answer[0] = 0;
+
+	if (x == 0x00000000)
+		answer[1] = 1;
+	else
+		answer[1] = 0;
+
+	unsigned char* cp = (unsigned char*)&x;
+	if (*cp == 0xFF)
+		answer[2] = 1;
+	else
+		answer[2] = 0;
+
+	if (*(cp + (sizeof(int) - 1)) == 0x00)
+		answer[3] = 1;
+	else
+		answer[3] = 0;
+}
+
+int main() {
+
+	for (int i = 0; i < 16; ++i) {
+		int x = samples[i];
+		verification(x);
+
+		assert(answer[0] == A(x));
+		assert(answer[1] == B(x));
+		assert(answer[2] == C(x));
+		assert(answer[3] == D(x));
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.62
+```c
+#include <stdio.h>
+
+int int_shifts_are_arithmetic() {
+	return ((~0) >> 1) == ~0;
+}
+
+int main() {
+
+	printf("%d\n", int_shifts_are_arithmetic());
+
+	return 0;
+}
+```
+
+![Problem](practice/2-62.png)
