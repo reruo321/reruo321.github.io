@@ -1160,3 +1160,63 @@ int main() {
 ```
 
 ![Problem](practice/2-62.png)
+
+### Problem 2.63
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+/* Perform shift logically */
+unsigned srl(unsigned x, int k) {
+	/* Perform shift arithmetically */
+	unsigned xsra = (int) x >> k;
+
+	xsra += ((xsra & (1 << (w - k - 1))) << 1);
+	return xsra;
+}
+
+/* Perform shift arithmetically */
+int sra(int x, int k) {
+	/* Perform shift logically */
+	int xsrl = (unsigned) x >> k;
+
+	xsrl -= ((xsrl & (1 << (w - k - 1))) << 1);
+	return xsrl;
+}
+
+int main() {
+
+	int samples[8] = {
+		0x00000000, 0x01234567, 0x3579FDEC, 0x789ABCDE,
+		0x87654321, 0xBCDEF012, 0xFEDCBA98, 0xFFFFFFFF
+	};
+
+	for (int i = 0; i < 8; ++i) {
+		for (int k = 0; k < w; ++k) {
+			int x = samples[i];
+			unsigned int answer_srl = ((unsigned)x) >> k;
+			int answer_sra = x >> k;
+
+			unsigned int f_srl = srl(x, k);
+			int f_sra = sra(x, k);
+
+			printf("[x = 0x%08X, k = %d]\n", x, k);
+			printf("  answer_srl = 0x%08X, srl(x, k) = 0x%08X\n", answer_srl, f_srl);
+			printf("  answer_sra = 0x%08X, sra(x, k) = 0x%08X\n", answer_sra, f_sra);
+			assert(answer_srl == f_srl);
+			assert(answer_sra == f_sra);
+		}
+	}
+
+	printf("\nWOW!\n");
+
+}
+```
+
+![Problem](practice/2-63.png)
+
+I used left shift, addition, and subtraction.
+
+### 
