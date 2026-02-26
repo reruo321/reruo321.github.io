@@ -1069,57 +1069,56 @@ int main() {
 #include <assert.h>
 
 int answer[4] = { 0, 0, 0, 0 };
-int samples[16] = {
+int samples[20] = {
 	0x00000000, 0x000000FF, 0x0000FF00, 0x0000FFFF,
 	0x00FF0000, 0x00FF00FF, 0x00FFFF00, 0x00FFFFFF,
 	0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
-	0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF
+	0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF,
+	0x01234567, 0xFEDCBA98, 0xF0F0F0F0, 0xFEFEFEFE,
 };
 
-/* Any bit of x equals 1. 0xFFFFFFFF */
+/* Any bit of x equals 1. */
 int A(int x) {
-	/* If any bit of x is 0, x ^ 0xFFFFFFFF != 0 */
-	return !(x ^ (unsigned)~0);
+	/* False only if all bits of x equal 0: 0x00000000 */
+	return !!x;
 }
 
-/* Any bit of x equals 0. 0x00000000 */
+/* Any bit of x equals 0. */
 int B(unsigned x) {
-	/* If any bit of x is 1, x != 0 */
-	return !x;
+	/* False only if all bits of x equal 1: 0xFFFFFFFF */
+	return !!~x;
 }
 
-/* Any bit in the least significant byte of x equals 1. 0x______FF */
+/* Any bit in the least significant byte of x equals 1. */
 int C(int x) {
-	unsigned y = x;
-	/* If any bit of the LSB is 0, LSB ^ 0xFF != 0 */
-	return !((*(unsigned char *) &y) ^ 0xFF);
+	/* False only if all bits in the LSB is 0: 0x00 */
+	return !!(x & 0xFF);
 }
 
-/* Any bit in the most significant byte of x equals 0. 0x00______ */
+/* Any bit in the most significant byte of x equals 0. */
 int D(int x) {
-	/* If any bit of the MSB is 1, MSB & 0xFF != 0 */
-	unsigned y = x;
-	return !(*(((unsigned char*)&y) + (sizeof(int) - 1)) & 0xFF);
+	/* False only if all bits in the MSB is 1: 0xFF */
+	return !(x & (0xFF << ((sizeof(int) - 1) * 8)));
 }
 
 void verification(int x) {
-	if (x == 0xFFFFFFFF)
+	if (x != 0)
 		answer[0] = 1;
 	else
 		answer[0] = 0;
 
-	if (x == 0x00000000)
+	if (x != ~0)
 		answer[1] = 1;
 	else
 		answer[1] = 0;
 
 	unsigned char* cp = (unsigned char*)&x;
-	if (*cp == 0xFF)
+	if (*cp != 0x00)
 		answer[2] = 1;
 	else
 		answer[2] = 0;
 
-	if (*(cp + (sizeof(int) - 1)) == 0x00)
+	if (*(cp + (sizeof(int) - 1)) != 0xFF)
 		answer[3] = 1;
 	else
 		answer[3] = 0;
@@ -1130,7 +1129,7 @@ int main() {
 	for (int i = 0; i < 16; ++i) {
 		int x = samples[i];
 		verification(x);
-
+		D(x);
 		assert(answer[0] == A(x));
 		assert(answer[1] == B(x));
 		assert(answer[2] == C(x));
@@ -1142,6 +1141,10 @@ int main() {
 	return 0;
 }
 ```
+
+#### Warning!
+* "Any" on a declarative sentence (not a negative sentence using "not") in English means "at least one". So for example, the condition A means "It's true if **at least one** bit of `x` equals 1.", not "It's true if **all** bits of `x` equal 1."!
+* The type of the result using `~` is the type of the promoted operand. So the type like `unsigned char` whose rank is less than that of `int` can be converted to `int`. Avoid using `~` on some cases like masking that the byte number change matters, if you are not sure on this behavior!
 
 ### Problem 2.62
 ```c
@@ -1219,4 +1222,12 @@ int main() {
 
 I used left shift, addition, and subtraction.
 
-### 
+### Problem 2.64
+```c
+/* Assuming the LSB as bit 0 */
+int any_odd_one(unsigned x) {
+	return !!(x & 0xAAAAAAAA);
+}
+```
+
+### Problem 2.65
