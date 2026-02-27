@@ -1231,3 +1231,58 @@ int any_odd_one(unsigned x) {
 ```
 
 ### Problem 2.65
+```c
+#include <stdio.h>
+#include <assert.h>
+
+/* Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */
+int odd_ones(unsigned x) {
+	/* Divide and conquer with XOR until one bit position is left.	*/
+
+	/* 32bit -> 16bit */
+	x = (x >> 16) ^ x;
+
+	/* 16bit -> 8bit */
+	x = (x >> 8) ^ x;
+
+	/* 8bit -> 4bit */
+	x = (x >> 4) ^ x;
+
+	/* 4bit -> 2bit */
+	x = (x >> 2) ^ x;
+
+	/* 2bit ->1 bit */
+	x = (x >> 1) ^ x;
+
+	return x & 1;
+}
+
+int verification(unsigned x) {
+	int c = 0;
+	for (int i = 0; i < 32; ++i) {
+		if ((x >> i) & 1)
+			++c;
+	}
+	return c % 2;
+}
+
+int main() {
+
+	unsigned samples[12] = {
+		0x00000000, 0x00000001, 0xFFFFFFFF, 0xFFFFFFFE,
+		0x12345678, 0xFEDCBA98, 0xA4C132BB, 0xFEFEFEFF,
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		unsigned x = samples[i];
+		assert(odd_ones(x) == verification(x));
+	}
+
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+![Problem](practice/2-65.png)
