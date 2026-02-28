@@ -1268,12 +1268,12 @@ int verification(unsigned x) {
 
 int main() {
 
-	unsigned samples[12] = {
+	unsigned samples[8] = {
 		0x00000000, 0x00000001, 0xFFFFFFFF, 0xFFFFFFFE,
 		0x12345678, 0xFEDCBA98, 0xA4C132BB, 0xFEFEFEFF,
 	};
 
-	for (int i = 0; i < 12; ++i) {
+	for (int i = 0; i < 8; ++i) {
 		unsigned x = samples[i];
 		assert(odd_ones(x) == verification(x));
 	}
@@ -1286,3 +1286,96 @@ int main() {
 ```
 
 ![Problem](practice/2-65.png)
+
+### Problem 2.66
+```c
+#include <stdio.h>
+#include <assert.h>
+
+/* Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */
+int leftmost_one(unsigned x) {
+	/* masking 1 bit */
+	unsigned mask = x >> 1;
+	/* masking 2 bits */
+	mask = mask | (mask >> 1);
+	/* masking 4 bits */
+	mask = mask | (mask >> 2);
+	/* masking 8 bits */
+	mask = mask | (mask >> 4);
+	/* masking 16 bits */
+	mask = mask | (mask >> 8);
+	/* masking 31 bits */
+	mask = mask | (mask >> 16);
+
+	return x & ~mask;
+}
+
+int verification(unsigned x) {
+	unsigned mask = 0x80000000;
+	while (mask) {
+		if (x & mask) {
+			return mask;
+		}
+		mask >>= 1;
+	}
+	return mask;
+}
+
+int main() {
+
+	unsigned samples[12] = {
+		0x00000000, 0x00000001, 0xFFFFFFFF, 0xFFFFFFFE,
+		0x12345678, 0xFEDCBA98, 0xA4C132BB, 0xFEFEFEFF,
+		0x80000000, 0x7FFFFFFF, 0x00010000, 0x0000000F
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		unsigned x = samples[i];
+		assert(leftmost_one(x) == verification(x));
+	}
+
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+![Problem](practice/2-66.png)
+
+### Problem 2.67
+A. **Section 6.5.7 Bitwise shift operators** says:
+
+The integer promotions are performed on each of the operands. The type of the result is that of the
+promoted left operand. If the value of the right operand is negative or is greater than or equal to the width of the promoted left operand, the behavior is undefined.
+
+B. Why don't we just avoid big shifts at once?
+
+```c
+int int_size_is_32() {
+	/* Set most significant bit (msb) of 32-bit machine */
+	int set_msb = 1 << 31;
+	/* Shift past msb of 32-bit word */
+	int beyond_msb = set_msb << 1;
+
+	/* set_msb is nonzero when word size >= 32
+	   beyond_msb is zero when word size <= 32 */
+	return set_msb && !beyond_msb;
+}
+```
+
+C.
+```c
+int int_size_is_32_in_16bit_machine() {
+	/* Set most significant bit (msb) of 16-bit machine */
+	int set_msb = (((1 << 8) << 8) << 8) << 7;
+	/* Shift past msb of 32-bit word */
+	int beyond_msb = set_msb << 1;
+
+	/* set_msb is nonzero when word size >= 32
+	   beyond_msb is zero when word size <= 32 */
+	return set_msb && !beyond_msb;
+}
+```
+
+### Problem 2.68
