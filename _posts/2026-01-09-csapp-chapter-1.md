@@ -5,7 +5,7 @@ layout: post
 date: 2026-01-09
 media_subpath: /pics/2026-01-09-csapp-chapter-1/
 image:
-    path: https://csapp.cs.cmu.edu/3e/images/csapp3e-cover.jpg
+    path: csapp3e-cover.jpg
 categories: computer-system
 tags: [CS:APP]
 math: true

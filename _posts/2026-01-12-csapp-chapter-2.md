@@ -5,7 +5,7 @@ layout: post
 date: 2026-01-12
 media_subpath: /pics/2026-01-12-csapp-chapter-2/
 image:
-    path: https://csapp.cs.cmu.edu/3e/images/csapp3e-cover.jpg
+    path: csapp3e-cover.jpg
 categories: computer-system
 tags: [CS:APP]
 math: true
@@ -1379,3 +1379,92 @@ int int_size_is_32_in_16bit_machine() {
 ```
 
 ### Problem 2.68
+```c
+#include <stdio.h>
+#include <assert.h>
+
+int w = sizeof(int) * 8;
+
+/*
+  * Mask with least significant n bits set to 1
+  */
+int lower_one_mask(int n) {
+	unsigned x = (((unsigned)1 << (n >> 1)) << (n >> 1)) << (n & 1);
+	--x;
+	return x;
+}
+
+int verification(int n) {
+	unsigned x = 0;
+	for (int i = 0; i < n; ++i) {
+		x |= ((unsigned)1 << i);
+	}
+	return x;
+}
+int main() {
+
+	for (int i = 1; i <= w; ++i) {
+		int answer = verification(i);
+		printf("Expected lower_one_mask(%d): 0x%08X\n", i, answer);
+		assert(lower_one_mask(i) == answer);
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.69
+NOTE: Samples in the code were given assuming w = 32, although they will properly work well with any `w`s.
+
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+/*
+  * Mask with least significant n bits set to 1
+  */
+unsigned rotate_left(unsigned x, int n) {
+	int mask = ~0;
+	mask |= (!!n << (w - n - 1));
+	mask >>= n;
+	unsigned rotated_val = x & (unsigned) mask;
+	return (x << n) | (rotated_val >> (w - n));
+}
+
+unsigned verification(unsigned x, int n) {
+	unsigned rotated_val = 0;
+	unsigned mask = 1;
+	mask <<= w - 1;
+	for (int i = 1; i <= n; ++i) {
+		rotated_val |= (x & (mask >> (i - 1)));
+	}
+	return (x << n) | (rotated_val >> (w - n));
+}
+int main() {
+
+	unsigned samples[8] = {
+		0x00000000, 0xFFFFFFFF, 0x12345678, 0xFEDCBA98,
+		0x10101010, 0x10000000, 0x00000001, 0xEFEFEFEF,
+	};
+
+	for (int i = 0; i < 8; ++i) {
+		unsigned x = samples[i];
+		for (int j = 0; j < w; ++j) {
+			unsigned answer = verification(x, j);
+			printf("Expected rotate_left(0x%08X, %d) = 0x%08X\n", x, j, answer);
+			assert(rotate_left(x, j) == answer);
+		}
+	}
+
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.70
