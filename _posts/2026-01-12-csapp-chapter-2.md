@@ -1174,8 +1174,12 @@ const int w = sizeof(int) * 8;
 /* Perform shift logically */
 unsigned srl(unsigned x, int k) {
 	/* Perform shift arithmetically */
-	unsigned xsra = (int) x >> k;
-
+	unsigned xsra = (int)x >> k;
+	/* Fill the most significant bits with 0s.
+	 * Nothing changes if xsra had the MSB = 0 before the right shift arithmetically,
+	 * and removes the most significant k bits if xsra had the MSB = 1 before the right shift arithmetically.
+	 * (It removes the bits by adding 1 << (w-k), and making it to overflow.)
+	 */
 	xsra += ((xsra & (1 << (w - k - 1))) << 1);
 	return xsra;
 }
@@ -1183,8 +1187,12 @@ unsigned srl(unsigned x, int k) {
 /* Perform shift arithmetically */
 int sra(int x, int k) {
 	/* Perform shift logically */
-	int xsrl = (unsigned) x >> k;
-
+	int xsrl = (unsigned)x >> k;
+	/* Fill the most significant bits with 0s or 1s.
+	 * Nothing changes if xsrl had the MSB = 0 before the right shift logically,
+	 * and fills the most significant k bits with 1s if xsrl had the MSB = 1 before the right shift logically.
+	 * (It fills the bits with 1s by subtracting 1 << (w-k), and making it to underflow.)
+	 */
 	xsrl -= ((xsrl & (1 << (w - k - 1))) << 1);
 	return xsrl;
 }
@@ -1389,9 +1397,10 @@ int w = sizeof(int) * 8;
   * Mask with least significant n bits set to 1
   */
 int lower_one_mask(int n) {
-	unsigned x = (((unsigned)1 << (n >> 1)) << (n >> 1)) << (n & 1);
-	--x;
-	return x;
+	/* Make a mask by shifting 1 left by n positions and then subtracting 1. */
+	unsigned mask = (((unsigned)1 << (n >> 1)) << (n >> 1)) << (n & 1);
+	--mask;
+	return mask;
 }
 
 int verification(int n) {
@@ -1428,10 +1437,15 @@ const int w = sizeof(int) * 8;
   * Mask with least significant n bits set to 1
   */
 unsigned rotate_left(unsigned x, int n) {
+	/* mask masks the most significant n bits. */
 	int mask = ~0;
 	mask |= (!!n << (w - n - 1));
 	mask >>= n;
-	unsigned rotated_val = x & (unsigned) mask;
+	/* rotated_val is the masked value from x to be rotated. */
+	unsigned rotated_val = x & (unsigned)mask;
+	/* Do rotating left shift by concatenating rotated_val that goes to the lower position,
+	 * and other bits that go to the higher position.
+	 */
 	return (x << n) | (rotated_val >> (w - n));
 }
 
@@ -1468,3 +1482,116 @@ int main() {
 ```
 
 ### Problem 2.70
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+/*
+  * Return 1 when x can be represented as an n-bit, 2's-complement
+  * number; 0 otherwise
+  * Assume 1 <= n <= w
+  */
+
+int fits_bits(int x, int n) {
+	/* Left shift to clear other than the least significant n bits,
+	  * and right shift to revert the left shift AND to determine the sign of the n-bit value.
+	  */
+	return x == ((x << (w - n)) >> (w - n));
+}
+
+int verification(int x, int n) {
+	if (n == w)
+		return 1;
+	int absolute = 1 << (n - 1);
+	if (x >= -absolute && x < absolute)
+		return 1;
+	return 0;
+}
+
+int main() {
+
+	int samples[8] = {
+		0x00000000, 0xFFFFFFFF, -2147483647, 2147483647,
+		-2147483648, 0x00000001, -12345, 0x00100000
+	};
+
+	for (int i = 0; i < 8; ++i) {
+		for (int n = 1; n <= w; ++n) {
+			int x = samples[i];
+			int answer = verification(x, n);
+			printf("Expected fits_bits(0x%08X, %d): %d\n", x, n, answer);
+			assert(fits_bits(x, n) == answer);
+		}
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.71
+A. Sign does not extend at all so the result is always positive.
+
+B.
+
+```c
+#include <stdio.h>
+#include <assert.h>
+
+/* Declaration of data type where 4 bytes are packed into an unsigned */
+typedef unsigned packed_t;
+
+/* Extract byte from word. Return as signed integer */
+int xbyte(packed_t word, int bytenum) {
+	/* If word had the MSB = 0, nothing is subtracted.
+	 * If word had the MSB = 1, it subtracts (1 << 8) from the value,
+	 * which leads to the underflow to make the bits other than the least significant bytes 1.
+	 */
+	return ((word >> (bytenum << 3)) & 0xFF) - ((word & (1 << 31)) >> 23);
+}
+
+int main() {
+
+	packed_t sample1 = 0x12345678;
+	packed_t sample2 = 0x89ABCDEF;
+	int a0 = xbyte(sample1, 0);
+	int a1 = xbyte(sample1, 1);
+	int a2 = xbyte(sample1, 2);
+	int a3 = xbyte(sample1, 3);
+
+	int b0 = xbyte(sample2, 0);
+	int b1 = xbyte(sample2, 1);
+	int b2 = xbyte(sample2, 2);
+	int b3 = xbyte(sample2, 3);
+
+	assert(a0 == 0x78);
+	assert(a1 == 0x56);
+	assert(a2 == 0x34);
+	assert(a3 == 0x12);
+
+	assert(b0 == 0xFFFFFFEF);
+	assert(b1 == 0xFFFFFFCD);
+	assert(b2 == 0xFFFFFFAB);
+	assert(b3 == 0xFFFFFF89);
+
+	printf("0x%08X = %d (0x%08X) / %d (0x%08X) / %d (0x%08X) / %d (0x%08X)\n", sample1, a0, a0, a1, a1, a2, a2, a3, a3);
+	printf("0x%08X = %d (0x%08X) / %d (0x%08X) / %d (0x%08X) / %d (0x%08X)\n", sample2, b0, b0, b1, b1, b2, b2, b3, b3);
+
+	return 0;
+}
+```
+
+### Problem 2.72
+A.`maxbytes-sizeof(val)` is `size_t`, which is a `unsigned` type. Therefore it is always >= 0.
+
+B.
+
+```c
+if(maxbytes >= (int) sizeof(val))
+	memcpy(buf, (void *) &val, siezof(val));
+```
+
+### Problem 2.73
