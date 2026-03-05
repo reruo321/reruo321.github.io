@@ -1595,5 +1595,124 @@ if(maxbytes >= (int) sizeof(val))
 ```
 
 ### Problem 2.73
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+/* Addition that saturates to TMin or TMax */
+int saturating_add(int x, int y) {
+	int result = x + y;
+	unsigned msb_mask = 1 << (w - 1);
+
+	/* x_sign: Sign of x. If x >= 0, x_sign = 0. If x < 0, x_sign = 1. */
+	int x_sign = !!(x & msb_mask);
+	/* is_overflow: Flag to determine if x+y overflows */
+	int is_overflow = !((x ^ y) & msb_mask) && ((x & msb_mask) ^ (result & msb_mask));
+	/* overflow_result_eraser: Mask to clear original x+y if it overflows */
+	int overflow_result_eraser = ~((is_overflow << (w - 1)) >> (w - 1));
+
+	int tmin = 1 << (w - 1);
+	int tmax = tmin - 1;
+
+	/* 
+	 * Return x+y if it does not overflow, otherwise return TMin or TMax.
+	 * TMin = (is_overflow << (w-1))
+	 * TMax = TMin - 1, where 1 can be expressed as (is_overflow & !x_sign), using x_sign = 0 when returning TMax.
+	 */
+	return (result & (overflow_result_eraser)) + (is_overflow << (w - 1)) - (is_overflow & !x_sign);
+}
+
+int verification(int x, int y) {
+	int result = x + y;
+	int tmin = 1 << (w - 1);
+	if (x > 0 && y > 0 && result < 0)
+		result = tmin - 1;
+	if (x < 0 && y < 0 && result >= 0)
+		result = tmin;
+
+	return result;
+}
+
+int main() {
+
+	int samples[12][2] = {
+		{0x0000ABCD, 0x12345678}, {0xFFFFFFFF, 0x00000000}, {0xFFFFFFFE, 0x00000001}, {0xFFFFFFFE, 0x00000002},
+		{0x80000000, 0x80000000}, {0x80000000, 0xFFFFFFFF}, {0xFFFFFFFF, 0xFFFFFFFE}, {0x00000000, 0x80000000},
+		{0x7FFFFFFF, 0x00000000}, {0x7FFFFFFF, 0x12345678}, {0x7FFFFFFF, 0x80000000}, {0x7FFFFFFF, 0x7FFFFFFF},
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		int x = samples[i][0];
+		int y = samples[i][1];
+		int answer = verification(x, y);
+		int trial = saturating_add(x, y);
+		printf("x = %d (0x%08X), y = %d (0x%08X)\n", x, x, y, y);
+		printf("Expected saturating_add(%d, %d): %d (0x%08X)\n", x, y, answer, answer);
+		printf("Trial: %d (0x%08X)\n\n", trial, trial);
+		assert(answer == trial);
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
 
 ### Problem 2.74
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+int tsub_ok(int x, int y) {
+	int msb_mask = (1 << (w - 1));
+	int x_sign = x & msb_mask;
+	int y_sign = y & msb_mask;
+	/* r_sign: Sign of the x-y */
+	int r_sign = (x - y) & msb_mask;
+	/* (y != 0x80000000) && !(x < 0 && y > 0 && result > 0) && !(x > 0 && y < 0 && result < 0) */
+	return (y != msb_mask) && !(!x_sign && y_sign && r_sign) && !(x_sign && !y_sign && !r_sign);
+}
+
+int verification(int x, int y) {
+	if(y == (1 << (w - 1)))
+		return 0;
+	int result = x - y;
+
+	if (x < 0 && y > 0 && result > 0)
+		return 0;
+	if (x > 0 && y < 0 && result < 0)
+		return 0;
+	return 1;
+}
+
+int main() {
+	
+	int samples[12][2] = {
+		{0x0000ABCD, 0x12345678}, {0xFEDCBA98, 0x12345678}, {0xFFFFFFFF, 0x7FFFFFFF}, {0xFFFFFFFE, 0x7FFFFFFF},
+		{0x80000000, 0x80000000}, {0x80000000, 0xFFFFFFFF}, {0x80000000, 0x00000000}, {0x7FFFFFFF, 0x80000000},
+		{0x7FFFFFFF, 0x00000000}, {0x7FFFFFFF, 0x12345678}, {0x7FFFFFFF, 0xFFFFFFFF}, {0x7FFFFFFF, 0x7FFFFFFF},
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		int x = samples[i][0];
+		int y = samples[i][1];
+		int answer = verification(x, y);
+		int trial = tsub_ok(x, y);
+		printf("x = %d (0x%08X), y = %d (0x%08X)\n", x, x, y, y);
+		printf("Expected tsub_ok(%d, %d): %d\n", x, y, answer);
+		printf("Trial: %d\n\n", trial);
+		assert(answer == trial);
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.75
+
