@@ -1715,5 +1715,63 @@ int main() {
 ```
 
 ### Problem 2.75
+```c
+#include <stdio.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+int signed_high_prod(int x, int y) {
+	int64_t mult = (int64_t)x * (int64_t)y;
+	return mult >> w;
+}
+
+unsigned unsigned_high_prod(unsigned x, unsigned y) {
+	unsigned ushp = (unsigned) signed_high_prod(x, y);
+	int x_wm1 = 0;
+	int y_wm1 = 0;
+
+	if ((int)x < 0)
+		x_wm1 = 1;
+	if ((int)y < 0)
+		y_wm1 = 1;
+
+	return ushp + x_wm1 * y + y_wm1 * x;
+}
+
+unsigned verification(unsigned x, unsigned y) {
+	uint64_t mult = (uint64_t) x * (uint64_t) y;
+	printf("x * y = %" PRIu64 " (0x%016" PRIX64 ")\n", mult, mult);
+	return mult >> w;
+}
+
+int main() {
+
+	int samples[12][2] = {
+		{0x0000ABCD, 0x12345678}, {0xFFFFFFFF, 0x00000000}, {0xFFFFFFFF, 0x00000001}, {0xFEDCBA98, 0x98765432},
+		{0x80000000, 0x80000000}, {0x80000000, 0xFFFFFFFF}, {0xFFFFFFFF, 0xFFFFFFFE}, {0x98765432, 0xFEDCBA98},
+		{0x7FFFFFFF, 0x00000000}, {0x7FFFFFFF, 0x89ABCDEF}, {0x7FFFFFFF, 0x80000000}, {0x7FFFFFFF, 0x7FFFFFFF},
+	};
+
+	for (int i = 0; i < 12; ++i) {
+		int x = samples[i][0];
+		int y = samples[i][1];
+		printf("x = %d (0x%08X), y = %d (0x%08X)\n", x, x, y, y);
+		unsigned answer = verification(x, y);
+		unsigned trial = unsigned_high_prod(x, y);
+		printf("Expected unsigned_high_prod(%d, %d): %u (0x%08X)\n", x, y, answer, answer);
+		printf("Trial: %u (0x%08X)\n\n", trial, trial);
+		assert(answer == trial);
+	}
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+![Problem](practice/2-75.png)
 
 ### Problem 2.76
