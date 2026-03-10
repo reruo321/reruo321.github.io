@@ -1775,3 +1775,50 @@ int main() {
 ![Problem](practice/2-75.png)
 
 ### Problem 2.76
+```c
+#include <stdio.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <inttypes.h>
+
+void* my_calloc(size_t nmemb, size_t size) {
+	if (nmemb == 0 || size == 0)
+		return NULL;
+	if (nmemb > SIZE_MAX / size)
+		return NULL;
+	size_t buf = nmemb * size;
+	void* s = malloc(buf);
+	if(s != NULL)
+		memset(s, 0, buf);
+	return s;
+}
+
+int main() {
+	void* p;
+
+	p = my_calloc(0x1234, 2);
+	assert(p != NULL);
+	free(p);
+
+	p = my_calloc(0, 2);
+	assert(p == NULL);
+	free(p);
+
+	p = my_calloc(0x1234, 0);
+	assert(p == NULL);
+	free(p);
+
+	p = my_calloc(SIZE_MAX, 2);
+	assert(p == NULL);
+	free(p);
+
+	p = my_calloc(0x1234, SIZE_MAX);
+	assert(p == NULL);
+	free(p);
+
+	printf("WOW!\n");
+
+	return 0;
+}
+```
