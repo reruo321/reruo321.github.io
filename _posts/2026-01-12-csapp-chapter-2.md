@@ -11,9 +11,8 @@ tags: [CS:APP]
 math: true
 ---
 
-<h2>
-※ DISCLAIMER: This post is written by a non-native English speaking student. It may contain any incorrect information or improper expressions.
-</h2>
+> DISCLAIMER: This post is written by a non-native English speaking student. It may contain any incorrect information or improper expressions.
+{: .prompt-warning }
 
 # 2. Representing and Manipulating Information
 ## 2.1 Information Storage

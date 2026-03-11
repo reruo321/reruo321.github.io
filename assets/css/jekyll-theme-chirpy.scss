@@ -9,10 +9,14 @@
 ';
 
 code {
-  background-color: #2e3440 !important;
+  background-color: #d8dee9 !important;
   padding: 0.2em 0.4em;
   border-radius: 4px;
   font-size: 0.95em;
+}
+
+[data-mode="dark"] code {
+  background-color: #2e3440 !important;
 }
 
 [data-mode="light"] code {

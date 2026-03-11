@@ -7,7 +7,7 @@ media_subpath: /pics/2026-03-08-stm32-cubeide-version2-new-workflow/
 image:
     path: stm32cubeide.avif
 categories: firmware
-tags: [firmware, STM32, CubeIDE, Nucleo 64]
+tags: [firmware, STM32, CubeMX, CubeIDE, Nucleo]
 ---
 
 Today I'll show you how we can create a fresh new project for STM32CubeIDE version 2.X. I wrote this guide since I have some experience of version 1.X but got annoyed when using the version 2.X for the first time.
@@ -23,7 +23,7 @@ To sum up first, you need **STM32CubeMX** in addition to STM32CubeIDE to generat
 ### STM32CubeMX
 #### 1) Download and install the latest STM32CubeMX AND STM32CubeIDE.
 * STM32CubeMX: [https://www.st.com/en/development-tools/stm32cubemx.html](https://www.st.com/en/development-tools/stm32cubemx.html)
-* STM32CubeIDE: [https://www.st.com/en/development-tools/stm32cubemx.html](https://www.st.com/en/development-tools/stm32cubemx.html)
+* STM32CubeIDE: [https://www.st.com/en/development-tools/stm32cubeide.html](https://www.st.com/en/development-tools/stm32cubeide.html)
 
 #### 2) Open STM32CubeMX first, and start a new project.
 There are three options to start the project:
@@ -37,7 +37,7 @@ In my case, I picked up "ACCESS TO BOARD SELECTOR" for my Nucleo-F103RB. If a po
 ![mx00](mx00.png)
 
 #### 3) Configure your project.
-I selected my board, initialized all peripherals with their default Mode, use default configurations. In "Project" in **Project Manager** tab I set my project name and changed "ToolChain / IDE" to "STM32CubeIDE", and in "Code Generator" I checked "Generate peripheral initialization as a pair of '.c/.h' files per peripheral".
+I selected my board, initialized all peripherals with their default Mode, use default configurations. In "Project" in **Project Manager** tab I set my project name and changed "ToolChain / IDE" to "STM32CubeIDE", and in "Code Generator" I checked "Generate peripheral initialization as a pair of '.c/.h' files per peripheral" to easily distinguish between main.c and peripherial source.
 
 ![mx01](mx01.png)
 
@@ -59,7 +59,7 @@ If you got this pop-up message, congratulations! You successfully created the pr
 ![mx07](mx07.png)
 
 ### STM32CubeIDE
-#### 5) Open STM32CubeIDE, and select File → STM32 Project Create/Import.
+#### 5) Open STM32CubeIDE, and select [File] → [STM32 Project Create/Import].
 
 ![ide00](ide00.png)
 
@@ -86,7 +86,7 @@ DONE!
 
 ![mx06](mx06.png)
 
-#### 3) Go back to STM32CubeIDE and click File → Refresh, or press F5.
+#### 3) Go back to STM32CubeIDE and click [File] → [Refresh], or press F5.
 
 ![refresh](refresh.png)
 

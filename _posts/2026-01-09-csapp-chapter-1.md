@@ -11,6 +11,9 @@ tags: [CS:APP]
 math: true
 ---
 
+> DISCLAIMER: This post is written by a non-native English speaking student. It may contain any incorrect information or improper expressions.
+{: .prompt-warning }
+
 # 1. A Tour of Computer Systems
 ## 1.2 Compilation System
 ![Compilation System](compilation-system.png)
