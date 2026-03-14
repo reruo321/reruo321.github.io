@@ -1821,3 +1821,113 @@ int main() {
 	return 0;
 }
 ```
+
+### Problem 2.77
+![Problem](practice/2-77.png)
+
+### Problem 2.78
+```c
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+int divide_power2(int x, int k) {
+	int msb = (x & (1 << (w - 1)));
+	/* flag: If x >= 0, it's 0. If x < 0, it's 1. */
+	int flag = (((unsigned)x) >> (w - 1));
+	/* xor_mask: If x >= 0, x ^ mask does not affect x. If x < 0, x ^ mask does ~x */
+	int xor_mask = x >> (w - 1);
+	/*
+	 * If x >= 0, simply do x >> k.
+	 * If x < 0, do |x| >> k and then multiply -1 (Use -a = ~a + 1).
+	 * Be careful on the edge case where x = INT_MIN, since ~x + 1 is still negative.
+	 */
+	return (int)((((unsigned)((x ^ xor_mask) + flag) >> k) ^ xor_mask) + flag);
+}
+
+int verification(int x, int k) {
+	return x / pow(2, k);
+}
+
+int main() {
+
+	int samples[13] = {
+		0,
+		1, -1,
+		12343, -12343,
+		12344, -12344,
+		12345, -12345,
+		67890, -67890,
+		INT_MIN, INT_MAX,
+	};
+
+	for (int i = 0; i < 13; ++i) {
+		int x = samples[i];
+
+		for (int k = 0; k < w - 1; ++k) {
+			int trial = divide_power2(x, k);
+			int answer = verification(x, k);
+			printf("x = %d, k = %d\n", x, k);
+			printf("Trial: %d, Answer: %d\n\n", trial, answer);
+			assert(trial == answer);
+		}
+	}
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.79
+```c
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+int mult3div4(int x) {
+	int mult3 = x + (x << 1);
+	int msb = (mult3 & (1 << (w - 1)));
+	int flag = ((unsigned)msb) >> (w - 1);
+	int xor_mask = msb >> (w - 1);
+
+	return (int)(((((unsigned)((mult3 ^ xor_mask) + flag) >> 2)) ^ xor_mask) + flag);
+}
+
+int verification(int x) {
+	return 3 * x / 4;
+}
+
+int main() {
+
+	int samples[13] = {
+		0,
+		1, -1,
+		12343, -12343,
+		12344, -12344,
+		12345, -12345,
+		67890, -67890,
+		INT_MIN, INT_MAX
+	};
+
+	for (int i = 0; i < 13; ++i) {
+		int x = samples[i];
+
+		int trial = mult3div4(x);
+		int answer = verification(x);
+		printf("x = %d\n", x);
+		printf("Trial: %d, Answer: %d\n\n", trial, answer);
+		assert(trial == answer);
+	}
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.80
