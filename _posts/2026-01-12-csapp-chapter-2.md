@@ -1931,3 +1931,115 @@ int main() {
 ```
 
 ### Problem 2.80
+```c
+#include <stdio.h>
+#include <math.h>
+#include <limits.h>
+#include <assert.h>
+
+const int w = sizeof(int) * 8;
+
+int threefourths(int x) {
+	int low_mask = (1 << (w / 2)) - 1;
+	int high_mask = low_mask << (w / 2);
+
+	/* abs_x: Absolute value of x */
+	int msb = x & (1 << (w - 1));
+	int abs_mask = msb >> (w - 1);
+	/* Get the absolute value of x */
+	unsigned abs_x = (x ^ abs_mask) + (((unsigned) msb) >> (w - 1));
+
+	/*
+	  * Get both the most significant (w/2) bits and the least significant (w/2) bits of abs_x
+	  * to the low (w/2)-bit positions, so that they won't overflow after multiplying 3.
+	  */
+	unsigned low_bits = abs_x & low_mask;
+	unsigned high_bits_higher = abs_x & high_mask;
+	unsigned high_bits = high_bits_higher >> (w / 2);
+	
+	/* Multiply 3 */
+	unsigned low_bits_x3 = low_bits + (low_bits << 1);
+	unsigned high_bits_x3 = high_bits + (high_bits << 1);
+
+	/* Extract carry from the least significant (w/2) bits' multiplication */
+	unsigned carry_from_low = low_bits_x3 & high_mask;
+	low_bits_x3 -= carry_from_low;
+	/* Add the carry to the most significant (w/2) bits' multiplication */
+	high_bits_x3 += (carry_from_low >> (w / 2));
+
+	/*
+	 * Shift all things to the right by 2.
+	 * The least significant (w/2) bits: Just shift to the right by 2.
+	 * The most significant (w/2) bits: Left-shift by (w/2) and right-shift by 2 => Shift to the left by ((w / 2) - 2).
+	 */
+	unsigned new_abs_x = (low_bits_x3 >> 2) + (high_bits_x3 << ((w / 2) - 2));
+
+	/* Convert the absolute value to negative for negative x. */
+	int result = (new_abs_x ^ abs_mask) + (((unsigned)msb) >> (w - 1));
+	return result;
+}
+
+int verification(int x) {
+	return ((long long)x * 3) / 4;
+}
+
+int main() {
+
+	int samples[15] = {
+		0,
+		1, -1,
+		12343, -12343,
+		12344, -12344,
+		12345, -12345,
+		12346, -12346,
+		67890, -67890,
+		INT_MIN, INT_MAX,
+	};
+
+	for (int i = 0; i < 15; ++i) {
+		int x = samples[i];
+
+		int trial = threefourths(x);
+		int answer = verification(x);
+		printf("x = %d\n", x);
+		printf("Trial: %d, Answer: %d\n\n", trial, answer);
+		assert(trial == answer);
+	}
+	printf("WOW!\n");
+
+	return 0;
+}
+```
+
+### Problem 2.81
+A.
+
+```c
+~0 - ((((1 << (k/2)) << (k/2)) << (k & 1)) - 1)
+```
+
+B.
+
+```c
+int c = k + j;
+int k_one = (((1 << (c / 2)) << (c / 2)) << (c & 1)) - 1;
+int j_one = (((1 << (j / 2)) << (j / 2)) << (j & 1)) - 1;
+int answer = k_one - j_one;
+```
+
+### Problem 2.82
+A. False
+
+If `x = -2147483648, y = 1`, (x < y)
+
+However, since `-x = -2147483648, y = -1`, (-x < -y).
+
+B. True
+
+C. True
+
+Use that ~x = -x-1.
+
+Left: ~x+~y+1 = -x-y-1
+
+Right: ~(x+y) = -(x+y)-1 = -x-y-1
