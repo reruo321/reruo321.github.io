@@ -2030,16 +2030,41 @@ int answer = k_one - j_one;
 ### Problem 2.82
 A. False
 
-If `x = -2147483648, y = 1`, (x < y)
+```
+If x = -2147483648, y = 1, x < y
 
-However, since `-x = -2147483648, y = -1`, (-x < -y).
+However, since -x = -2147483648, y = -1, -x < -y.
+```
 
 B. True
 
+```
+'<<' has distributive property, and overflow/underflow does not affect the coefficient of x and y.
+
+Therefore, ((x+y) << 4) + y - x = 16x + 16y + y - x = 17y + 15x.
+
+```
+
 C. True
 
+```
 Use that ~x = -x-1.
 
 Left: ~x+~y+1 = -x-y-1
 
 Right: ~(x+y) = -(x+y)-1 = -x-y-1
+```
+
+D. True
+
+```
+Since bits of x and y are not changed by unsigned casting, (ux-uy) == -(unsigned)(y-x).
+```
+
+E. True
+
+```
+Considering the bit vector of x, and you can see ((x >> 2) << 2) always removes x_1 and x_0, where 2 * x_1 >= 0, 1 * x_0 >= 0.
+
+Therefore, ((x >> 2) << 2) <= x for all x.
+```
