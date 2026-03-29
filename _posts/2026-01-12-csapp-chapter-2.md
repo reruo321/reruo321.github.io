@@ -2068,3 +2068,16 @@ Considering the bit vector of x, and you can see ((x >> 2) << 2) always removes 
 
 Therefore, ((x >> 2) << 2) <= x for all x.
 ```
+
+### Problem 2.83
+A. Y / (2^k - 1)
+
+B.
+
+(a) 5/7
+
+(b) 2/5
+
+(c) 19/63
+
+### Problem 2.84
