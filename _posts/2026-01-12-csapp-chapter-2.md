@@ -2081,3 +2081,75 @@ B.
 (c) 19/63
 
 ### Problem 2.84
+```c
+#include <stdio.h>
+#include <assert.h>
+
+const w = sizeof(int) * 8;
+
+unsigned f2u(float x) {
+	return *(unsigned*)&x;
+}
+
+int float_le(float x, float y) {
+	unsigned ux = f2u(x);
+	unsigned uy = f2u(y);
+
+	/* Get the sign bits */
+	unsigned sx = ux >> 31;
+	unsigned sy = uy >> 31;
+
+	/* Give an expression using only ux, uy, sx, and sy */
+	return ((ux << 1 == 0) && (uy << 1 == 0))   // x = y = 0 (-0 = +0)
+		|| ((sx == 0) && (sy == 0) && (ux <= uy))   // x > 0, y > 0
+		|| ((sx == 1) && (sy == 0))   // x < 0, y > 0
+		|| ((sx == 1) && (sy == 1) && (ux >= uy));   // x < 0, y < 0
+}
+
+int verification(float x, float y) {
+	return f2u(x) <= f2u(y);
+}
+
+int main() {
+
+	float samples[21][2] = {
+		{-0.0, +0.0},
+		{1.0, 0.0}, {0.0, 1.0},
+		{-1.0, 0.0 }, {0.0, -1.0},
+		{12345, 67890}, {67890, 12345},
+		{12345, -67890}, {-67890, 12345},
+		{-12345, 67890}, {67890, -12345},
+		{-12345, -67890}, {-67890, -12345},
+		{12345.678, 98765.432}, {98765.432, 12345.678},
+		{12345.678, -98765.432}, {-98765.432, 12345.678},
+		{-12345.678, 98765.432}, {98765.432, -12345.678},
+		{-12345.678, -98765.432}, {-98765.432, -12345.678},
+	};
+
+	int answer_bool[21] = {
+		1,
+		0, 1,
+		1, 0,
+		1, 0,
+		0, 1,
+		1, 0,
+		0, 1,
+		1, 0,
+		0, 1,
+		1, 0,
+		0, 1
+	};
+
+	for (int i = 0; i < 21; ++i) {
+		float x = samples[i][0];
+		float y = samples[i][1];
+		printf("x = %f, y = %f\n", x, y);
+		int answer = answer_bool[i];
+		int trial = float_le(x, y);
+		printf("Answer: %d, Trial: %d\n", answer, trial);
+		assert(answer == trial);
+	}
+
+	return 0;
+}
+```
