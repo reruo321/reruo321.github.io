@@ -2155,4 +2155,7 @@ int main() {
 ```
 
 ### Problem 2.85
+![Problem](practice/2-85.png)
 
+### Problem 2.86
+![Problem](practice/2-86.png)
