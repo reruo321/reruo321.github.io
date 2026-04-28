@@ -8,17 +8,6 @@ tags: [programming, C++]
 ---
 
 ## Lambda Expression
-```cpp
-static const int fast_io = [](){
-    ios::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    return 0;
-}();
-```
-
-Before the main function, the code immediately runs three performance optimizations inside a lambda expression, and then destroys. It is useful for optimizing resources like LeetCode solutions.
-
 ![Lambda Expression](lambda_expression_in_c_.webp)
 _Lambda Expression in C++ - GeeksforGeeks_
 
@@ -82,4 +71,42 @@ int main()
 In the example, `byVal` and `byRef` can capture all external variables from the enclosing scope, the main function.
 
 ### IIFE
-**IIFE(Immediately Invoked Function Expression)** immediately runs statements inside a lambda expression then destroys it. The destruction prevents the expression to be called again accidently. It can be attached right after to the definition of a lambda expression.
+**IIFE(Immediately Invoked Function Expression)** immediately runs statements inside a lambda expression then destroys it. The destruction prevents the expression to be called again accidently. It can be attached as `()` right after to the definition of a lambda expression.
+
+#### Example
+```cpp
+static const int fast_io = [](){
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    return 0;
+}();
+```
+
+Before the main function, the code immediately runs three performance optimizations inside a lambda expression, and then destroys. It is useful for optimizing resources like LeetCode solutions.
+
+```cpp
+int result = [](int a, int b) {
+    return a + b;
+}(5, 10);
+```
+
+Another example shows arguments can be passed into the parentheses for the immediate invocation, where `a = 5`, `b = 10`.
+
+```cpp
+// This 'const' ensures the value is calculated ONCE
+const uint32_t BAUDRATE_REG_VALUE = []() {
+    uint32_t pclk = HAL_RCC_GetPCLK1Freq();
+    uint32_t baud = 115200;
+    // Complex formula for the register value
+    return (pclk + (baud / 2)) / baud;
+}(); 
+
+// Now use that clean, constant value
+USART1->BRR = BAUDRATE_REG_VALUE;
+```
+
+The last example shows how to set a single baud rate or a timer frequency with a lambda expression in STM32. Such programming skill to define a `const` especially shines in the embedded world because:
+
+1. Optimization: It reduces the assembly code to load trash variables from RAM, calculate with them, and get the final `const` value.
+2. Flash memory: On microcontrollers, `const` data can often be stored in Flash (ROM) instead of SRAM. That is, it saves your precious RAM.
