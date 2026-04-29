@@ -1,13 +1,15 @@
 ---
 title: Useful C++ Tricks
+description: Learn some C++ tricks for programming tests or practical developments.
 layout: post
 date: 2026-04-28
 media_subpath: /pics/2026-04-28-useful-cpp-tricks/
 categories: programming
 tags: [programming, C++]
+math: true
 ---
 
-## Lambda Expression
+## ✅ Lambda Expression
 ![Lambda Expression](lambda_expression_in_c_.webp)
 _Lambda Expression in C++ - GeeksforGeeks_
 
@@ -110,3 +112,20 @@ The last example shows how to set a single baud rate or a timer frequency with a
 
 1. Optimization: It reduces the assembly code to load trash variables from RAM, calculate with them, and get the final `const` value.
 2. Flash memory: On microcontrollers, `const` data can often be stored in Flash (ROM) instead of SRAM. That is, it saves your precious RAM.
+
+## ✅ Indirect Sorting
+**Indirect sorting** is an algorithm to sort entities' indices instead of creating actual `struct` or `class` for the entities and then sort them.
+
+![Indirect Sorting](indirect_sorting.png)
+
+
+## ✅ Counting Sort
+**Counting sort** is an algorithm to sort entities by increasing some element values as if we are counting them.
+
+![Counting Sort](counting_sort.png)
+
+> This is the part of [the LeetCode Problem 2751 solution](/posts/leetcode-2751/).
+
+Suppose that we need to return the health of $K$ survivors sorting by index, which survived from $N$ robots. Let `idx_vst` is a vector that has survivors' indices. Instead of sorting `idx_vst` and replace the indices to the health values, creating a new vector `hp_vec` having a trash value (here -1) with $N$ size, and put the survivors' health values into `hp_vec`'s corresponding indices. Checking any positive elements in `hp_vec` from $0$-th to $(n-1)$-th will find all survivors' health.
+
+While the former `sort()` takes $O(K log K)$ where $K$ is the number of survivors, the latter takes $O(N)$ where $N$ is the number of robots. Therefore counting sort will save much time when $K$ is big.
