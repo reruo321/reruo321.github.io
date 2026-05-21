@@ -3,7 +3,7 @@ title: Big-endian MIPS Compiler on Ubuntu
 description: Easy big-endian lab environment setup without installing full system
 layout: post
 date: 2026-02-24
-media_subpath: /pics/2026-02-24-big-endian-mips-compiler-on-ubuntu/
+media_subpath: /pics/computer-system/2026-02-24-big-endian-mips-compiler-on-ubuntu/
 image:
     path: mips.png
 categories: computer-system

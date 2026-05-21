@@ -3,10 +3,10 @@ title: CS:APP Chapter 2
 description: 2. Representing and Manipulating Information
 layout: post
 date: 2026-01-12
-media_subpath: /pics/2026-01-12-csapp-chapter-2/
+media_subpath: /pics/computer-system/csapp/csapp-chapter-2/
 image:
-    path: csapp3e-cover.jpg
-categories: computer-system
+    path: ../../../../assets/img/thumbnails/csapp3e-cover.jpg
+categories: [computer-system, csapp]
 tags: [CS:APP]
 math: true
 ---

@@ -2,7 +2,7 @@
 title: Network Study Challenge Day 1
 layout: post
 date: 2025-11-24
-media_subpath: /pics/2025-11-24-network-study-challenge-day-1/
+media_subpath: /pics/network/2025-11-24-network-study-challenge-day-1/
 image:
     path: osi_tcpip_model.png
 description: Learn about OSI vs TCP/IP, IPv4 vs IPv6, DHCP, CIDR, and Wireshark.

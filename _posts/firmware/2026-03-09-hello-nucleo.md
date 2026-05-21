@@ -3,7 +3,7 @@ title: Hello, Nucleo!
 description: Let's be familiar with STM32 Nucleo-64 board.
 layout: post
 date: 2026-03-09
-media_subpath: /pics/2026-03-09-hello-nucleo/
+media_subpath: /pics/firmware/2026-03-09-hello-nucleo/
 image:
     path: nucleo.webp
 categories: firmware

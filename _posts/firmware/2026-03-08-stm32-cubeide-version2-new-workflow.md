@@ -3,7 +3,7 @@ title: STM32CubeIDE 2.X New Workflow
 description: Let's learn how to create a new project for STM32CubeIDE version 2.X.
 layout: post
 date: 2026-03-08
-media_subpath: /pics/2026-03-08-stm32-cubeide-version2-new-workflow/
+media_subpath: /pics/firmware/2026-03-08-stm32-cubeide-version2-new-workflow/
 image:
     path: stm32cubeide.avif
 categories: firmware

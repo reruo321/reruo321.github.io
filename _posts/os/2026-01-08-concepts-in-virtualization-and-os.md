@@ -2,7 +2,7 @@
 title: Concepts in Virtualization and OS
 layout: post
 date: 2026-01-08
-media_subpath: /pics/2026-01-08-concepts-in-virtualization-and-os/    
+media_subpath: /pics/os/2026-01-08-concepts-in-virtualization-and-os/    
 image:
     path: https://docs.aws.amazon.com/images/whitepapers/latest/security-design-of-aws-nitro-system/images/virtualization-architecture.png
 description: Learn concepts in virtualization and OS.

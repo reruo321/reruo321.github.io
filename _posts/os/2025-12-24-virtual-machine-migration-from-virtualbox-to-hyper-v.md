@@ -2,7 +2,7 @@
 title: Virtual Machine Migration from VirtualBox to Hyper-V
 layout: post
 date: 2025-12-24
-media_subpath: /pics/2025-12-24-virtual-machine-migration-from-virtualbox-to-hyper-v/    
+media_subpath: /pics/os/2025-12-24-virtual-machine-migration-from-virtualbox-to-hyper-v/    
 image:
     path: ubuntu-01.png
 description: Learn how to migrate a VirtualBox virtual machine to Hyper-V.

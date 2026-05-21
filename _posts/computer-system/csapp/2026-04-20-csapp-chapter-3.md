@@ -3,10 +3,10 @@ title: CS:APP Chapter 3
 description: 3. Machine-Level Representation of Programs
 layout: post
 date: 2026-04-20
-media_subpath: /pics/2026-04-20-csapp-chapter-3/
+media_subpath: /pics/computer-system/csapp/csapp-chapter-3/
 image:
-    path: csapp3e-cover.jpg
-categories: computer-system
+    path: ../../../../assets/img/thumbnails/csapp3e-cover.jpg
+categories: [computer-system, csapp]
 tags: [CS:APP]
 math: true
 ---

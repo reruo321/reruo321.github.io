@@ -3,10 +3,10 @@ title: CS:APP Chapter 1
 description: 1. A Tour of Computer Systems
 layout: post
 date: 2026-01-09
-media_subpath: /pics/2026-01-09-csapp-chapter-1/
+media_subpath: /pics/computer-system/csapp/csapp-chapter-1/
 image:
-    path: csapp3e-cover.jpg
-categories: computer-system
+    path: ../../../../assets/img/thumbnails/csapp3e-cover.jpg
+categories: [computer-system, csapp]
 tags: [CS:APP]
 math: true
 ---

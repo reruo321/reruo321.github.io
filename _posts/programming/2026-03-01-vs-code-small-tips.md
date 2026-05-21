@@ -3,7 +3,7 @@ title: Visual Studio Code Small Tips
 description: Let's customize some simple things in Visual Studio Code
 layout: post
 date: 2026-03-01
-media_subpath: /pics/2026-03-01-vs-code-small-tips/
+media_subpath: /pics/programming/2026-03-01-vs-code-small-tips/
 image:
     path: vs-code.png
 categories: programming
