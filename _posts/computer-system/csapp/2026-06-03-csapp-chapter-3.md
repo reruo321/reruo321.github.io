@@ -16,3 +16,37 @@ math: true
 
 # 3. Machine-Level Representation of Programs
 ## 3.1 A Historical Perspective
+Each successive processor has been designed to be backward compatible.
+
+* Intel: Intel Architecture 32-bit (IA32) → Intel 64 (x86-64)
+* Intel 64 = x86-64 = x64 = AMD64
+* Moore's Law: The prediction that number of transistors per chip would double every year for the next 10 years. ― This is dead because doubling has slowed to roughly every 2.5~3 years today.
+
+## 3.2 Program Encodings
+```bash
+gcc -0g -o p p1.c p2.c
+```
+
+The `gcc` command invokes an entire sequence of programs to turn the source code into executable code.
+
+1. **C preprocessor**: Expands source code + files specified with `#include` commands + macros specified with `#define` declarations.
+2. **Compiler**: Generates assembly code versions of `p1.c` and `p2.c`, `p1.s` and `p2.s`.
+3. **Assembler**: Converts the assembly code into binary object-code files `p1.o` and `p2.o`. Object code is one form of machine code.
+4. **Linker**: Merges two object-code files along with code implementing library functions (e.g., `printf`) and generates the final executable code file `p`.
+
+* **Object code**: Contains binary representations of all of the instructions, but the addresses of global values are not yet filled in.
+* **Executable code**: Exact form of code that is executed by the processor.
+
+### 3.2.1 Machine-Level Code
+Among different forms of abstraction that computer systems employ, these are especially important for machine-level programming.
+
+1. **Instruction Set Architecture(ISA)**: Defines the format and behavior of a machine-level program. Most ISAs, including x86-64, describe the behavior of a program as if each instruction is executed in sequence.
+2. **Virtual Address**: The memory addresses used by a machine-level program. The actual implementation of the memory system involves a combination of multiple hardware memories and operating system software.
+
+The execution units do **dynamic execution (Out-of-order execution)** to execute multiple instructions concurrently, and the temporary results for the instructions are put in a reorder buffer.
+
+Meanwhile, the retirement unit watches the reorder buffer, takes only the finished results, and permanently write them to the architectural registers/memory in the exact sequential order of the original program, which is called **in-order retirement**.
+
+Therefore, the instructions seem to be executed one by one in order, even if they are actually be executed concurrently in the computer system.
+
+* [Out-of-order execution - Wikipedia](https://en.wikipedia.org/wiki/Out-of-order_execution)
