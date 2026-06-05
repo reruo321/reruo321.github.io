@@ -43,10 +43,22 @@ Among different forms of abstraction that computer systems employ, these are esp
 1. **Instruction Set Architecture(ISA)**: Defines the format and behavior of a machine-level program. Most ISAs, including x86-64, describe the behavior of a program as if each instruction is executed in sequence.
 2. **Virtual Address**: The memory addresses used by a machine-level program. The actual implementation of the memory system involves a combination of multiple hardware memories and operating system software.
 
+The assembly-code representation is very close to machine code, while it is in a more readable textual format, as compared to the binary format of machine code.
+
+#### The Machine Code for x86-64
+The machine code for x86-64 differs greatly from the original C code. Parts of the processor state are visible that normally are hidden from the C programmer.
+
+* The program counter (PC, `%rip`) indicates the address in memory of the next instruction to be executed.
+* The integer "register file" contains 16 named locations storing 64-bit values. They can hold addresses or integer data.
+* The condition code registers hold status information about the most recently executed arithmetic or logical instruction. These are used to implemet conditional changes in the control or data flow, such as is required to implement `if` and `while` statements.
+* A set of vector registers can each hold one or more integer or floating-point values.
+
+#### ISA in Modern Computer System
 The execution units do **dynamic execution (Out-of-order execution)** to execute multiple instructions concurrently, and the temporary results for the instructions are put in a reorder buffer.
 
-Meanwhile, the retirement unit watches the reorder buffer, takes only the finished results, and permanently write them to the architectural registers/memory in the exact sequential order of the original program, which is called **in-order retirement**.
+Meanwhile, the retirement unit watches the reorder buffer, takes only the finished results, and permanently write them to the architectural registers/memory in the exact sequential order of the original program. This is called **in-order retirement**.
 
 Therefore, the instructions seem to be executed one by one in order, even if they are actually be executed concurrently in the computer system.
 
 * [Out-of-order execution - Wikipedia](https://en.wikipedia.org/wiki/Out-of-order_execution)
+
