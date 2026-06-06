@@ -44,9 +44,10 @@ Among different forms of abstraction that computer systems employ, these are esp
 2. **Virtual Address**: The memory addresses used by a machine-level program. The actual implementation of the memory system involves a combination of multiple hardware memories and operating system software.
 
 The assembly-code representation is very close to machine code, while it is in a more readable textual format, as compared to the binary format of machine code.
+The machine code for x86-64 differs greatly from the original C code. Parts of the processor state are visible that normally are hidden from the C programmer.
+
 
 #### The Machine Code for x86-64
-The machine code for x86-64 differs greatly from the original C code. Parts of the processor state are visible that normally are hidden from the C programmer.
 
 * The program counter (PC, `%rip`) indicates the address in memory of the next instruction to be executed.
 * The integer "register file" contains 16 named locations storing 64-bit values. They can hold addresses or integer data.
