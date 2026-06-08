@@ -13,7 +13,7 @@ module Rouge
 
       def self.keywords
         @keywords ||= Set.new %w(
-          mov movl movq movw movb xor xorl add addl sub subl
+          mov movl movq movw movb xor xorl add addl sub subl imull
           push pushq pop popq jmp je jne jz jnz call ret syscall
           int leave enter inc dec cmp cmpl cltq
         )

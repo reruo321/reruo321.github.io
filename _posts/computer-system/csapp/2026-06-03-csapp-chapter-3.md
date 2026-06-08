@@ -153,7 +153,7 @@ An x86-64 CPU contains a set of 16 general-purpose registers storing 64-bit valu
 
 The other 15 registers have more flexibility in their uses. While they have calling convention (rules to use the registers), they are not restricted by hardware. So the CPU does not care at all what we put in `%rax` or `%rdi`. Also, the registers are free to use by the compiler as any other usages, when their roles are not needed.
 
-##### Registers by Calling Convention
+### Registers by Calling Convention
 
 * **`%rsp`**: Stack pointer
 * **`%rax`**: Return value
@@ -161,7 +161,8 @@ The other 15 registers have more flexibility in their uses. While they have call
 * **`%r10`**, **`%r11`**: Caller saved
 * **`%rdi`**, **`%rsi`**, **`%rdx`**, **`%rcx`**, **`%r8`**, **`%r9`**
 
-Example Code:
+#### Callee Save and Caller Save
+##### Example Code
 
 ```c
 int compute_square(int x) {
@@ -195,6 +196,24 @@ multiply_and_add:
     
     addl    %eax, %r10          # local_var + square
     movl    %r10, %eax          # Put final result in %eax to return
+    ret
+```
+
+```att
+compute_square:
+    # 'b' is passed in %edi
+    
+    # --- ENTERING CALLEE ---
+    pushq   %rbx                # !! CALLEE SAVES: Back up the original %rbx onto the stack
+                                # to protect the Caller's old data!
+    
+    movl    %edi, %ebx          # Now %rbx is free for us to use safely. Copy 'b' to %ebx
+    imull   %ebx, %ebx          # b * b
+    movl    %ebx, %eax          # Put the result into %eax (the standard return register)
+    
+    # --- EXITING CALLEE ---
+    popq    %rbx                # !! CALLEE RESTORES: Put the Caller's original data 
+                                # back into %rbx before returning!
     ret
 ```
 
