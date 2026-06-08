@@ -1,0 +1,9 @@
+/* Styling for your native ATT custom plugin output */
+.highlight .language-att {
+  .nv { color: #569cd6; } /* %registers - Blue */
+  .no { color: #b5cea8; } /* $immediates - Light Green */
+  .k  { color: #c586c0; } /* Mnemonics/Opcodes - Purple */
+  .nl { color: #dcdcaa; } /* Labels: - Yellow */
+  .nd { color: #9cdcfe; } /* .directives - Light Blue */
+  .c1 { color: #6a9955; font-style: italic; } /* Comments - Green */
+}
