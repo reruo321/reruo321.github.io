@@ -22,6 +22,8 @@ Each successive processor has been designed to be backward compatible.
 * Intel 64 = x86-64 = x64 = AMD64
 * Moore's Law: The prediction that number of transistors per chip would double every year for the next 10 years. ― This is dead because doubling has slowed to roughly every 2.5~3 years today.
 
+---
+
 ## 3.2 Program Encodings
 ```bash
 gcc -0g -o p p1.c p2.c
@@ -36,6 +38,8 @@ The `gcc` command invokes an entire sequence of programs to turn the source code
 
 * **Object code**: Contains binary representations of all of the instructions, but the addresses of global values are not yet filled in.
 * **Executable code**: Exact form of code that is executed by the processor.
+
+---
 
 ### 3.2.1 Machine-Level Code
 Among different forms of abstraction that computer systems employ, these are especially important for machine-level programming.
@@ -66,6 +70,8 @@ Meanwhile, the retirement unit watches the reorder buffer, takes only the finish
 Therefore, the instructions seem to be executed one by one in order, even if they are actually be executed concurrently in the computer system.
 
 * [Out-of-order execution - Wikipedia](https://en.wikipedia.org/wiki/Out-of-order_execution)
+
+---
 
 ### 3.2.2 Code Examples
 ```bash
@@ -114,6 +120,8 @@ objdump -d prog
 2. The linker has filled in the address that the `callq` instruction should use in calling the function `mult2`.
 3. Two additional `nop`s have added. They will have no effect on the program, but they have been inserted to grow the code for the function to 16 bytes. It enables a better placement of the next block of code in terms of memory system performance.
 
+---
+
 ### 3.2.3 Notes on Formatting
 * **Directive**: The line beginning with `.`.
 
@@ -127,6 +135,8 @@ gcc -0g -S -masm=intel mstore.c
 * The Intel code has a different way of describing locations in memory.
     * Example: Intel `DWORD PTR [rbx]` vs ATT `(%rbx)`
 * Instructions with multiple operands list them in the reverse order.
+
+---
 
 ## 3.3 Data Formats
 Intel uses the term "word" to refer to a 16-bit data type.
@@ -142,6 +152,8 @@ Intel uses the term "word" to refer to a 16-bit data type.
 * Note 2: Assembly-code suffix `s` for `float` stands for "single", as in single-precision floating-point.
 * Note 3: In the Linux/macOS model LP64, both `long` and `long long` is 64 bits. Meanwhile, in the Windows model LLP64, `long` is 32 bits and `long long` is 64 bits.
 
+---
+
 ## 3.4 Accessing Information
 An x86-64 CPU contains a set of 16 general-purpose registers storing 64-bit values.
 
@@ -153,15 +165,20 @@ An x86-64 CPU contains a set of 16 general-purpose registers storing 64-bit valu
 
 The other 15 registers have more flexibility in their uses. While they have calling convention (rules to use the registers), they are not restricted by hardware. So the CPU does not care at all what we put in `%rax` or `%rdi`. Also, the registers are free to use by the compiler as any other usages, when their roles are not needed.
 
-### Registers by Calling Convention
+#### Registers by Calling Convention
 
 * **`%rsp`**: Stack pointer
 * **`%rax`**: Return value
 * **`%rbx`**, **`%rbp`**, **`%r12`**, **`%r13`**, **`%r14`**, **`%r15`**: Callee saved
 * **`%r10`**, **`%r11`**: Caller saved
-* **`%rdi`**, **`%rsi`**, **`%rdx`**, **`%rcx`**, **`%r8`**, **`%r9`**
+* **`%rdi`**, **`%rsi`**, **`%rdx`**, **`%rcx`**, **`%r8`**, **`%r9`**: 1st ~ 6th argument
 
-#### Callee Save and Caller Save
+##### Callee Save and Caller Save
+Calling convention to determine which function is responsible for backing up CPU registers before a new function is called, preventing data loss.
+
+* **Callee Save**: The function being called
+* **Caller Save**: The function making the call.
+
 ##### Example Code
 
 ```c
@@ -217,4 +234,36 @@ compute_square:
     ret
 ```
 
+---
+
+### 3.4.1 Operand Specifiers
+#### Types
+1. **Immediate** ($\\$Imm$): Constant value.
+2. **Register** ($r_a$): Contents of a register $a$. $R[r_a]$ is the reference, which is the value of the register $a$.
+3. **Memory** ($M_b[Addr]$): In which we access some memory location according to a computed address.
+
 ![3-3](3-3.png)
+
+---
+
+### 3.4.2 Data Movement Instructions
+![mov](mov.png)
+
+#### MOV
+* **MOV Source**: Immediate, Register, Memory
+* **MOV Destination**: Register, Memory
+* The size of the register (but not memory!) must match the size designated by the last character of the instruction ('b', 'w', 'l', or 'q').
+* For most cases, the `MOV` instructions will only update the specific register bytes or memory locations indicated by the destination operand.
+* When `movl` has a register as the destination, it will set the high-order 4 bytes of the register to 0, because of the convention and backward compatibility for 32-bit code.
+
+#### movabsq
+* **movabsq**: Move absolute quad word (immediate) to register.
+
+#### Zero-extending Data Movement Instructions
+![3-5](3-5.png)
+
+---
+
+## Problems
+### Problem 3.1
+![Problem](practice/3-1.png)
