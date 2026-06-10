@@ -247,9 +247,14 @@ compute_square:
 ---
 
 ### 3.4.2 Data Movement Instructions
-![mov](mov.png)
+#### Summary
+* `movb`, `movw`, `movl`, `movq`
+* `movzbw`, `movzbl`, `movzbq`, `movzwl`, `movzwq`
+* `movsbw`, `movsbl`, `movsbq`, `movswl`, `movswq`, `movslq`
 
 #### MOV
+![mov](mov.png)
+
 * **MOV Source**: Immediate, Register, Memory
 * **MOV Destination**: Register, Memory
 * The size of the register (but not memory!) must match the size designated by the last character of the instruction ('b', 'w', 'l', or 'q').
@@ -259,11 +264,80 @@ compute_square:
 #### movabsq
 * **movabsq**: Move absolute quad word (immediate) to register.
 
-#### Zero-extending Data Movement Instructions
+#### Zero-Extending Data Movement Instructions
 ![3-5](3-5.png)
+
+Instructions in the `MOVZ` class fill out the remaining bytes of the destination with zeros.
+
+Note that `movl` already acts the same as `movzlq`.
+
+#### Sign-Extending Data Movement Instructions
+![3-6](3-6.png)
+
+Instructions in the `MOVS` class fill out the remaining bytes of the destination by sign extension, replicating copies of the most significant bit of the source operand.
+
+The `cltq` instruction is specific to registers `%eax` and `%rax`.
+
+---
+
+### 3.4.3 Data Movement Example
+![3-7](3-7.png)
+
+* Pointers in C are simply addresses. Dereferencing a pointer = Copying the pointer into a register, and then using it in a memory reference.
+* Local variables are often kept in registers rather than stored in memory locations. Register access is much faster than memory access.
+
+---
+
+### 3.4.4 Pushing and Popping Stack Data
+![3-8](3-8.png)
+
+![3-9](3-9.png)
+
+```att
+pushq %rbp
+```
+is the same as
+
+```att
+subq $8, %rsp
+movq %rbp, (%rsp)
+```
+And
+```att
+popq %rax
+```
+is the same as
+
+```att
+movq (%rsp), %rax
+addq $8, %rsp
+```
+except that `pushq` and `popq` size,
 
 ---
 
 ## Problems
 ### Problem 3.1
 ![Problem](practice/3-1.png)
+
+### Problem 3.2
+![Problem](practice/3-2.png)
+
+### Problem 3.3
+![Problem](practice/3-3.png)
+
+### Problem 3.4
+![Problem](practice/3-4.png)
+
+### Problem 3.5
+```c
+void decode1(long *xp, long *yp, long *zp){
+    long x = *xp;
+    long y = *yp;
+    long z = *zp;
+
+    *xp = y;
+    *yp = z;
+    *zp = x;
+}
+```
