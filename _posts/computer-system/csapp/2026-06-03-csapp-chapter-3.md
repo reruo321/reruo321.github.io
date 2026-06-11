@@ -293,6 +293,8 @@ The `cltq` instruction is specific to registers `%eax` and `%rax`.
 
 ![3-9](3-9.png)
 
+The stack top is always considered to be the address indicated by `%rsp`.
+
 ```att
 pushq %rbp
 ```
@@ -312,7 +314,23 @@ is the same as
 movq (%rsp), %rax
 addq $8, %rsp
 ```
-except that `pushq` and `popq` size,
+
+`pushq` and `popq` take just 1 byte (2 bytes when using `%r8` ~ `%r15`), their equivalent code take 7~8 bytes.
+
+---
+
+## 3.5 Arithmetic and Logical Operations
+![3-10](3-10.png)
+
+### 3.5.1 Load Effective Address
+`leaq` is actually a variant of the `movq` instruction. It reads from memory to a register, but it does not reference memory at all.
+
+![leaq](leaq.png)
+
+---
+
+### 3.5.2 Unary and Binary Operations
+`incq` and
 
 ---
 
