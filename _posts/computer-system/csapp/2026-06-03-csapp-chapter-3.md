@@ -322,6 +322,13 @@ addq $8, %rsp
 ## 3.5 Arithmetic and Logical Operations
 ![3-10](3-10.png)
 
+There are four groups in the arithmetic and logical operations:
+
+1. Load Effective Address: `leaq`
+2. Unary Operations: `INC`, `DEC`, `NEG`, `NOT`
+3. Binary Operations: `ADD`, `SUB`, `IMUL`, `XOR`, `OR`, `AND`
+4. Shift Operations: `SAL`, `SHL`, `SAR`, `SHR`
+
 ### 3.5.1 Load Effective Address
 `leaq` is actually a variant of the `movq` instruction. It reads from memory to a register, but it does not reference memory at all.
 
@@ -330,7 +337,50 @@ addq $8, %rsp
 ---
 
 ### 3.5.2 Unary and Binary Operations
-`incq` and
+#### Unary Operations
+Unary operations are with the single operand serving as both source and destination.
+
+* `INC`
+* `DEC`
+* `NEG`
+* `NOT`
+
+```att
+incq (%rsp)
+```
+causes the 8-byte element on the top of the stack to be incremented.
+
+This syntax is reminiscent of the C increment (`++`) and decrement (`--`) operators.
+
+#### Binary Operations
+Binary operations use the second operand as both a source and a destination. This syntax is reminiscent of the C assignment operators, such as `x -= y`.
+
+* `ADD`
+* `SUB`
+* `IMUL`
+* `XOR`
+* `OR`
+* `AND`
+
+```att
+subq %rax, %rdx
+```
+decrements register `%rdx` by the value in `%rax`.
+
+* The first operand: Immediate, Register, Memory
+* The second operand: Register, Memory
+
+As with `MOV`, the two operands cannot be Memory + Memory.
+
+---
+
+### 3.5.3 Shift Operations
+Shift operations have arithmetic and logical shifts, where the shift amount is given first and the value to shift is given second.
+
+* `SAL`
+* `SHL`
+* `SAR`
+* `SHR`
 
 ---
 
@@ -359,3 +409,12 @@ void decode1(long *xp, long *yp, long *zp){
     *zp = x;
 }
 ```
+
+### Problem 3.6
+![Problem](practice/3-6.png)
+
+### Problem 3.7
+![Problem](practice/3-7.png)
+
+### Problem 3.8
+![Problem](practice/3-8.png)
