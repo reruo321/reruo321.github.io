@@ -418,3 +418,4 @@ void decode1(long *xp, long *yp, long *zp){
 
 ### Problem 3.8
 ![Problem](practice/3-8.png)
+
