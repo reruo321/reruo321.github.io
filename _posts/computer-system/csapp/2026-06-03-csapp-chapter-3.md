@@ -382,6 +382,8 @@ Shift operations have arithmetic and logical shifts, where the shift amount is g
 * `SAR`
 * `SHR`
 
+The shift amount can be specified ]
+
 ---
 
 ## Problems
