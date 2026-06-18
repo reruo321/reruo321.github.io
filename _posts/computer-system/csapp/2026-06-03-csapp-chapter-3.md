@@ -382,8 +382,42 @@ Shift operations have arithmetic and logical shifts, where the shift amount is g
 * `SAR`
 * `SHR`
 
-The shift amount can be specified 
+The shift amount can be specified either as an immediate value or with the single-byte register `%cl`.
 
+#### Immediate Shift Amount
+Immediate shift amount is hardcoded by the compiler without being stored to any registers.
+
+```att
+sall    $2, %eax    # Shift %eax left by exactly 2 bits
+```
+
+#### Dynamic Shift Amount
+Dynamic shift amount in x86-64 is placed inside the `%cl` register. The CPU just looks at the bottom $n$ bits of `%cl` to check the shift amount between $0$ and $2^n - 1$. For example, $n = 6$ when the shift amount is $63$.
+
+```att
+movl    %esi, %ecx  # Move our variable 'y' into the %ecx register pool
+sall    %cl, %eax   # Shift %eax left by the amount stored in %cl
+```
+
+Shifting a 64-bit integer by $64$ or more is an undefined behavior. The x86-64 CPU handles it by wrapping the number around using that 6-bit mask. (like a modulo operation, $(mod 64)$.)
+
+#### Priority of %cl
+When the 4th
+
+```c
+// C Code: 4 arguments, where the 4th argument 'shift_amt' is used to shift
+void process(long a, long b, long c, long shift_amt) {
+    a = a << shift_amt; 
+}
+```
+
+```att
+# At start: %rdi=a, %rsi=b, %rdx=c, %rcx=shift_amt
+
+movq    %rcx, %r8    # Move the 4th argument safely out of the way into %r8
+movq    %r8, %rcx    # (Or keep it in %rcx if it's already the shift amount!)
+shlq    %cl, %rdi    # Shift 'a' (%rdi) by the amount in %cl
+```
 
 ---
 
