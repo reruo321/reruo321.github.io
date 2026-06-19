@@ -384,6 +384,10 @@ Shift operations have arithmetic and logical shifts, where the shift amount is g
 
 The shift amount can be specified either as an immediate value or with the single-byte register `%cl`.
 
+`SAL` and `SAR` perform an arithmetic shift, which fill with copies of sign bit. `SHL` and `SHR` perform a logical shift, which fill with zeros.
+
+The destination operand of a shift operation can be either a register or a memory location.
+
 #### Immediate Shift Amount
 Immediate shift amount is hardcoded by the compiler without being stored to any registers.
 
@@ -402,7 +406,7 @@ sall    %cl, %eax   # Shift %eax left by the amount stored in %cl
 Shifting a 64-bit integer by $64$ or more is an undefined behavior. The x86-64 CPU handles it by wrapping the number around using that 6-bit mask. (like a modulo operation, $(mod 64)$.)
 
 #### Priority of %cl
-When the 4th
+When the 4th argument and a dynamic shift instruction are fighting over `%cl`, the compiler performs a register shuffle. Before running the shift instruction, it will copy the 4th argument safely out of `%rcx` into an empty scratch register, such as `%rax`, `%r10`, or use the stack as the last resort.
 
 ```c
 // C Code: 4 arguments, where the 4th argument 'shift_amt' is used to shift
@@ -418,6 +422,18 @@ movq    %rcx, %r8    # Move the 4th argument safely out of the way into %r8
 movq    %r8, %rcx    # (Or keep it in %rcx if it's already the shift amount!)
 shlq    %cl, %rdi    # Shift 'a' (%rdi) by the amount in %cl
 ```
+
+---
+
+### 3.5.4 Discussion
+![3-11](3-11.png)
+
+We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The compiler reads the entire function and wisely determines if a register can be safely reused.
+
+---
+
+### 3.5.5 Special Arithmetic Operations
+![3-12](3-12.png)
 
 ---
 
@@ -455,3 +471,25 @@ void decode1(long *xp, long *yp, long *zp){
 
 ### Problem 3.8
 ![Problem](practice/3-8.png)
+
+### Problem 3.9
+![Problem](practice/3-9.png)
+
+### Problem 3.10
+![Problem](practice/3-10.png)
+
+### Problem 3.11
+A. Set `%rdx` to 0. This is the same as `x ^ x = 0`, which leads to `x = 0`.
+
+B.
+
+```att
+movq $0, %rdx
+```
+or
+
+```att
+movl $0, %edx
+```
+
+C. #TODO
