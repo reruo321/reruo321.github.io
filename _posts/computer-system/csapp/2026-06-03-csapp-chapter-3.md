@@ -435,8 +435,13 @@ We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The c
 ### 3.5.5 Special Arithmetic Operations
 ![3-12](3-12.png)
 
+* `IMUL`
+* `MUL`
+* `CQTO`
+* `IDIV`
+* `DIV`
 
-
+The x86-64 instruction set provides limited support for operations involving 128-bit (16-byte) numbers.
 
 ---
 
