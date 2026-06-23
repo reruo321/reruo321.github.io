@@ -441,7 +441,21 @@ We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The c
 * `IDIV`
 * `DIV`
 
-The x86-64 instruction set provides limited support for operations involving 128-bit (16-byte) numbers.
+The x86-64 instruction set provides limited support for operations involving 128-bit (16-byte) numbers, using `%rdx` and `%rax`.
+
+![muldiv](muldiv.png)
+
+| Instruction | Function      | Allowed Number of Operands | 128-bit Fused Mode (`%rdx:%rax`)? |
+| ----------- | ------------- | -------------------------- | --------------------------------- |
+| `imulq`     | Signed Mult   | 1, 2, or 3                 | Only for 1 operand                |
+| `mulq`      | Unsigned Mult | 1                          | Always                            |
+| `cqto`      | Sign Extend   | 0                          | Always                            |
+| `idivq`     | Signed Div    | 1                          | Always                            |
+| `divq`      | Unsigned Div  | 1                          | Always                            |
+
+Note that `imulq` can have 1, 2, or 3 operands, and each case works differently. 128-bit fused mode is used only for 1-operand `imulq` instructions, such as `imulq %rcx`.
+
+![store_uprod](store_uprod.png)
 
 ---
 
