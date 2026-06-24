@@ -428,7 +428,7 @@ shlq    %cl, %rdi    # Shift 'a' (%rdi) by the amount in %cl
 ### 3.5.4 Discussion
 ![3-11](3-11.png)
 
-We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The compiler reads the entire function and wisely determines if a register can be safely reused.
+We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The compiler reads the entire function and wisely determines if a register can be safely reused. If the compiler translated the code line by line, the machine code lines would not harmonize well, leading to a slow and buggy program.
 
 ---
 
@@ -437,7 +437,7 @@ We can see that the compiler recycles `%rdi` to hold a new variable, `t1`. The c
 
 * `IMUL`
 * `MUL`
-* `CQTO`
+* `CQTO` (`CQO` in Intel)
 * `IDIV`
 * `DIV`
 
@@ -456,6 +456,29 @@ The x86-64 instruction set provides limited support for operations involving 128
 Note that `imulq` can have 1, 2, or 3 operands, and each case works differently. 128-bit fused mode is used only for 1-operand `imulq` instructions, such as `imulq %rcx`.
 
 ![store_uprod](store_uprod.png)
+
+As the code is generated for a little-endian machine, the high-order bytes are stored at higher addresses, `8(%rdi)`, and the lower-order bytes are stored at lower addresses, `(%rdi)`.
+
+Also note that the CPU does not have any problem on using `%rdx` in three ways; for storing the argument `y` (`%rdx`), get the multiplier (`mulq %rdx`), and storing the product with 128-bit fused mode. The CPU uses the concept called **instruction pipelining and latching**, so it can snapshot values from registers or safely overwrite them.
+
+##### The Execution Timeline of `mulq %rdx`
+1. **The Read Phase**: The CPU instantly takes a snapshot of the numbers inside its required inputs. It reads the value of `%rax` (`x`) and the value of the source operand `%rdx` (`y`).
+2. **The Math Phase**: The CPU sends those two snapshot values deep into the multiplication hardware pipelines. The math takes place completely isolated from the registers. The answer calculated is a full 128-bit number.
+3. **The Write Phase**: Only now, after the math is 100% finished, does the CPU open the register doors to save the result: lower 64 bits into `%rax`, and upper 64 bits into `%rdx` (overwriting the old value of `y`).
+
+The moment the clock cycle hits an instruction, the CPU instantly grabs the raw voltages (the 1s and 0s) out of `%rax` and `%rdx`, traps them safely inside the physical logic gates of the multiplier circuit, and locks them down. Once those numbers are captured inside the pipeline, the actual registers on the outside can be overwritten or changed, and the math circuit won't care at all.
+
+![remdiv](remdiv.png)
+
+Argument `rp` must first be saved in a different register, since argument register `%rdx` is required for the division operation.
+
+---
+
+## 3.6 Control
+Machine code provides two basic low-level mechanisms for implementing conditional behavior: it tests data values and then alters either the control flow or the data flow based on the results of these tests. The execution order of a set of machine code instructions is normally sequential, but it can be altered with a `jump` instruction.
+
+### 3.6.1 Condition Codes
+
 
 ---
 
