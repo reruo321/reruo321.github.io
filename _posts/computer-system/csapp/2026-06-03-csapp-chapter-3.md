@@ -478,7 +478,18 @@ Argument `rp` must first be saved in a different register, since argument regist
 Machine code provides two basic low-level mechanisms for implementing conditional behavior: it tests data values and then alters either the control flow or the data flow based on the results of these tests. The execution order of a set of machine code instructions is normally sequential, but it can be altered with a `jump` instruction.
 
 ### 3.6.1 Condition Codes
+* `CF`: Carry Flag
+* `ZF`: Zero Flag
+* `SF`: Sign Flag (1 for negative)
+* `OF`: Overflow Flag
 
+![3-10](3-10.png)
+
+Except `leaq`, all of the instructions listed in Figure 3.10 cause the condition codes to be set.
+
+* Logical operations: CF and OF are set to 0.
+* Shift operations: CF is set to the last bit shifted out, while OF is set to 0.
+* `INC`, `DEC`: OF and ZF is set, but CF is unchanged.
 
 ---
 
