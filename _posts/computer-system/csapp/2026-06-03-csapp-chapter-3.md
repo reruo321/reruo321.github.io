@@ -487,9 +487,22 @@ Machine code provides two basic low-level mechanisms for implementing conditiona
 
 Except `leaq`, all of the instructions listed in Figure 3.10 cause the condition codes to be set.
 
-* Logical operations: CF and OF are set to 0.
-* Shift operations: CF is set to the last bit shifted out, while OF is set to 0.
-* `INC`, `DEC`: OF and ZF is set, but CF is unchanged.
+##### Logical Operations
+* CF and OF are set to 0.
+
+
+##### Shift Operations
+* CF is set to the last bit shifted out.
+
+* OF is set to 0.
+
+##### INC and DEC
+* OF and ZF is set.
+
+
+* CF is unchanged.
+
+Note: If C source increases a big number using multiple registers (such as `++very_big_number` of 256-bit `very_big_number`), the assembly code does not use `incq` used for single register. Instead, it uses `adcq` to get CF from the register with lower bits.
 
 ---
 
