@@ -487,22 +487,65 @@ Machine code provides two basic low-level mechanisms for implementing conditiona
 
 Except `leaq`, all of the instructions listed in Figure 3.10 cause the condition codes to be set.
 
-##### Logical Operations
-* CF and OF are set to 0.
+#### Logical Operations
+* `CF` and `OF` are set to 0.
 
 
-##### Shift Operations
-* CF is set to the last bit shifted out.
+#### Shift Operations
+* `CF` is set to the last bit shifted out.
 
-* OF is set to 0.
+* `OF` is set to 0.
 
-##### INC and DEC
-* OF and ZF is set.
+#### INC and DEC
+* `OF` and `ZF` is set. 
+* `CF` is unchanged.
 
-
-* CF is unchanged.
+The compiler decides to use either `INC`/`DEC` (Do not change `CF`) or `ADD`/`SUB` (Change `CF`) depending on the context. For example, let `int a = 0xFFFFFFFF` and assume that we wrote a C source line `++a`. If there's no need to use `CF`, it uses `incl` instruction. However if it needs to use the `CF`, it uses `addl`. 
 
 Note: If C source increases a big number using multiple registers (such as `++very_big_number` of 256-bit `very_big_number`), the assembly code does not use `incq` used for single register. Instead, it uses `adcq` to get CF from the register with lower bits.
+
+##### Example 1
+```c
+unsigned int a = 0xFFFFFFFF;
+++a;
+```
+
+This does not care about a carry, so it leaves `CF` completely unchanged.
+
+```att
+incl    %eax    # Fast, leaves CF completely unchanged (CF remains 0 or whatever it was)
+```
+
+##### Example 2
+```c
+unsigned int a = 0xFFFFFFFF;
+++a;
+if (a == 0) { /* Handle the overflow wrap-around */ }
+```
+
+This also use `incl` because checking `a == 0` requires `ZF`, not `CF`.
+
+```att
+incl    %eax    # Fast, leaves CF completely unchanged (CF remains 0 or whatever it was)
+...
+```
+
+##### Example 3
+```c
+unsigned int a = 0xFFFFFFFF;
+unsigned int old_a = a;
+++a;
+if (a < old_a) { /* Handle the overflow */ }
+```
+
+The example requires to check `CF` for the if-statement, because `++a` creates a carry. Note that "overflow" in the comment is C-level overflow, although the actual assembly code checks the carry.
+
+```att
+unsigned int a = 0xFFFFFFFF;
+unsigned int old_a = a;
+++a;
+if (a < old_a) { /* Handle the overflow */ }
+```
 
 ---
 
