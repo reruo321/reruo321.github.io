@@ -538,7 +538,7 @@ unsigned int old_a = a;
 if (a < old_a) { /* Handle the overflow */ }
 ```
 
-The example requires to check `CF` for the if-statement, because `++a` creates a carry. Note that "overflow" in the comment is C-level overflow, although the actual assembly code checks the carry.
+The example requires to check `CF` for the if-statement, because `++a` creates a carry. Note that "overflow" in the comment says C-level overflow, although the actual assembly code checks the carry.
 
 ```att
 unsigned int a = 0xFFFFFFFF;
