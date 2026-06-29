@@ -490,14 +490,16 @@ Except `leaq`, all of the instructions listed in Figure 3.10 cause the condition
 #### Logical Operations
 * `CF` and `OF` are set to 0.
 
-
 #### Shift Operations
 * `CF` is set to the last bit shifted out.
 
-* `OF` is set to 0.
+`CF` holds the last bit shifted out to check $n$-bit in a value by shifting, or handle shifted bits in big numbers which use multiple registers.
+
+* `OF` is set according to whether the sign bit changed if shifting by 1 bit.
+* Otherwise, `OF` is undefined. The book says it is set to 0, because the value is meaningless.
 
 #### INC and DEC
-* `OF` and `ZF` is set. 
+* `OF` and `ZF` is set.
 * `CF` is unchanged.
 
 The compiler decides to use either `INC`/`DEC` (Do not change `CF`) or `ADD`/`SUB` (Change `CF`) depending on the context. For example, let `int a = 0xFFFFFFFF` and assume that we wrote a C source line `++a`. If there's no need to use `CF`, it uses `incl` instruction. However if it needs to use the `CF`, it uses `addl`. 
