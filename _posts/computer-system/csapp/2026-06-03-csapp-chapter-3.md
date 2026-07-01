@@ -549,6 +549,35 @@ unsigned int old_a = a;
 if (a < old_a) { /* Handle the overflow */ }
 ```
 
+![3-13](3-13.png)
+
+#### CMP
+* Set the condition codes according to the differences of their two operands.
+* Behave in the same way as the `SUB` instructions, except that they set the condition codes without updating their destinations.
+* Set the `ZF` if the two operands are equal.
+* The other flags can be used to determine ordering relations between the two operands.
+
+#### TEST
+* Behave in the same manner as the `AND` instructions, except that they set the condition codes without altering their destinations.
+* Typically, the same operand is repeated (e.g., `testq %rax, %rax` to see whether `%rax` is negative, zero, or positive), or one of the operands is a mask indicating which bits should be tested.
+
+---
+
+### 3.6.2 Accessing the Condition Codes
+There are three common ways of using the condition codes:
+
+1. Set a single byte to 0 or 1 depending on some combination of the condition codes.
+2. Conditionally jump to some other part of the program.
+3. Conditionally transfer data.
+
+#### SET
+![3-14](3-14.png)
+
+`SET` instructions set a single byte to 0 or 1 depending on some combination of the condition codes. The suffixes for the instruction names denote different conditions.
+
+A `SET` instruction has either one of the low-order single-byte register elements or a single-byte memory location as its destionation, setting this byte to either 0 oir 1. To generate a 32-bit or 64-bit result, we must also clear the high order bits.
+
+
 ---
 
 ## Problems
