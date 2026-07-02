@@ -577,6 +577,16 @@ There are three common ways of using the condition codes:
 
 A `SET` instruction has either one of the low-order single-byte register elements or a single-byte memory location as its destionation, setting this byte to either 0 oir 1. To generate a 32-bit or 64-bit result, we must also clear the high order bits.
 
+##### a < b
+An example equation `a < b` helps to study how signed comparison logic works.
+
+![comp](comp.png)
+
+![abcomp](abcomp.png)
+
+We can determine `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setl` 
+
+
 
 ---
 
