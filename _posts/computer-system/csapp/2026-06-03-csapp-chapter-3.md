@@ -582,14 +582,20 @@ An example equation `a < b` helps to study how signed comparison logic works.
 
 ![comp](comp.png)
 
-![abcomp](abcomp.png)
+![setl](setl.png)
 
-We can determine `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setl` 
+We can determine signed `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setl` sets a single byte to 0 or 1 based on the result.
 
 ##### Unsigned a < b
-
-
 ![subcarry](subcarry.png)
+
+![setb](setb.png)
+
+We can determine unsigned `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setb` sets a single byte to 0 or 1 based on the result.
+
+Note: Machine code does not associate a data type with each program value. Therefore, there is no concept of "negative value" in the unsigned subtraction. Instead, as a theory of computer arithmetic, the unsigned subtraction is two's complement addition. After the subtraction, the x86-64 CPU architecture inverts the `CF` during subtraction, so that we can get the final `CF`.
+
+
 
 ---
 
