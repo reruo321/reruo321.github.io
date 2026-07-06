@@ -560,6 +560,7 @@ if (a < old_a) { /* Handle the overflow */ }
 #### TEST
 * Behave in the same manner as the `AND` instructions, except that they set the condition codes without altering their destinations.
 * Typically, the same operand is repeated (e.g., `testq %rax, %rax` to see whether `%rax` is negative, zero, or positive), or one of the operands is a mask indicating which bits should be tested.
+* The instructions are useful for checking bits or masking.
 
 ---
 
@@ -570,8 +571,9 @@ There are three common ways of using the condition codes:
 2. Conditionally jump to some other part of the program.
 3. Conditionally transfer data.
 
-#### SET
 ![3-14](3-14.png)
+
+#### SET
 
 `SET` instructions set a single byte to 0 or 1 depending on some combination of the condition codes. The suffixes for the instruction names denote different conditions.
 
@@ -594,8 +596,6 @@ We can determine signed `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` ge
 We can determine unsigned `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setb` sets a single byte to 0 or 1 based on the result.
 
 Note: Machine code does not associate a data type with each program value. Therefore, there is no concept of "negative value" in the unsigned subtraction. Instead, as a theory of computer arithmetic, the unsigned subtraction is two's complement addition. After the subtraction, the x86-64 CPU architecture inverts the `CF` during subtraction, so that we can get the final `CF`.
-
-
 
 ---
 
