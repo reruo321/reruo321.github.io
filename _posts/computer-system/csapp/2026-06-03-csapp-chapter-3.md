@@ -579,6 +579,8 @@ There are three common ways of using the condition codes:
 
 A `SET` instruction has either one of the low-order single-byte register elements or a single-byte memory location as its destionation, setting this byte to either 0 oir 1. To generate a 32-bit or 64-bit result, we must also clear the high order bits.
 
+Suffix group {`g`, `l`, `ge`, `le`} allows signed values, while another suffix group {`a`, `b`, `ae`, `be`} allows unsigned values where includes `size_t` and pointers.
+
 ##### Signed a < b
 An example equation `a < b` helps to study how signed comparison logic works.
 
@@ -596,6 +598,13 @@ We can determine signed `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` ge
 We can determine unsigned `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` gets the result of `a - b`. And then `setb` sets a single byte to 0 or 1 based on the result.
 
 Note: Machine code does not associate a data type with each program value. Therefore, there is no concept of "negative value" in the unsigned subtraction. Instead, as a theory of computer arithmetic, the unsigned subtraction is two's complement addition. After the subtraction, the x86-64 CPU architecture inverts the `CF` during subtraction, so that we can get the final `CF`.
+
+### 3.6.3 Jump Instructions
+![3-15](3-15.png)
+
+A `jump` instruction can cause the execution to switch to a completely new position in the program. These `jump` destinations are generally indicated in assembly code by a label.
+
+
 
 ---
 
