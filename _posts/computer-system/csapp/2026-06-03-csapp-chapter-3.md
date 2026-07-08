@@ -542,7 +542,7 @@ if (a < old_a) { /* Handle the overflow */ }
 
 The example requires to check `CF` for the if-statement, because `++a` creates a carry. Note that "overflow" in the comment says C-level overflow, although the actual assembly code checks the carry.
 
-```att
+```c
 unsigned int a = 0xFFFFFFFF;
 unsigned int old_a = a;
 ++a;
@@ -602,9 +602,69 @@ Note: Machine code does not associate a data type with each program value. There
 ### 3.6.3 Jump Instructions
 ![3-15](3-15.png)
 
-A `jump` instruction can cause the execution to switch to a completely new position in the program. These `jump` destinations are generally indicated in assembly code by a label.
+A **jump** instruction can cause the execution to switch to a completely new position in the program. These jump destinations are generally indicated in assembly code by a label.
+
+#### Unconditional Jump
+The `jmp` instruction jumps unconditionally.
+
+* Direct jump: the jump target is encoded as part of the instruction.
+    * Example: `jmp .L1`
+* Indirect jump: the jump target is read from a register or a memory location.
+    * Example: `jmp *%rax`, `jmp *(%rax)`
+
+#### Conditional Jumps
+All jump instructions except `jmp` are conditional jumps, which can only be direct.
+
+### 3.6.4 Jump Instruction Encodings
+Understanding how the targets of jump instructions are encoded will become important when we study linking, and when interpreting the output of a disassembler.
+
+* In assembly code, jump targets are written using symbolic labels.
+* The assembler, and later the linker, generate the proper encodings of the jump targets.
+
+There are several different encodings for jumps, but some of the most commonly used ones are PC relative. The assembler and linker select the appropriate encodings of the jump destinations.
+
+#### PC Relative Encodings
+* Encode the difference between the address of the target instruction, and the address of the instruction immediately following the jump.
+* The offsets can be encoded using 1, 2, or 4 bytes.
+
+![branch](branch.png)
 
 
+
+#### Absolute Encodings
+* Give an "absolute" address, using 4 bytes or 8 bytes to directly specify the target.
+* While a 4-byte PC-relative offset can only jump $\pm$2 GB, an absolute 8-byte direct jump can reach absolutely anywhere in memory.
+* Like `jmp *%rax`, if the target address is calculated at runtime and stored in a register like `%rax`, the CPU has to perform an indirect, absolute jump.
+
+##### Indirect, Absoulte Jump
+```c
+void (*func_ptr)() = choose_function_at_runtime();
+func_ptr(); // Where are we jumping? The compiler doesn't know!
+```
+
+At compile time the compiler has no idea which function the user will choose. The address isn't known until the program is running, and it lands insude a register (e.g., `%rax`). The x86-64 hardware does not have an instruction syntax or the internal circuitry to treat a register's contents as a relative distance to add to the PC. Instead, it uses an **indirect, absolute jump**.
+
+When the CPU executes `jmp *%rax`:
+
+1. It looks at the 64-bit absolute address sitting inside `%rax`. (e.g., 0x00401122).
+2. It completely overwrites the PC with that value: `PC = 0x00401122`.
+3. On the very next clock cycle, it fetches the instruction at that exact address.
+
+#### Jump Tables
+When we have a massive switch-case statement, the compiler creates a **jump table** in memory—literally just an array of absolute 64-bit memory addresses pointing to the different case blocks.
+
+```att
+# An example jump table in memory (.rodata)
+.L4:
+    .quad .Lcase0   # Absolute address of Case 0
+    .quad .Lcase1   # Absolute address of Case 1
+    .quad .Lcase2   # Absolute address of Case 2
+```
+When our C code executes `switch(x)`, the assembly indexes into that array using an indirect jump:
+
+```att
+jmp *.L4(,%rax,8)   # Look up array element at (.L4 + %rax * 8) and jump directly to that absolute address
+```
 
 ---
 
