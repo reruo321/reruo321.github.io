@@ -599,6 +599,8 @@ We can determine unsigned `a < b` by determining `a - b < 0`. `cmpl %esi, %edi` 
 
 Note: Machine code does not associate a data type with each program value. Therefore, there is no concept of "negative value" in the unsigned subtraction. Instead, as a theory of computer arithmetic, the unsigned subtraction is two's complement addition. After the subtraction, the x86-64 CPU architecture inverts the `CF` during subtraction, so that we can get the final `CF`.
 
+---
+
 ### 3.6.3 Jump Instructions
 ![3-15](3-15.png)
 
@@ -615,6 +617,8 @@ The `jmp` instruction jumps unconditionally.
 #### Conditional Jumps
 All jump instructions except `jmp` are conditional jumps, which can only be direct.
 
+---
+
 ### 3.6.4 Jump Instruction Encodings
 Understanding how the targets of jump instructions are encoded will become important when we study linking, and when interpreting the output of a disassembler.
 
@@ -629,7 +633,7 @@ There are several different encodings for jumps, but some of the most commonly u
 
 ![branch](branch.png)
 
-
+By knowing two of these, (1) the target of the jump instruction, (2) the end of the jump instruction address, and (3) the target address, we can know all of them. [Problem 3.15](#problem-315) helps to understand how we can track jump target address.
 
 #### Absolute Encodings
 * Give an "absolute" address, using 4 bytes or 8 bytes to directly specify the target.
@@ -665,6 +669,11 @@ When our C code executes `switch(x)`, the assembly indexes into that array using
 ```att
 jmp *.L4(,%rax,8)   # Look up array element at (.L4 + %rax * 8) and jump directly to that absolute address
 ```
+
+---
+
+### 3.6.5 Implementing Conditional Branches with Conditional Control
+![absdiff_se](absdiff_se.png)
 
 ---
 
@@ -724,3 +733,15 @@ movl $0, %edx
 ```
 
 C. #TODO
+
+### Problem 3.12
+![Problem](practice/3-12.png)
+
+### Problem 3.13
+![Problem](practice/3-13.png)
+
+### Problem 3.14
+![Problem](practice/3-14.png)
+
+### Problem 3.15
+![Problem](practice/3-15.png)
