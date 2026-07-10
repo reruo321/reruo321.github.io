@@ -670,10 +670,24 @@ When our C code executes `switch(x)`, the assembly indexes into that array using
 jmp *.L4(,%rax,8)   # Look up array element at (.L4 + %rax * 8) and jump directly to that absolute address
 ```
 
+#### rep and repz
+In the x86 ISA, `rep` (repeat) and `repz` (repeat while zero) were designed to be placed in front of string manipulation instructions like `movs` (move string) or `stos` (store string) to create fast hardware loops. For example, `rep movs` tells the CPU: "Keep copying bytes from memory location A to memory location B, decrementing the `%rcx` register every time, until `%rcx` hits 0."
+
+In modern x86-64, `rep` does nothing. However, it exists to avoid a 1-to-2 clock cycle penalty. Modern CPUs use a **branch predictor** to guess where jumps are going before they even happen. If the jump target and the `ret` instruction share the same pipeline slot or exit logic, the branch predictor can stall (need to predict two massive changes in program flow simultaneously), causing the cycle penalty. To avoid it, the compiler needs to insert an empty instruction between the jump target and the `ret` so the branch predictor has breathing room.
+
+* `nop` could be good here, but it takes up an extra byte of code and requires the CPU decode logic to process an entirely separate instruction.
+* `rep`
+    * To the branch predictor, it shifts the execution alignment just enough to prevent the pipeline stall.
+    * To the CPU decoder, it treats `rep ret` as a single instruction, which is faster to parse than a separate `nop` and `ret`.
+
 ---
 
 ### 3.6.5 Implementing Conditional Branches with Conditional Control
+The most general way to translate conditional expressions and statements from C into machine code is to use combinations of conditional and unconditional jumps.
+
 ![absdiff_se](absdiff_se.png)
+
+`gotodiff_se` uses the `goto` statement in C, which is similar to the unconditional jump of assembly code. We call this style of programming "goto code".
 
 ---
 
