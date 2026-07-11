@@ -673,7 +673,7 @@ jmp *.L4(,%rax,8)   # Look up array element at (.L4 + %rax * 8) and jump directl
 #### rep and repz
 In the x86 ISA, `rep` (repeat) and `repz` (repeat while zero) were designed to be placed in front of string manipulation instructions like `movs` (move string) or `stos` (store string) to create fast hardware loops. For example, `rep movs` tells the CPU: "Keep copying bytes from memory location A to memory location B, decrementing the `%rcx` register every time, until `%rcx` hits 0."
 
-In modern x86-64, `rep` does nothing. However, it exists to avoid a 1-to-2 clock cycle penalty. Modern CPUs use a **branch predictor** to guess where jumps are going before they even happen. If the jump target and the `ret` instruction share the same pipeline slot or exit logic, the branch predictor can stall (need to predict two massive changes in program flow simultaneously), causing the cycle penalty. To avoid it, the compiler needs to insert an empty instruction between the jump target and the `ret` so the branch predictor has breathing room.
+In modern x86-64, the combination `rep ret` is recommended to avoid making the `ret` instruction the destination of a conditional jump instruction. `rep` does nothing but it exists to avoid a 1-to-2 clock cycle penalty. Modern CPUs use a **branch predictor** to guess where jumps are going before they even happen. If the jump target and the `ret` instruction share the same pipeline slot or exit logic, the branch predictor can stall (need to predict two massive changes in program flow simultaneously), causing the cycle penalty. To avoid it, the compiler needs to insert an empty instruction between the jump target and the `ret` so the branch predictor has breathing room.
 
 * `nop` could be good here, but it takes up an extra byte of code and requires the CPU decode logic to process an entirely separate instruction.
 * `rep`
@@ -688,6 +688,28 @@ The most general way to translate conditional expressions and statements from C 
 ![absdiff_se](absdiff_se.png)
 
 `gotodiff_se` uses the `goto` statement in C, which is similar to the unconditional jump of assembly code. We call this style of programming "goto code".
+
+The general form of an if-else statement in C is given by the template
+
+```c
+if (test-expr)
+    then-statement
+else
+    else-statement
+```
+
+The assembly implementation using C syntax is like
+
+```c
+    t = test-expr;
+    if (!t)
+        goto false;
+    then-statement
+    goto done;
+false:
+    else-statement
+done:
+```
 
 ---
 
@@ -759,3 +781,21 @@ C. #TODO
 
 ### Problem 3.15
 ![Problem](practice/3-15.png)
+
+### Problem 3.16
+A.
+
+```c
+void goto_cond(long a, long* p)
+{
+	if (p == 0)
+		goto bye;
+	if (*p >= a)
+		goto bye;
+	*p = a;
+bye:
+	return;
+}
+```
+
+B. Two conditioanl branches are separated by `&&` inside one `if` statement. The first conditional branch checks if `p == 0`. If `p == 0`, it skips the second conditional branch to check `a > *p`.
