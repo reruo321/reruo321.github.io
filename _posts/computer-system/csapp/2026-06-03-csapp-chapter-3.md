@@ -711,6 +711,23 @@ false:
 done:
 ```
 
+
+#### Instruction Density
+Reducing unnecessary jumps shrinks the compiled machine code size. This saves bytes, allowing more instructions to fit inside the CPU's ultra-fast L1 Instruction Cache, which minimizes time spent fetching data from main memory.
+
+#### Fall-Through Execution
+Structuring code so the most common pathway flows straight down without executing a jump is called **fall-through execution**. While early CPUs were hardwired to assume branches were not taken, modern branch predictors use dynamic history tables to guess patterns. However, keeping the path straight and sequential remains ideal because it reduces the absolute number of branch instructions the hardware has to track, maximizing pipeline efficiency.
+
+#### The Arbitrary Nature of Code Style
+Because modern optimizing compilers (like GCC or Clang) automatically rearrange blocks, eliminate redundant jumps, and inject conditional moves behind the scenes, the high-level C code structure is largely arbitrary for performance. Human programmers should prioritize readability and maintainability, leaving local micro-optimizations to the compiler.
+
+### 3.6.6 Implementing Conditional Branches with Conditional Moves
+
+#### Conditional Branches vs Conditional Moves
+Modern CPUs and compilers dynamically choose between these two strategies to optimize execution.
+* When a Conditional Branch (`j__`) is better: If the condition is highly predictable (e.g., error-checking code that rarely triggers). The branch predictor will guess correctly nearly $100\%$ of the time, allowing the CPU to execute the dominant path with zero overhead.
+* When a Conditional Move (`cmov`) is better: If the condition is highly random or unpredictable (e.g., processing unsorted data). A conditional branch here would cause the branch predictor to constantly guess wrong, triggering a branch misprediction penalty that flushes the pipeline and stalls the CPU for 15 to 30 clock cycles. A conditional move avoids the branch entirely by computing both paths and selecting the result using hardware logic.
+
 ---
 
 ## Problems
@@ -799,3 +816,26 @@ bye:
 ```
 
 B. Two conditioanl branches are separated by `&&` inside one `if` statement. The first conditional branch checks if `p == 0`. If `p == 0`, it skips the second conditional branch to check `a > *p`.
+
+### Problem 3.17
+A.
+
+```c
+long absdiff_se(long x, long y)
+{
+	long result;
+	if (x < y)
+		goto test_true;
+	else {
+		ge_cnt++;
+		result = x - y;
+		return result;
+	}
+test_true:
+	lt_cnt++;
+	result = y - x;
+	return result;
+}
+```
+
+B. It's arbitrary, but without `else` statement works better.
