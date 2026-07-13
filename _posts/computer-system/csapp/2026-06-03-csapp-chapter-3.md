@@ -721,12 +721,26 @@ Structuring code so the most common pathway flows straight down without executin
 #### The Arbitrary Nature of Code Style
 Because modern optimizing compilers (like GCC or Clang) automatically rearrange blocks, eliminate redundant jumps, and inject conditional moves behind the scenes, the high-level C code structure is largely arbitrary for performance. Human programmers should prioritize readability and maintainability, leaving local micro-optimizations to the compiler.
 
+---
+
 ### 3.6.6 Implementing Conditional Branches with Conditional Moves
+* **Conditional Branch** (`j__`), **Conditional transfer of control**: It uses speculative lines, branch prediciton, and the CPU runs down one guessed path. The program follows one execution path when a condition holds and another when it does not.
+    * It uses its assembly lines to do the work ahead of time, but it marks the work in "pencil"; If the condition proves the guess was wrong, it throws it away. It only ever looks at one path at a time.
+    * Pros: Simple and general.
+    * Cons: Very inefficient on modern processors. A branch misprediction penalty flushes the pipeline and stalls the CPU for 15 to 30 clock cycles for cleanup.
+    * Usage:
+        * If a condition is highly predictable.
+        * If blocks of code are huge.
+        * There are side effects on the code inside blocks to be calculated ahead of time. (e.g., dividing a number, reading from a pointer)
+* **Conditional Move* (`cmov`), **Conditional transfer of data**: It uses real lines. It computes both outcomes of a conditional operation and then selects one based on whether or not the condition holds.
+    * The CPU uses its multiple parallel assembly lines to process both options completely and simultaneously in "ink"; no guessing is involved, both results are fully calculated, and the CPU just picks the winning register at the finish line.
+    * Pros: No guessing, no cleanup penalty
+
 
 #### Conditional Branches vs Conditional Moves
 Modern CPUs and compilers dynamically choose between these two strategies to optimize execution.
-* When a Conditional Branch (`j__`) is better: If the condition is highly predictable (e.g., error-checking code that rarely triggers). The branch predictor will guess correctly nearly $100\%$ of the time, allowing the CPU to execute the dominant path with zero overhead.
-* When a Conditional Move (`cmov`) is better: If the condition is highly random or unpredictable (e.g., processing unsorted data). A conditional branch here would cause the branch predictor to constantly guess wrong, triggering a branch misprediction penalty that flushes the pipeline and stalls the CPU for 15 to 30 clock cycles. A conditional move avoids the branch entirely by computing both paths and selecting the result using hardware logic.
+* When a **Conditional Branch** (`j__`) is better: If the condition is highly predictable (e.g., error-checking code that rarely triggers). The branch predictor will guess correctly nearly $100\%$ of the time, allowing the CPU to execute the dominant path with zero overhead.
+* When a **Conditional Move** (`cmov`) is better: If the condition is highly random or unpredictable (e.g., processing unsorted data). A conditional branch here would cause the branch predictor to constantly guess wrong, triggering a branch misprediction penalty that flushes the pipeline and stalls the CPU for 15 to 30 clock cycles. A conditional move avoids the branch entirely by computing both paths and selecting the result using hardware logic.
 
 ---
 
