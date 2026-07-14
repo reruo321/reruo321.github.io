@@ -685,7 +685,7 @@ In modern x86-64, the combination `rep ret` is recommended to avoid making the `
 ### 3.6.5 Implementing Conditional Branches with Conditional Control
 The most general way to translate conditional expressions and statements from C into machine code is to use combinations of conditional and unconditional jumps.
 
-![absdiff_se](absdiff_se.png)
+![3-16](3-16.png)
 
 `gotodiff_se` uses the `goto` statement in C, which is similar to the unconditional jump of assembly code. We call this style of programming "goto code".
 
@@ -711,7 +711,6 @@ false:
 done:
 ```
 
-
 #### Instruction Density
 Reducing unnecessary jumps shrinks the compiled machine code size. This saves bytes, allowing more instructions to fit inside the CPU's ultra-fast L1 Instruction Cache, which minimizes time spent fetching data from main memory.
 
@@ -724,23 +723,66 @@ Because modern optimizing compilers (like GCC or Clang) automatically rearrange 
 ---
 
 ### 3.6.6 Implementing Conditional Branches with Conditional Moves
+Modern CPUs and compilers dynamically choose between these two strategies to optimize execution.
+
+![3-17](3-17.png)
+
 * **Conditional Branch** (`j__`), **Conditional transfer of control**: It uses speculative lines, branch prediciton, and the CPU runs down one guessed path. The program follows one execution path when a condition holds and another when it does not.
     * It uses its assembly lines to do the work ahead of time, but it marks the work in "pencil"; If the condition proves the guess was wrong, it throws it away. It only ever looks at one path at a time.
-    * Pros: Simple and general.
-    * Cons: Very inefficient on modern processors. A branch misprediction penalty flushes the pipeline and stalls the CPU for 15 to 30 clock cycles for cleanup.
+    * Pros:
+        * Simple and general.
+        * If the condition is highly predictable, the branch predictor will guess nearly $100\%$ of the time, allowing the CPU to execute the dominant path with zero overhead.
+    * Cons:
+        * Very inefficient on modern processors. A branch misprediction penalty flushes the pipeline and stalls the CPU for 15 to 30 clock cycles for cleanup.
     * Usage:
-        * If a condition is highly predictable.
+        * If a condition is highly predictable to achieve success rates on the order of 90%.
         * If blocks of code are huge.
-        * There are side effects on the code inside blocks to be calculated ahead of time. (e.g., dividing a number, reading from a pointer)
-* **Conditional Move* (`cmov`), **Conditional transfer of data**: It uses real lines. It computes both outcomes of a conditional operation and then selects one based on whether or not the condition holds.
+        * If there are side effects on the code inside blocks to be calculated ahead of time. (e.g., dividing a number, reading from a pointer)
+* **Conditional Move** (`cmov`), **Conditional transfer of data**: It uses real lines. It computes both outcomes of a conditional operation and then selects one based on whether or not the condition holds.
     * The CPU uses its multiple parallel assembly lines to process both options completely and simultaneously in "ink"; no guessing is involved, both results are fully calculated, and the CPU just picks the winning register at the finish line.
-    * Pros: No guessing, no cleanup penalty
+    * Pros:
+        * No guessing
+        * No cleanup penalty
+    * Cons:
+        * Not proper to use on some cases, where branches are better.
+    * Usage:
+        * If a condition is unpredictable. (e.g., `x < y` would make a branch predictor wrong guess 50% or the time.)
+
+![3-18](3-18.png)
+
+* S and D can be 16, 32, or 64 bits long. Single byte conditional moves are not supported.
+* The assembler can infer the operand length of a conditional move instruction from the name of the destination register, and so the same instruction name can be used for all operand lengths.
+* The processor can execute conditional move instructions without having to predict the outcome of the test.
 
 
-#### Conditional Branches vs Conditional Moves
-Modern CPUs and compilers dynamically choose between these two strategies to optimize execution.
-* When a **Conditional Branch** (`j__`) is better: If the condition is highly predictable (e.g., error-checking code that rarely triggers). The branch predictor will guess correctly nearly $100\%$ of the time, allowing the CPU to execute the dominant path with zero overhead.
-* When a **Conditional Move** (`cmov`) is better: If the condition is highly random or unpredictable (e.g., processing unsorted data). A conditional branch here would cause the branch predictor to constantly guess wrong, triggering a branch misprediction penalty that flushes the pipeline and stalls the CPU for 15 to 30 clock cycles. A conditional move avoids the branch entirely by computing both paths and selecting the result using hardware logic.
+
+#### Side Effects
+**Side effects** are simply any change to the state of the computer that happens outside of the function's local return value. Any changes to the global variables `lt_cnt` and `ge_cnt` in the `absdiff_se` (Figure 3-16, the branching version) are the examples of the side effects.
+
+Unlike the general meaning of "side effects" in the real world are bad, they are very important parts of software to do these:
+
+* Printing to the screen (change the state of a monitor)
+* Saving files
+* Network communication
+* User Interaction
+
+They got the name "side effects" because they make code unpredictable and harder to optimize for both humans and compilers.
+
+* The human problem: People have a hard time to catch hidden bugs by side effects.
+* The compiler problem: If a function is a pure function (no side effect), the compiler can safely rearrange it, skip executing it if the result isn't used, or convert it into a branchless conditional move. However, if a side effect is added (impure function), it must run the code exactly as written to avoid ruining the program's global memory.
+
+Modern software engineering doesn't try to elimate side effects entirely; instead, it tries to isolate them.
+* The core: Pure, clean functions are written with zero side effects. This allows the compiler to use `cmov`, loop unrolling, and maximum pipeline accelaration.
+* The shell: Impure, all side effects are pushed to the very outre edges of the program.
+
+#### Penalty Calculation
+* $p$: The probability of misprediction
+* $T_{OK}$: The time to execute the code without misprediction
+* $T_{MP}$: The misprediction penalty
+
+$$
+T_{avg}(p) = (1-p)T_{OK} + p(T_{OK} + T_{MP}) = T_{OK} + pT_{MP}
+$$
 
 ---
 
@@ -853,3 +895,4 @@ test_true:
 ```
 
 B. It's arbitrary, but without `else` statement works better.
+
