@@ -754,8 +754,6 @@ Modern CPUs and compilers dynamically choose between these two strategies to opt
 * The assembler can infer the operand length of a conditional move instruction from the name of the destination register, and so the same instruction name can be used for all operand lengths.
 * The processor can execute conditional move instructions without having to predict the outcome of the test.
 
-
-
 #### Side Effects
 **Side effects** are simply any change to the state of the computer that happens outside of the function's local return value. Any changes to the global variables `lt_cnt` and `ge_cnt` in the `absdiff_se` (Figure 3-16, the branching version) are the examples of the side effects.
 
