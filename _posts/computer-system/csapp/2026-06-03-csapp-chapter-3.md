@@ -782,6 +782,8 @@ $$
 T_{avg}(p) = (1-p)T_{OK} + p(T_{OK} + T_{MP}) = T_{OK} + pT_{MP}
 $$
 
+
+
 ---
 
 ## Problems
