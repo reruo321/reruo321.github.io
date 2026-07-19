@@ -745,6 +745,7 @@ Modern CPUs and compilers dynamically choose between these two strategies to opt
         * No cleanup penalty
     * Cons:
         * Not proper to use on some cases, where branches are better.
+            * If blocks of code are huge. Since it computes all options simultaneously, any efforts to calculate thrown options would be wasted.
     * Usage:
         * If a condition is unpredictable. (e.g., `x < y` would make a branch predictor wrong guess 50% or the time.)
 
@@ -894,3 +895,8 @@ test_true:
 
 B. It's arbitrary, but without `else` statement works better.
 
+### Problem 3.18
+![Problem](practice/3-18.png)
+
+### Problem 3.19
+![Problem](practice/3-19.png)
