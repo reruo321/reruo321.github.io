@@ -785,6 +785,23 @@ $$
 
 ---
 
+### 3.6.7 Loops
+Machine Code Loop = Conditional tests + Jumps
+
+1. Do-While Loops
+2. While Loops
+
+#### Do-While Loops
+![3-19](3-19.png)
+
+#### Aside: Reverse Engineering Loops
+**Reverse engineering** to find a mapping between program values and registers can be more challenging for more complex programs.
+
+1. The C compiler will often rearrange the computations.
+2. It will often try to minimize register usage by mapping multiple program values onto a single register.
+
+---
+
 ## Problems
 ### Problem 3.1
 ![Problem](practice/3-1.png)
