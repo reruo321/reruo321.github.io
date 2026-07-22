@@ -794,6 +794,10 @@ Machine Code Loop = Conditional tests + Jumps
 #### Do-While Loops
 ![3-19](3-19.png)
 
+#### While-Loops
+##### 1. Jump to Middle
+![3-20](3-20.png)
+
 #### Aside: Reverse Engineering Loops
 **Reverse engineering** to find a mapping between program values and registers can be more challenging for more complex programs.
 
