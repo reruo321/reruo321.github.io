@@ -804,6 +804,8 @@ Machine Code Loop = Conditional tests + Jumps
 1. The C compiler will often rearrange the computations.
 2. It will often try to minimize register usage by mapping multiple program values onto a single register.
 
+
+
 ---
 
 ## Problems
