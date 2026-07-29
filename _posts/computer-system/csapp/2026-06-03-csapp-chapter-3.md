@@ -929,3 +929,6 @@ B. It's arbitrary, but without `else` statement works better.
 
 ### Problem 3.19
 ![Problem](practice/3-19.png)
+
+### Problem 3.20
+![Problem](practice/3-20.png)
