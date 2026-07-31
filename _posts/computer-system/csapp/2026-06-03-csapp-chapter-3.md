@@ -810,7 +810,19 @@ Machine Code Loop = Conditional tests + Jumps
 1. The C compiler will often rearrange the computations.
 2. It will often try to minimize register usage by mapping multiple program values onto a single register.
 
+---
 
+### 3.6.8 Switch Statements
+A **switch statements** not only make the C code more readable, but they also allow an efficient implementation using a data structure called a jump table.
+
+![3-22](3-22.png)
+
+![3-23](3-23.png)
+
+#### Jump Table
+A **jump table** is an array where entry `i` is the address of a code segment implementing the action the program should take when the switch index equals `i`. The code performs an array reference into the jump table using the switch index to determine the target for a jump instruction.
+
+The advantage of using a jump table over a long sequence of if-else statement is that the time taken to perform the switch is independent of the number of switch cases.
 
 ---
 
