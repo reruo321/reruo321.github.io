@@ -878,6 +878,17 @@ With x86-64, most of data passing to and from procedures take place via register
 
 ![3-30](3-30.png)
 
+#### Memory Management
+* DRAM is volatile.
+    * Power OFF: electrical charges bleed off completely within seconds. Physical RAM drops back to zero charge.
+    * Power ON: As voltage stabilizes, the floating transistors in RAM initialize to unpredictable noise (random 1s and 0s). RAM does not boot with pre-cleaned zeroes—it boots with physical hardware noise.
+
+##### The Boot Sequence
+1. **Reset Vector & Firmware Execution**: The CPU wakes up in Real Mode with registers set to a default state. The CPU fetches its very first instruction from a hardcoded memory address (the reset vector), which points directly to non-volatile flash ROM containing UEFI/BIOS firmware.
+2. **Firmware & DRAM Initialization**: The UEFI/BIOS runs POST (Power-On Self-Test) and configures the memory controller. Because RAM contains random noise, firmware clears critical memory regions needed for its own execution.
+3. **Bootloader & Kernel Launch**: Firmware reads the storage drive (SSD/HDD), loads the OS Bootloader (e.g., GRUB or Windows Boot Manager) into RAM, and passes control. The bootloader loads the Operating System Kernel.
+4. **OS Memory Management Takes Over**: The OS Kernel initializes Virtual Memory paging tables. From this point forward, whenever a new process asks for RAM, the kernel explicitly zeroes out those pages for security before handing them over.
+
 ---
 
 ## Problems
