@@ -879,6 +879,8 @@ With x86-64, most of data passing to and from procedures take place via register
 ![3-30](3-30.png)
 
 #### Memory Management
+* `push %rax`: Subtracts 8 from `%rsp`, and then overwrites whatever old, stale data happened to be sitting at that memory location with the new contents of `%rax`.
+* `popq %rax`: Popping something off the stack DOES NOT erase or zero out the physical bits in RAM! It reads the value currently sitting at the address pointed to by `%rsp`, copies it into `%rax`, and then adds 8 to `%rsp`. The original bits remain sitting in memory unused.
 * DRAM is volatile.
     * Power OFF: electrical charges bleed off completely within seconds. Physical RAM drops back to zero charge.
     * Power ON: As voltage stabilizes, the floating transistors in RAM initialize to unpredictable noise (random 1s and 0s). RAM does not boot with pre-cleaned zeroes—it boots with physical hardware noise.
@@ -888,6 +890,15 @@ With x86-64, most of data passing to and from procedures take place via register
 2. **Firmware & DRAM Initialization**: The UEFI/BIOS runs POST (Power-On Self-Test) and configures the memory controller. Because RAM contains random noise, firmware clears critical memory regions needed for its own execution.
 3. **Bootloader & Kernel Launch**: Firmware reads the storage drive (SSD/HDD), loads the OS Bootloader (e.g., GRUB or Windows Boot Manager) into RAM, and passes control. The bootloader loads the Operating System Kernel.
 4. **OS Memory Management Takes Over**: The OS Kernel initializes Virtual Memory paging tables. From this point forward, whenever a new process asks for RAM, the kernel explicitly zeroes out those pages for security before handing them over.
+
+### 3.7.4 Local Storage on the Stack
+At times, local data must be stored in memory, such as in these cases:
+* There are not enough registers to hold all of the local data.
+* The address operator `&` is applied to a local variable, and hence we must be able to generate an address for it.
+* Some of the local variables are arrays or structures and hence must be accessed by array or sturcture reference.
+
+We can check the usage of stack with `(%rsp)` or `(%rbp)` in instructions.
+
 
 ---
 
