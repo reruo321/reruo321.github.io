@@ -899,6 +899,7 @@ At times, local data must be stored in memory, such as in these cases:
 
 We can check the usage of stack with `(%rsp)` or `(%rbp)` in instructions.
 
+![3-31](3-31.png)
 
 ---
 
