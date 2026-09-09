@@ -42,3 +42,8 @@ Look at the configurations below. On [DMA Settings], add `USART1_RX` and `USART1
 
 
 ![build_console](build_console.png)
+
+## Study
+An embedded 
+### Flash vs SRAM
+Flash (ROM) and SRAM in STM32F103RB are separate, physical silicon memory blocks inside the board. Flash is 128 KB, Meanwhile, SRAM is 20 KB.
