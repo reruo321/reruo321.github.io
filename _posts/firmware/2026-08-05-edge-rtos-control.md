@@ -23,14 +23,18 @@ On [System Core] → [SYS] → (Mode) Timebase Source, change `SysTick` to `TIM1
 
 On [Connectivity] → [USART1] → (Mode) Mode, select `Asynchronous`.
 
-Look at the configurations below. On [DMA Settings], add `USART1_RX` and `USART1_TX`. Additionally, set the mode of `USART1_RX`'s DMA Request Settings to `Circular`.
+Look at the configurations below. On [DMA Settings], add `USART1_RX` and `USART1_TX`.
+
+![mx_conf_2](mx_conf_2.png)
+
+Additionally, set the mode of `USART1_RX`'s DMA Request Settings to `Circular`. It helps USART1_RX to continuously receive the message.
 
 * **Normal**: After transferring a fixed number of bytes/items once, halts.
 * **Circular**: Reaches the end of the destination/source buffer, automatically resets the address/counter pointers, and wraps back to index 0 without stopping.
 
-![mx_conf_2](mx_conf_2.png)
-
 ![mx_conf_3](mx_conf_3.png)
+
+On [NVIC Settings], enable `USART1 global interrupt`. 
 
 ![mx_conf_4](mx_conf_4.png)
 
