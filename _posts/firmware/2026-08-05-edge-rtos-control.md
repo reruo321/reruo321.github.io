@@ -34,7 +34,7 @@ Additionally, set the mode of `USART1_RX`'s DMA Request Settings to `Circular`. 
 
 ![mx_conf_3](mx_conf_3.png)
 
-On [NVIC Settings], enable `USART1 global interrupt`. 
+On [NVIC Settings], enable `USART1 global interrupt`. It enables to capture the IDLE line event (`UART_IT_IDLE`) so that the CPU can know when a full message finished arriving from the Pi.
 
 ![mx_conf_4](mx_conf_4.png)
 
