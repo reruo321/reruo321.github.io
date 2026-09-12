@@ -44,7 +44,6 @@ On [NVIC Settings], enable `USART1 global interrupt`. It enables to capture the 
 
 ![mx_conf_7](mx_conf_7.png)
 
-
 ![build_console](build_console.png)
 
 ## Study
