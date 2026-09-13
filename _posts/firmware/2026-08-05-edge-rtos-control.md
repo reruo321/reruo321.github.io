@@ -17,13 +17,20 @@ Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with 
 ### Pinout & Configuration
 ![mx_conf_0](mx_conf_0.png)
 
-On [System Core] → [SYS] → (Mode) Timebase Source, change `SysTick` to `TIM1` (or `TIM2`). This prevents the collision between the default SysTick timer and FreeRTOS.
+On [System Core] → [SYS] → [Mode] → [Timebase Source], change `SysTick` to `TIM1` (or `TIM2`). This prevents the collision between the default SysTick timer and FreeRTOS.
 
 ![mx_conf_1](mx_conf_1.png)
 
-On [Connectivity] → [USART1] → (Mode) Mode, select `Asynchronous`.
+Click [Connectivity] → [USART1] on the left sidebar. On [Mode] → [Mode], select `Asynchronous`.
 
 Look at the configurations below. On [DMA Settings], add `USART1_RX` and `USART1_TX`.
+
+A **USART(Universal Synchronous/Asynchronous Receiver/Transmitter)** is a piece of hardware that lets devices send and receive serial data. It operates full-duplex operation, which means it can send and receive data at the same time using separate internal registers.
+
+It can work in both asynchronous mode and synchronous mode.
+
+* **Asynchronous Mode**: The device uses a single data line to send data. Both devices must agree beforehand on the speed (baud rate) to interpret the bits correctly.
+* **Synchronous Mode**: 
 
 ![mx_conf_2](mx_conf_2.png)
 
@@ -38,7 +45,11 @@ On [NVIC Settings], enable `USART1 global interrupt`. It enables to capture the 
 
 ![mx_conf_4](mx_conf_4.png)
 
+On [Parameter Settings], ensure `Baud Rate` is 115200 Bits/s, and `Word Length` is 8 Bits (including Parity).
+
 ![mx_conf_5](mx_conf_5.png)
+
+On [Middleware and Software Packs] → 
 
 ![mx_conf_6](mx_conf_6.png)
 
@@ -46,7 +57,27 @@ On [NVIC Settings], enable `USART1 global interrupt`. It enables to capture the 
 
 ![build_console](build_console.png)
 
+![memory_detail](memory_detail.png)
+
+
 ## Study
 An embedded 
 ### Flash vs SRAM
 Flash (ROM) and SRAM in STM32F103RB are separate, physical silicon memory blocks inside the board. Flash is 128 KB, Meanwhile, SRAM is 20 KB.
+
+SRAM looks like this, which seems similar to the RAM in a normal computer.
+
+```
+[ SRAM 끝: 0x2000 5000 (20KB) ]
+┌──────────────────────────┐
+│ Stack                    │ <- 지역 변수, 함수 호출 정보 (하향 성장)
+│      ↓                   │
+│      ↑                   │
+│ Heap                     │ -> malloc() 등 동적 할당 (상향 성장)
+├──────────────────────────┤
+│ .bss                     │ Scan 용량이 클수록 0 초기화 루프가 길어짐
+├──────────────────────────┤
+│ .data                    │ <- 초기화 값이 있는 전역 변수
+└──────────────────────────┘
+[ SRAM 시작: 0x2000 0000 ]
+```
