@@ -106,7 +106,6 @@ SRAM looks like this, which seems similar to the RAM in a normal computer.
 #### 2. Map File
 ![map_file](map_file.png)
 
-
 #### 3. Linker Script
 The linker script (`.ld`) file in the project root shows how the sections are structured dynamically.
 
