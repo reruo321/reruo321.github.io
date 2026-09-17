@@ -81,7 +81,41 @@ From Build Analyzer on the IDE, you can see various sections are available in **
 
 FLASH and SRAM in STM32F103RB are separate, physical silicon memory blocks inside the board. FLASH is 128 KB, Meanwhile, SRAM is 20 KB.
 
-SRAM looks like this, which seems similar to the RAM in a normal computer.
+FLASH looks like this, which operates completely different from the flash memory (SSDs) used in a normal PC.
+
+```
+[ FLASH End: 0x0801 FFFF (128KB) ]
+┌──────────────────────────┐
+│ Page 127 (2KB)           │ <- Last page (Often used for user data backup / non-volatile config)
+├──────────────────────────┤
+│ ...                      │
+├──────────────────────────┤
+│ Page 1 (2KB)             │ 
+├──────────────────────────┤
+│ Page 0 (2KB)             │ <- Main Memory Start (0x0800 0000)
+│  ┌────────────────────┐  │
+│  │ .rodata            │  │ <- Read-Only Data (Constants, string literals)
+│  ├────────────────────┤  │
+│  │ .text              │  │ <- Executable Code (Compiled machine instructions & functions)
+│  ├────────────────────┤  │
+│  │ .data (Init Values)│  │ <- Initial values of global/static variables (Copied to SRAM at boot)
+│  ├────────────────────┤  │
+│  │ Interrupt Vectors  │  │ <- Vector Table (Reset, SysTick, and peripheral ISR addresses)
+│  ├────────────────────┤  │
+│  │ Initial SP Value   │  │ <- Absolute Start: Initial Main Stack Pointer (MSP) value
+│  └────────────────────┘  │
+└──────────────────────────┘
+[ FLASH Start: 0x0800 0000 ]
+```
+
+Here are major differences between two FLASHes:
+
+| **Feature** | **NOR FLASH**<br>**(e.g. NUCLEO-F103RB)** | **NAND FLASH**<br>**(e.g. PC SSD / USB Drive)** |
+| - | - | - |
+| **Primary Use** | - | - |
+
+
+Meanwhile, SRAM looks like this, which seems similar to the RAM in a normal computer.
 
 ```
 [ SRAM End: 0x2000 5000 (20KB) ]
