@@ -108,12 +108,17 @@ FLASH looks like this, which operates completely different from the flash memory
 [ FLASH Start: 0x0800 0000 ]
 ```
 
-Here are major differences between two FLASHes:
+Here are major differences between two types of FLASH:
 
 | **Feature** | **NOR FLASH**<br>**(e.g. NUCLEO-F103RB)** | **NAND FLASH**<br>**(e.g. PC SSD / USB Drive)** |
 | - | - | - |
-| **Primary Use** | - | - |
-
+| **Primary Use** | Code execution<br>Bootloaders<br>Firmware storage | Bulk data storage<br>Files<br>Operating systems |
+| **Primary Use** | Byte-addressable<br>(Random access like RAM) | Block/Page-addressable (Serial access) |
+| **Execute-in-Place**<br>**(XIP)** | Yes<br>The CPU can run code directly from FLASH. | No.<br>Code |
+| **Read Speed** | Very fast | Fast, but high initial latency for random reads |
+| **Write/Erase Speed** | Very slow | Fast |
+| **Storage Density** | Low (Typically 32KB~a few MB) | Extremely high (GB~TB) |
+| **Cost per Bit** | High | Low |
 
 Meanwhile, SRAM looks like this, which seems similar to the RAM in a normal computer.
 
