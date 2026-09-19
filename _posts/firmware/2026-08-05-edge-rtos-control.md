@@ -72,6 +72,7 @@ On [Code Generator], choose `Copy only the necessary library files`, and check `
 
 You can also see some kinds of information on the CDT Build Console.
 
+##
 
 ## Study
 ### Flash vs SRAM
