@@ -11,8 +11,21 @@ tags: [firmware, STM32, Nucleo, NUCLEO-F103RB]
 ## Introduction
 In August 2026, I started my first edge RTOS control project with NUCLEO-F103RB and Raspberry Pi 5. Not only I could be more familiar with firmware and embedded programming, I also got significant insights on computer science.
 
+## Prerequisite
+* NUCLEO-F103RB board
+* Raspberry Pi 5
+* Wire × 3
+
+
 ## Project Configuration
 Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX.
+
+## Board Selector
+Open STM32CubeMX, and select [File] → [New Project].
+
+![board_selector](board_selector.png)
+
+Click [Board Selector] and write `NUCLEO-F103RB` on `Commercial Part Number`.
 
 ### Pinout & Configuration
 ![mx_conf_0](mx_conf_0.png)
@@ -67,6 +80,19 @@ Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32Cu
 ![mx_conf_7](mx_conf_7.png)
 
 On [Code Generator], choose `Copy only the necessary library files`, and check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
+
+After finishing the configurations, generate code and open the project with STM32CubeIDE.
+
+## Bare-Metal Polling Test
+As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1_RX` is on `PA10`. You can also check this from the Pinout view, or the datasheet, **[DS5319](https://www.st.com/en/microcontrollers-microprocessors/stm32f103rb.html#documentation)**.
+
+![signal_pin](signal_pin.png)
+
+![pinout_pa910](pinout_pa910.png)
+
+![ds_pa910](ds_pa910.png)
+
+
 
 ![build_console](build_console.png)
 
