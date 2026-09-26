@@ -11,11 +11,21 @@ tags: [firmware, STM32, Nucleo, NUCLEO-F103RB]
 ## Introduction
 In August 2026, I started my first edge RTOS control project with NUCLEO-F103RB and Raspberry Pi 5. Not only I could be more familiar with firmware and embedded programming, I also got significant insights on computer science.
 
+The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cortex-M3 32-bit RISC core (CPU). It features FLASH up to 128 Kbytes and SRAM up to 20 Kbytes.
+
 ## Prerequisite
 * NUCLEO-F103RB board
 * Raspberry Pi 5
 * Wire × 3
 
+### Documents
+#### NUCLEO-F103RB
+* Datasheet for STM32F103RB (**DS5319**) - From [here](https://www.st.com/en/microcontrollers-microprocessors/stm32f103rb.html)
+* User Manual for NUCLEO-F103RB (**UM1724**) - From [here](https://www.st.com/en/evaluation-tools/nucleo-f103rb.html#documentation)
+* Board Schematic for **MB1136** - From [here](https://www.st.com/en/evaluation-tools/nucleo-f103rb.html#cad-resources)
+
+#### Raspberry Pi 5
+* [RP1 Peripherals](https://pip-assets.raspberrypi.com/categories/892-raspberry-pi-5/documents/RP-008370-DS-1-rp1-peripherals.pdf)
 
 ## Project Configuration
 Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX.
@@ -83,8 +93,9 @@ On [Code Generator], choose `Copy only the necessary library files`, and check `
 
 After finishing the configurations, generate code and open the project with STM32CubeIDE.
 
-## Bare-Metal Polling Test
-As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1_RX` is on `PA10`. You can also check this from the Pinout view, or the datasheet, **[DS5319](https://www.st.com/en/microcontrollers-microprocessors/stm32f103rb.html#documentation)**.
+## Hardware Connection
+### NUCLEO-F103RB
+As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1_RX` is on `PA10`. You can also check this from the Pinout view, or many documents.
 
 ![signal_pin](signal_pin.png)
 
@@ -92,11 +103,22 @@ As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1
 
 ![ds_pa910](ds_pa910.png)
 
+Looking at UM1724, we can check on CN10, Pin 21 is `PA9`, and Pin 33 is `PA10`.
 
+![morpho_pa910](morpho_pa910.png)
+
+### Raspberry Pi 5
+The terminal command `pinout` in Pi or the website [pinout.xyz](https://pinout.xyz/) show the pinout of Pi.
+
+![pinout_pi](pinout_pi.png)
+
+RP-008370-DS-1-rp1-peripherals
 
 ![build_console](build_console.png)
 
 You can also see some kinds of information on the CDT Build Console.
+
+## Bare-Metal Polling Test
 
 ## Serial Test
 
@@ -107,7 +129,7 @@ From Build Analyzer on the IDE, you can see various sections are available in **
 
 ![memory_detail](memory_detail.png)
 
-FLASH and SRAM in STM32F103RB are separate, physical silicon memory blocks inside the board. FLASH is 128 KB, Meanwhile, SRAM is 20 KB.
+FLASH and SRAM in STM32F103RB are separate, physical silicon memory blocks inside the board. FLASH is 128 KB, Meanwhile, SRAM is 20 KB. We cannot see them without decapsulate the MCU, however we can check their digital status with some tools.
 
 FLASH looks like this, which operates completely different from the flash memory (SSDs) used in a normal PC.
 
