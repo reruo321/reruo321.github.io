@@ -27,6 +27,10 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 #### Raspberry Pi 5
 * [RP1 Peripherals](https://pip-assets.raspberrypi.com/categories/892-raspberry-pi-5/documents/RP-008370-DS-1-rp1-peripherals.pdf)
 
+#### Other Useful Guides
+* [Getting started with UART - Wiki by ST](https://wiki.st.com/stm32mcu/wiki/Getting_started_with_UART)
+* [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/)
+
 ## Project Configuration
 Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX.
 
@@ -85,13 +89,49 @@ Click [Middleware and Software Packs] → [FREERTOS] on the left sidebar. On `Mo
 
 ![mx_conf_6](mx_conf_6.png)
 
+### Project Manager
 Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32CubeIDE`.
 
 ![mx_conf_7](mx_conf_7.png)
 
 On [Code Generator], choose `Copy only the necessary library files`, and check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
 
-After finishing the configurations, generate code and open the project with STM32CubeIDE.
+After finishing the configurations, generate code and open the project with STM32CubeIDE!
+
+### C++ Project Conversion
+Right-click the project and select "Convert to C++".
+
+![cpp_conversion](cpp_conversion.png)
+
+Click the "Continue" button.
+
+## Raspberry Pi Software Configuration Tool
+Open the terminal in Pi.
+
+![pi_pin_before](pi_pin_before.png)
+
+The command `pinctrl -p` display the state of the 40-way header pins. (`pinctrl` displays the state of ALL recognized GPIOs. You can find the usage with `pinctrl help`.)
+
+```bash
+sudo raspi-config
+```
+
+From `raspi-config`, choose [Interface Options] → [Serial Port].
+
+> Would you like a login shell to be accessible over serial?
+> `<No>`
+
+> Would you like the serial port hardware to be enabled?
+> `<Yes>`
+
+After `<Ok>`, push the right arrow key on your keyboard twice, select `<Finish>`, and reboot.
+
+![pi_pin_after](pi_pin_after.png)
+
+Now you can see with `pinctrl -p`, `Pin 8` is changed to `TXD0` and `Pin 10` is changed to `RXD0`! We will use this information for hardware connection soon.
+
+* `a4` means "alternate function 4". The functions available on each IO are show in Table 4 in 3.1.1. Function select, RP1 Peripherals document.
+* `pn` means "pull none", no internal pull-up or pull-down registor is active. `pu` is "pull up", and `pd` is "pull down".
 
 ## Hardware Connection
 ### NUCLEO-F103RB
@@ -103,28 +143,122 @@ As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1
 
 ![ds_pa910](ds_pa910.png)
 
-Looking at UM1724, we can check on CN10, Pin 21 is `PA9`, and Pin 33 is `PA10`.
+Looking at UM1724, we can check on CN10, `Pin 21` is `PA9`, and `Pin 33` is `PA10`.
 
 ![morpho_pa910](morpho_pa910.png)
 
 ### Raspberry Pi 5
-The terminal command `pinout` in Pi or the website [pinout.xyz](https://pinout.xyz/) show the pinout of Pi.
+We already confirmed above that `Pin 8` is `UART0_TX (GPIO14 = TXD0)`, and `Pin 10` is `UART0_RX (GPIO15 = RXD0)`. There are some other ways to check this.
+
+![rp1_pin](rp1_pin.png)
+
+The RP1 Peripherals document shows `GPIO14` is `UART0_TX`, and `GPIO15` is `UART0_RX`, which we are going to use for our USART connection.
 
 ![pinout_pi](pinout_pi.png)
 
-RP-008370-DS-1-rp1-peripherals
+The terminal command `pinout` in Pi or the website [pinout.xyz](https://pinout.xyz/) show the pinout of Pi, so we can the position of the pins very easily. `Pin 8` is `GPIO14`, and `Pin 10` is `GPIO15`.
 
+### Final Connection
+We must pair TX of a board with RX of another board. Don't forget that we should also connect one of the Nucleo's GND pins (I chose `Pin 20`) and one of the Pi's GND pins (I chose `Pin 6`). Here's my final connection:
+
+| **Nucleo** | **Pin No.** | **Pi 5** | **Pin No.** |
+| - | - | - | - |
+| USART1_TX | 21 (PA9) | UART0_RX | 10 (GPIO15) |
+| USART1_RX | 33 (PA10) | UART0_TX | 8 (GPIO14) |
+| GND | 20 | GND | 6 |
+
+![hw_connection](hw_connection.png)
+
+## Polling Mode Test
+### 1. Nucleo → Pi
+#### A. Nucleo
+In STM32CubeIDE, find `Drivers/STM32F1xx_HAL_Driver/stm32f1xx_hal_uart.c` in the project to get some information on UART functions.
+
+```c
+/*
+     *** Polling mode IO operation ***
+     =================================
+     [..]
+       (+) Send an amount of data in blocking mode using HAL_UART_Transmit()
+       (+) Receive an amount of data in blocking mode using HAL_UART_Receive()
+*/
+```
+
+In main.c, insert some code inside two tags like these:
+
+```c
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+uint8_t tx_buff[]={0,1,2,3,4,5,6,7,8,9};
+/* USER CODE END 0 */
+```
+
+```c
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+	HAL_UART_Transmit(&huart1, tx_buff, 10, 1000);
+	HAL_Delay(10000);
+  }
+  /* USER CODE END 3 */
+```
+
+Build your project by clicking the hammer icon, connect the Nucleo board to your PC, and run your program by clicking the green play icon.
+
+In the debug configurations window, rename your configuration as what you want.
+
+![debug_uart_tx](debug_uart_tx.png)
+
+(Optional) In the Debugger tab, check "ST-LINK S/N" and click "Scan" button to detect your board. It indicates that this debug configuration is related to this specific board, which would be useful for developers with the same multiple boards.
+
+![debug_uart_tx_debugger](debug_uart_tx_debugger.png)
+
+#### B. Pi
+From the official Pi documentation [Configuration](https://www.raspberrypi.com/documentation/computers/configuration.html#uarts), it says on Pi 5, `/dev/ttyAMA0` can be used for use on the GPIO by disabling Bluetooth. Be careful older Pi developers! `/dev/serial0` became the symbolic link of `/dev/ttyAMA10` in Pi 5, which is the debug UART for Raspberry Pi Debug Probe. That is, it is the SWD interface for Pi acting the same as ST-LINK for STM32 boards.
+
+![debug_probe](debug_probe.jpg)
+
+_The left one is Raspberry Pi Debug Probe._
+
+## Interrupt & DMA Echo
+
+## FreeRTOS Task Integration
+
+## C++ Command Parser & GET_STATUS
+
+
+## Build and Debug
 ![build_console](build_console.png)
 
 You can also see some kinds of information on the CDT Build Console.
 
-## Bare-Metal Polling Test
-
-## Serial Test
-
-
 ## Study
-### Flash vs SRAM
+### HAL
+**HAL (Hardware Abstraction Layer)** is an abstraction layer, implemented in software, between the physical hardware of a computer and the software that runs on that computer. In ST's HAL library, almost every function provided by ST starts with `HAL_`. The naming convention look like this:
+
+> HAL_ + [PERIPHERAL] + _ + [ACTION]
+
+* To see the full function documentation pop-up, hover your cursor over the function name and press `F2`.
+* To find the definition of a function, hover your cursor over the function name and press `F3`.
+* To see the parameter hint pop-up while typing inside the parentheses `(...)`, place your cursor inside the function's parentheses and press `Ctrl + Shift + Space`. (Windows/Linux)
+* Auto-complete feature gives some default proposals to easily find a function or an argument which are defined somewhere. For example, to auto-complete `HAL_UART_Transmit(...)`, type `HAL_UART_` and press `Ctrl + Space`. And to find any candidates for the first argument, `Ctrl + Space` on the `huart`. It'll show something like `huart1` and `huart2`. Don't forget to add `&` if you are going to refer some address!
+
+### JTAG vs SWD
+Both are industry standard for verifying designs of and testing printed circuit boards after manufacture. That is, both are interface for debugging and programming MCUs or embedded systems.
+
+For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
+
+#### JTAG
+**Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It uses 
+
+#### SWD
+**Serial Wire Debug (SWD)** is an alternative 2-pin electrical interface that uses the same protocol. It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
+
+### FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
 
 ![memory_detail](memory_detail.png)
