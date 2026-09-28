@@ -253,10 +253,34 @@ Both are industry standard for verifying designs of and testing printed circuit 
 For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
 
 #### JTAG
-**Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It uses 
+**Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`.
+
+##### Pros
+* **Universal Compatibility**: Can be supported by almost all major microprocessors, microcontrollers, FPGAs, and DSPs.
+* **Boundary Scan Testing**: Can test the physical connections on a PCB without using physical probes.
+* **Daisy-Chaining**: Can connect multiple ICs in a single serial chain, which allows a single JTAG debugger header to program and debug multiple chips on the same board.
+
+##### Cons
+* **High Pin Count**: It requires at least 4 pins, and often up to 20 pins for standard debugging headers. On small microcontrollers with limited GPIOs, dedicating 4 or 5 pins just for debugging is a significant drawback.
+* **Complex Routing**: Routing 4 to 5 high-speed signals across a crowded PCB increases layout complexity and requires more physical board space for the connector.
 
 #### SWD
 **Serial Wire Debug (SWD)** is an alternative 2-pin electrical interface that uses the same protocol. It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
+
+##### Pros
+* **Ultra-Low Pin Count**: It uses only 2 pins, which frees up extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs).
+* **Space Saving**: It only requires 2 lines, drastically simplifies PCB routing and allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
+* **Optimized for ARM Cortex**: 
+
+---
+
+| | **JTAG** | **SWD** |
+| - | - | - |
+| **Minimum Pins Needed** | 4~5 | 2 |
+| **Target Architecture** | Universal | ARM Cortex series only |
+| **Hardware Testing** | Boundary Scan supported | - |
+| **Multi-Device Support** | Daisy-chaining allowed | Point-to-point (1:1 only) |
+| **PCB Space Impact** | Requires larger connectors and more routing | Highly efficient for tight spaces |
 
 ### FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
