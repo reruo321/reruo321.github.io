@@ -30,6 +30,7 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 #### Other Useful Guides
 * [Getting started with UART - Wiki by ST](https://wiki.st.com/stm32mcu/wiki/Getting_started_with_UART)
 * [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/)
+* [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/)
 
 ## Project Configuration
 Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX.
@@ -133,6 +134,13 @@ Now you can see with `pinctrl -p`, `Pin 8` is changed to `TXD0` and `Pin 10` is 
 * `a4` means "alternate function 4". The functions available on each IO are show in Table 4 in 3.1.1. Function select, RP1 Peripherals document.
 * `pn` means "pull none", no internal pull-up or pull-down registor is active. `pu` is "pull up", and `pd` is "pull down".
 
+Additionally, install `pyserial` if you don't have. Since Raspberry Pi OS Bookworm, it is recommended to use the official Debian package to install the package system-wide. (We used to do `pip install pyserial` in normal Python package installation.)
+
+```bash
+sudo apt update
+sudo apt install python3-pyserial
+```
+
 ## Hardware Connection
 ### NUCLEO-F103RB
 As you can see from STM32CubeMX, the signal `USART1_TX` is on `PA9`, and `USART1_RX` is on `PA10`. You can also check this from the Pinout view, or many documents.
@@ -223,6 +231,12 @@ From the official Pi documentation [Configuration](https://www.raspberrypi.com/d
 ![debug_probe](debug_probe.jpg)
 
 _The left one is Raspberry Pi Debug Probe._
+
+In a nutshell, we should transmit or receive data via `/dev/ttyAMA0` in Pi 5, or the board would try to use a wrong port!
+
+Let's write a simple Python script to receive data from the Nucleo board. Checking some documents from [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/) would be very helpful.
+
+
 
 ## Interrupt & DMA Echo
 
@@ -359,3 +373,23 @@ The linker script (`.ld`) file in the project root shows how the sections are st
 ![linker_script](linker_script.png)
 
 The startup code utilizes these exact symbols (`_sbss` and `_ebss`) to know exactly where to start and stop clearing the RAM to zero.
+
+### Troubleshooting
+#### Failed to start GDB server
+There are several reasons to get this error while debugging/running in STM32CubeIDE. I got "Failed to bind to port 61234".
+
+![stm_port_error](stm_port_error.png)
+
+![stm_port_error2](stm_port_error2.png)
+
+We should check (1) if the port is busy and (2) if it is in one of the reserved port ranges by the system. In Windows 11, open CMD and type these:
+
+```console
+netstat -ano
+```
+
+```console
+netsh int ipv4 show excludedportrange protocol=tcp
+```
+
+If there's your port number, changing it would be the easiest solution.
