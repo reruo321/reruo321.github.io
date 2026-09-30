@@ -256,6 +256,7 @@ You can also see some kinds of information on the CDT Build Console.
 
 > HAL_ + [PERIPHERAL] + _ + [ACTION]
 
+### STM32CubeIDE Tips
 * To see the full function documentation pop-up, hover your cursor over the function name and press `F2`.
 * To find the definition of a function, hover your cursor over the function name and press `F3`.
 * To see the parameter hint pop-up while typing inside the parentheses `(...)`, place your cursor inside the function's parentheses and press `Ctrl + Shift + Space`. (Windows/Linux)
@@ -388,8 +389,59 @@ We should check (1) if the port is busy and (2) if it is in one of the reserved 
 netstat -ano
 ```
 
+If there's your port number exactly, OR
+
 ```console
 netsh int ipv4 show excludedportrange protocol=tcp
 ```
 
-If there's your port number, changing it would be the easiest solution.
+If there's a range that contains your port number, changing your port number would be the easiest solution. Follow these steps to change it. I changed it something like "29876" to avoid the reserved port ranges.
+
+![stm_port_error3.png](stm_port_error3.png)
+
+![stm_port_error4.png](stm_port_error4.png)
+
+#### "Whose Fault?" Dilemma
+While writing code by myself and testing the serial bridge between two boards, I got a problem that I could not check which one failed to transmit or receive data.
+
+The solution is simple: Make a TX/RX loopback on a board you want to test - Disconnect GND, and connect TX and RX together with a single jumper wire.
+
+First here's my test script for Pi 5, `self_uart_test.py`.
+
+```python
+import serial
+import time
+
+SERIAL_PORT = '/dev/ttyAMA0'
+BAUD_RATE = 115200
+
+try:
+    ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+    print(f"Opening port {SERIAL_PORT} at {BAUD_RATE} baud: Successful!")
+except Exception as e:
+    print(f"Error... Cannot open port: {e}")
+    exit(1)
+
+try:
+    ser.reset_input_buffer()
+    while True:
+        ser.write(b"hello")
+        time.sleep(0.1)
+        if ser.in_waiting > 0:
+            s = ser.read(ser.in_waiting)
+            print(f"I said: \"{s}\"\n")
+        else:
+            print("Timeout... No echo from me\n")
+except KeyboardInterrupt:
+    print("\nStopping UART test. Bye!")
+    ser.close()
+finally:
+    if 'ser' in locals() and ser.is_open:
+        ser.close()
+        print("\nSerial port is closed well. Bye!")
+```
+
+![self_pi](self_pi.png)
+
+It properly works!
+
