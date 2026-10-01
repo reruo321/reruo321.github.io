@@ -29,6 +29,7 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 
 #### Other Useful Guides
 * [Getting started with UART - Wiki by ST](https://wiki.st.com/stm32mcu/wiki/Getting_started_with_UART)
+* [FreeRTOS on STM32 v2 - Youtube Playlist](https://www.youtube.com/watch?v=5rWyAlrkQec&list=PLnMKNibPkDnExrAsDpjjF1PsvtoAIBquX)
 * [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/)
 * [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/)
 
