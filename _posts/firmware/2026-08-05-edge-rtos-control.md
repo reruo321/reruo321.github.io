@@ -5,7 +5,7 @@ layout: post
 date: 2026-08-05
 media_subpath: /pics/firmware/2026-08-05-edge-rtos-control/
 categories: firmware
-tags: [firmware, STM32, Nucleo, NUCLEO-F103RB]
+tags: [firmware, STM32, Nucleo, NUCLEO-F103RB, STM32F103RBT6]
 ---
 
 ## Introduction
@@ -20,9 +20,12 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 
 ### Documents
 #### NUCLEO-F103RB
-* Datasheet for STM32F103RB (**DS5319**) - From [here](https://www.st.com/en/microcontrollers-microprocessors/stm32f103rb.html)
-* User Manual for NUCLEO-F103RB (**UM1724**) - From [here](https://www.st.com/en/evaluation-tools/nucleo-f103rb.html#documentation)
-* Board Schematic for **MB1136** - From [here](https://www.st.com/en/evaluation-tools/nucleo-f103rb.html#cad-resources)
+* [STM32F103RB](https://www.st.com/en/microcontrollers-microprocessors/stm32f103rb.html)
+    * Datasheet for STM32F103RB (**DS5319**) (Documentation)
+    * Reference Manual for STM32F103xx (**RM0008**) (Documentation)
+* [NUCLEO-F103RB](https://www.st.com/en/evaluation-tools/nucleo-f103rb.html)
+    * User Manual for NUCLEO-F103RB (**UM1724**) (Documentation)
+    * Board Schematic for **MB1136** (CAD Resources)
 
 #### Raspberry Pi 5
 * [RP1 Peripherals](https://pip-assets.raspberrypi.com/categories/892-raspberry-pi-5/documents/RP-008370-DS-1-rp1-peripherals.pdf)
@@ -34,15 +37,25 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 * [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/)
 
 ## Project Configuration
-Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX.
+Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX. Instead of using the easy-going Board Selector, I tried to use MCU/MPU Selector for studying peripherals manually.
 
-## Board Selector
-Open STM32CubeMX, and select [File] → [New Project].
+We are going to configure these:
+
+* **DMA**
+* **GPIO**
+
+<!--
+## Configuration Method A. Board Selector
+This is easier way to configure the project than Method B. Open STM32CubeMX, and select [File] → [New Project].
 
 ![board_selector](board_selector.png)
 
 Click [Board Selector] and write `NUCLEO-F103RB` on `Commercial Part Number`.
+-->
+### MCU/MPU Selector
+![mcu_selector](mcu_selector.png)
 
+<!--
 ### Pinout & Configuration
 ![mx_conf_0](mx_conf_0.png)
 
@@ -99,7 +112,7 @@ Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32Cu
 On [Code Generator], choose `Copy only the necessary library files`, and check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
 
 After finishing the configurations, generate code and open the project with STM32CubeIDE!
-
+-->
 ### C++ Project Conversion
 Right-click the project and select "Convert to C++".
 
