@@ -6,6 +6,7 @@ date: 2026-08-04
 media_subpath: /pics/2026-08-04-my-stm32f103rbt6-practice/
 categories: firmware
 tags: [firmware, STM32, Nucleo, STM32F103RBT6]
+math: true
 ---
 
 ## Introduction
@@ -34,3 +35,15 @@ I use MCU/MPU Selector for studying peripherals manually.
 ### MCU/MPU Selector
 ![mcu_selector](mcu_selector.png)
 
+
+## Study
+### Star Grounding and Ground Plane
+#### Star Grounding
+**Star Grounding (Single-Point Grounding)** is a technique used in recording studios is to interconnect all the metal chassis with heavy conductors like copper strips, then connect to the building ground wire system at one point.
+
+![star_ground](star_ground.png)
+
+##### Return Path
+Z  : Impedance, R: Resistance, X  : Inductive Reactance
+f: Signal Frequency, L: Inductance
+Y: Admittance
