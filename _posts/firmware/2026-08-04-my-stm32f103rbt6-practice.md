@@ -3,7 +3,7 @@ title: My STM32F103RBT6 Practice
 description: My STM32F103RBT6 Practice.
 layout: post
 date: 2026-08-04
-media_subpath: /pics/2026-08-04-my-stm32f103rbt6-practice/
+media_subpath: /pics/firmware/2026-08-04-my-stm32f103rbt6-practice/
 categories: firmware
 tags: [firmware, STM32, Nucleo, STM32F103RBT6]
 math: true
@@ -37,13 +37,23 @@ I use MCU/MPU Selector for studying peripherals manually.
 
 
 ## Study
-### Star Grounding and Ground Plane
+### Grounding
 #### Star Grounding
 **Star Grounding (Single-Point Grounding)** is a technique used in recording studios is to interconnect all the metal chassis with heavy conductors like copper strips, then connect to the building ground wire system at one point.
 
 ![star_ground](star_ground.png)
 
-##### Return Path
-Z  : Impedance, R: Resistance, X  : Inductive Reactance
-f: Signal Frequency, L: Inductance
-Y: Admittance
+### Return Path
+* $Z$: **Impedance**, the opposition to alternating current presented by the combined effect of resistance ($R$) and reactance ($X$) in a circuit.
+* $R$: **Resistance**, a measure of an object's opposition to the flow of electric current.
+* $X_L$: **Inductive Reactance**, the opposition of an inductor to an alternating current (AC).
+    * How much the actual opposition would be created by a coil against the current change in an AC circuit?
+* $f$: **Signal Frequency**
+* $L$: **Inductance**, the tendency of an electrical conductor to oppose a change in the electric current flowing through it.
+    * How much a coil would resist any change in current?
+    * It's a permanent, physical property which is decided by the coil itself.
+* $Y$: **Admittance**, a measure of how easily a circuit or device will allow a current to flow.
+
+![](https://www.youtube.com/watch?v=7OoODwOy4Mg)
+
+Note: Originally total impedance is $Z = R + jX$ where $R = R_{forward} + R_{return}$, $X = X_L - X_C = ωL - \frac{1}{ωC}$, and $j = \sqrt{-1}$. However we do not need to think about capacitive reactance ($X_C$) or $j$ here! Capacitance does not block or oppose the current as it travels through the ground plane back to the source. Moreover, since we want to know the real-world physical opposition, we need only the magnitude formula without $j$.
