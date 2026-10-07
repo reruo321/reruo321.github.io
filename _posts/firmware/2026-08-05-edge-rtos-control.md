@@ -41,8 +41,25 @@ Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with 
 
 We are going to configure these:
 
-* **DMA**
-* **GPIO**
+* System Core
+    * **DMA**:
+    * **GPIO**:
+    * **IWDG**:
+    * **NVIC**:
+    * **SYS**: ST-LINK flashing and debugging
+        * Timebase Source: TIM1, because FreeRTOS uses SysTick as core resource to generate system time.
+
+* Timers
+    * **TIM1**:
+    * **TIM2**:
+
+* Connectivity
+    * **I2C1**:
+    * **USART1**:
+    * **USART2**:
+
+* Middleware and Software Packs
+    * **FreeRTOS**:
 
 <!--
 ## Configuration Method A. Board Selector
