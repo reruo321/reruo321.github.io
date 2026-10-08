@@ -44,14 +44,14 @@ We are going to configure these:
 * System Core
     * **DMA**:
     * **GPIO**:
-    * **IWDG**:
+    * **IWDG**: Independant WatchDoG 
     * **NVIC**:
     * **SYS**: ST-LINK flashing and debugging
         * Timebase Source: TIM1, because FreeRTOS uses SysTick as core resource to generate system time.
 
 * Timers
-    * **TIM1**:
-    * **TIM2**:
+    * **TIM1**: HAL Timebase Source
+    * **TIM2**: Front servo PWM
 
 * Connectivity
     * **I2C1**:
@@ -59,7 +59,7 @@ We are going to configure these:
     * **USART2**:
 
 * Middleware and Software Packs
-    * **FreeRTOS**:
+    * **FreeRTOS**: CMSIS_V2
 
 <!--
 ## Configuration Method A. Board Selector
@@ -71,6 +71,75 @@ Click [Board Selector] and write `NUCLEO-F103RB` on `Commercial Part Number`.
 -->
 ### MCU/MPU Selector
 ![mcu_selector](mcu_selector.png)
+
+### Pinout & Configuration
+
+#### IWDG
+Click [System Core] → [IWDG] on the left sidebar.
+
+![iwdg_enable](iwdg_enable.png)
+
+On `Mode`, check "Activated".
+
+#### RCC
+Click [System Core] → [RCC] on the left sidebar.
+
+![rcc_hse](rcc_hse.png)
+
+On `Mode` → `High Speed Clock (HSE)`, choose "Crystal/Ceramic Resonator".
+
+#### SYS
+Click [System Core] → [SYS] on the left sidebar.
+
+![sys_debug](sys_debug.png)
+
+On `Mode` → `Debug`, select "Serial Wire". It opens PA13 and PA14 to enable SWD protocol by the ST-LINK, so that we can plug in a serial wire to flash and debug.
+
+![tim1](tim1.png)
+
+On `Mode` → `Timebase Source`, change `SysTick` to `TIM1`.
+
+The change is recommended when we use HAL library, because allowing both FreeRTOS and HAL library to use SysTick can lead to improper timing management within the system. FreeRTOS assigns SysTick and PendSV the lowest hardware interrupt priority, so that application hardware interrupts (such as UART DMA or EXTI) are never blocked by kernel task scheduling. If HAL library share SysTick at priority 15, calling `HAL_Delay()` inside an interrupt handler or critical section disables or delays SysTick updates. This halts `uwTick`, leading to infinite `while` loops and deadlock.
+
+#### I2C1
+![i2c_config](i2c_config.png)
+
+#### USART1
+Click [Connectivity] → [USART1] on the left sidebar.
+
+![usart1_config](usart1_config.png)
+
+On `Mode`, choose "Asynchronous".
+
+![usart1_dma](usart1_dma.png)
+
+On `Mode` → `Configuration`, select [DMA Settings]. Add `USART1_RX`, and from `DMA Request Settings` → `Mode`, choose "Circular". And add `USART1_TX`, and from `DMA Request Settings` → `Mode`, choose "Normal".
+
+#### USART2
+Click [Connectivity] → [USART2] on the left sidebar.
+
+![usart2_config](usart2_config.png)
+
+On `Mode`, choose "Asynchronous".
+
+#### NVIC
+![nvic_config](nvic_config.png)
+
+#### PC13
+
+![pc13](pc13.png)
+
+Click [PC13], and select `GPIO_EXTI13`.
+
+Click [System Core] → [GPIO] on the left sidebar.
+
+![pc13_gpio](pc13_gpio.png)
+
+On `Configuration`, select [GPIO]. On `GPIO mode`, choose "External Interrupt Mode with Falling edge trigger detection".
+
+![pc13_nvic](pc13_nvic.png)
+
+On `Configuration`, select [NVIC]. Check "Add" on `EXTI line[15:10] interrupts`.
 
 <!--
 ### Pinout & Configuration
