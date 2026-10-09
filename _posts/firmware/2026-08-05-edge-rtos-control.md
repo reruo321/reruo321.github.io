@@ -6,6 +6,7 @@ date: 2026-08-05
 media_subpath: /pics/firmware/2026-08-05-edge-rtos-control/
 categories: firmware
 tags: [firmware, STM32, Nucleo, NUCLEO-F103RB, STM32F103RBT6]
+math: true
 ---
 
 ## Introduction
@@ -73,6 +74,7 @@ Click [Board Selector] and write `NUCLEO-F103RB` on `Commercial Part Number`.
 ![mcu_selector](mcu_selector.png)
 
 ### Pinout & Configuration
+Note that we'll add FreeRTOS later.
 
 #### IWDG
 Click [System Core] → [IWDG] on the left sidebar.
@@ -80,6 +82,12 @@ Click [System Core] → [IWDG] on the left sidebar.
 ![iwdg_enable](iwdg_enable.png)
 
 On `Mode`, check "Activated".
+
+On `Configuration` → `Parameter Settings`, choose "32" on `IWDG counter clock prescaler`, and type "624" on `IWDG down-counter reload value`. This sets total timeout of the watchdog to 500 ms.
+
+![iwdg_calculate](iwdg_calculate.png)
+
+If the $Prescaler$ is $32$ and the $RL$ is $624$, the worst case of the IWDG timeout period is derived when $f_{LSI}$ is $60 kHz$, which has the maximum speed. In this case, the watchdog can underflow after $333 ms$ has passed, and reset the MCU prematurely. Therefore, feeding the IWDG at $167 ms$ is safe.
 
 #### RCC
 Click [System Core] → [RCC] on the left sidebar.
@@ -101,8 +109,25 @@ On `Mode` → `Timebase Source`, change `SysTick` to `TIM1`.
 
 The change is recommended when we use HAL library, because allowing both FreeRTOS and HAL library to use SysTick can lead to improper timing management within the system. FreeRTOS assigns SysTick and PendSV the lowest hardware interrupt priority, so that application hardware interrupts (such as UART DMA or EXTI) are never blocked by kernel task scheduling. If HAL library share SysTick at priority 15, calling `HAL_Delay()` inside an interrupt handler or critical section disables or delays SysTick updates. This halts `uwTick`, leading to infinite `while` loops and deadlock.
 
+#### TIM2
+Click [Timers] → [TIM2] on the left sidebar.
+
+![tim2_config](tim2_config.png)
+
+On `Mode` → `Channel1`, choose `PWM Generation CH1`.
+
+On `Configuration` → `Parameter Settings`, type a number $A$ on `Prescaler (PSC - 16 bits value)` and another number $B$ on `Counter Period (AutoReload Register - 16 bits value)`, where $(A + 1) × (B + 1)$ becomes $1,440,000$. I set $A = 39$, $B = 35999$ for the best resolution. For easier pulse calculation, $A = 71$, $B = 19999$ is good enough.
+
+![tim2_tick](tim2_tick.png)
+
 #### I2C1
+Click [Connectivity] → [I2C1] on the left sidebar.
+
 ![i2c_config](i2c_config.png)
+
+On `Mode` → `I2C`, choose `I2C`.
+
+On `Configuration` → `Parameter Settings`, choose "Fast Mode" or leave "Standard Mode" on `I2C Speed Mode`.
 
 #### USART1
 Click [Connectivity] → [USART1] on the left sidebar.
@@ -113,7 +138,7 @@ On `Mode`, choose "Asynchronous".
 
 ![usart1_dma](usart1_dma.png)
 
-On `Mode` → `Configuration`, select [DMA Settings]. Add `USART1_RX`, and from `DMA Request Settings` → `Mode`, choose "Circular". And add `USART1_TX`, and from `DMA Request Settings` → `Mode`, choose "Normal".
+On `Configuration` → `DMA Settings`. Add `USART1_RX`, and from `DMA Request Settings` → `Mode`, choose "Circular". And add `USART1_TX`, and from `DMA Request Settings` → `Mode`, choose "Normal".
 
 #### USART2
 Click [Connectivity] → [USART2] on the left sidebar.
@@ -122,24 +147,61 @@ Click [Connectivity] → [USART2] on the left sidebar.
 
 On `Mode`, choose "Asynchronous".
 
-#### NVIC
-![nvic_config](nvic_config.png)
+#### PA5
+Let's enable the green on-board LED, PA5. On Pinout view, click [PA5], and select `GPIO_Output`.
+
+![pa5_config](pa5_config.png)
 
 #### PC13
+Let's configure the blue button interrupt, PC13. On Pinout view, click [PC13], and select `GPIO_EXTI13`. Since the circuit holds it at HIGH via a pull-up register, pressing the button bridges directly to GND, which drops the voltage from HIGH to LOW.
 
 ![pc13](pc13.png)
-
-Click [PC13], and select `GPIO_EXTI13`.
 
 Click [System Core] → [GPIO] on the left sidebar.
 
 ![pc13_gpio](pc13_gpio.png)
 
-On `Configuration`, select [GPIO]. On `GPIO mode`, choose "External Interrupt Mode with Falling edge trigger detection".
+On `Configuration` → `GPIO`, choose "External Interrupt Mode with Falling edge trigger detection" on `GPIO mode`.
 
 ![pc13_nvic](pc13_nvic.png)
 
-On `Configuration`, select [NVIC]. Check "Add" on `EXTI line[15:10] interrupts`.
+On `Configuration` → `NVIC`, check "Add" on `EXTI line[15:10] interrupts`.
+
+#### NVIC
+Click [System Core] → [NVIC] on the left sidebar.
+
+![nvic_config](nvic_config.png)
+
+On `Configuration` → `NVIC`, increase the `Preemption Priority` of `Time base: Tim1 update interrupt`. Smaller number, higher priority. I changed the value "15" to "5".
+
+Also ensure `USART1 global interrupt` and `EXTI line[15:10] interrupts` are added.
+
+#### (Optional) User Labels
+You can freely add user labels to pins by right-clicking them in Pinout view.
+
+![pinout_view](pinout_view.png)
+
+#### Clock Configuration
+
+![clock_config](clock_config.png)
+
+##### Configuration
+Red marks in the figure are what we should configure.
+
+* `Input frequency`: 8
+* `PLL Source Mux`: HSE
+* `PLLMUL`: X 9
+* `System CLock Mux`: PLLCLK
+    * (Optional) Enable CSS
+* `AHB Prescaler`: /1
+* `APB1 Prescaler`: /2
+* `APB2 Prescaler`: /1
+
+##### Verification
+Green marks in the figure are what we should verify, whose value would be automatically adjusted by the configuration.
+
+* `HCLK (MHz)` should be 72 MHz.
+* `APB1 Timer clocks (MHz)` should be 72 MHz.
 
 <!--
 ### Pinout & Configuration
@@ -189,6 +251,7 @@ Click [Middleware and Software Packs] → [FREERTOS] on the left sidebar. On `Mo
     * Priority: Normal, standard telemetry can yield to high-priority control tasks without affecting hardware safety.
 
 ![mx_conf_6](mx_conf_6.png)
+-->
 
 ### Project Manager
 Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32CubeIDE`.
@@ -198,7 +261,7 @@ Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32Cu
 On [Code Generator], choose `Copy only the necessary library files`, and check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
 
 After finishing the configurations, generate code and open the project with STM32CubeIDE!
--->
+
 ### C++ Project Conversion
 Right-click the project and select "Convert to C++".
 
@@ -396,6 +459,15 @@ For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either 
 | **Hardware Testing** | Boundary Scan supported | - |
 | **Multi-Device Support** | Daisy-chaining allowed | Point-to-point (1:1 only) |
 | **PCB Space Impact** | Requires larger connectors and more routing | Highly efficient for tight spaces |
+
+### Button Interrupts
+Hardware EXTI line interrupts fire on edge transitions. Assume that a button use a pull-up resistor. (Active-LOW circuit) Its default state is HIGH, and when it is pressed, it is connected directly to GND so it drops to LOW.
+
+* **Rising Edge**: Fires the interrupt when you release the button.
+* **Falling Edge**: Fires the interrupt the exact instant you press the button down.
+* **Both Edges**: Fires twice—once when pressed and once when released. Useful if you want to measure how long a button was held down.
+
+The interrupts do not fire on static signal levels. Therefore, if you need continuous detection while a button is held down, polling a standard GPIO pin or using a timer-based debouncing task in FreeRTOS is the proper approach.
 
 ### FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
