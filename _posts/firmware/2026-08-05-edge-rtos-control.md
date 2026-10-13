@@ -203,56 +203,6 @@ Green marks in the figure are what we should verify, whose value would be automa
 * `HCLK (MHz)` should be 72 MHz.
 * `APB1 Timer clocks (MHz)` should be 72 MHz.
 
-<!--
-### Pinout & Configuration
-![mx_conf_0](mx_conf_0.png)
-
-Click [System Core] → [SYS] on the left sidebar. On `Mode` → `Timebase Source`, change `SysTick` to `TIM1` (or `TIM2`). This prevents the collision between the default SysTick timer and FreeRTOS.
-
-![mx_conf_1](mx_conf_1.png)
-
-Click [Connectivity] → [USART1] on the left sidebar. On `Mode` → `Mode`, select `Asynchronous`.
-
-Look at the configurations below. On [DMA Settings], add `USART1_RX` and `USART1_TX`.
-
-A **USART(Universal Synchronous/Asynchronous Receiver/Transmitter)** is a piece of hardware that lets devices send and receive serial data. It operates full-duplex operation, which means it can send and receive data at the same time using separate internal registers.
-
-It is an upgraded version of a standard **UART** which works asynchronously. It can work in both asynchronous mode and synchronous mode.
-
-* **Asynchronous Mode**: The device uses a single data line to send data. Both devices must agree beforehand on the speed (baud rate) to interpret the bits correctly.
-* **Synchronous Mode**:  The device uses a data line plus an extra clock line (`CLK`). The clock signal keeps both devices perfectly matched in time. This allows for faster and more efficient data transfers, but it requires an extra wire pin.
-
-![mx_conf_2](mx_conf_2.png)
-
-Additionally, set the mode of `USART1_RX`'s DMA Request Settings to `Circular`. It helps USART1_RX to continuously receive the message.
-
-* **Normal**: After transferring a fixed number of bytes/items once, halts.
-* **Circular**: Reaches the end of the destination/source buffer, automatically resets the address/counter pointers, and wraps back to index 0 without stopping.
-
-![mx_conf_3](mx_conf_3.png)
-
-On [NVIC Settings], enable `USART1 global interrupt`. It enables to capture the IDLE line event (`UART_IT_IDLE`) so that the CPU can know when a full message finished arriving from the Pi.
-
-![mx_conf_4](mx_conf_4.png)
-
-On [Parameter Settings], ensure `Baud Rate` is 115200 Bits/s, and `Word Length` is 8 Bits (including Parity).
-
-![mx_conf_5](mx_conf_5.png)
-
-Click [Middleware and Software Packs] → [FREERTOS] on the left sidebar. On `Mode` → `Interface`, select `CMSIS_V2`. On [Tasks and Queues] below, set two new tasks, `Task_Control` and `Task_UART`. (I changed the default task name to `Task_Status`.) Set `Task_Control` priority to `osPriorityHigh`, and `Task_UART` to `osPriorityNormal`.
-
-* `Task_Status`: Task on background maintenance
-    * Example: Toggling the onboard LD2 status LED
-    * Priority: Low, toggling an indicator LED is low urgency, so the task has low priority.
-* `Task_Control`: Task on the primary decision-making task
-    * Example: motor safety commands, parsing critical Pi commands
-    * Priority: High, in real-time edge controls, parsing commands or reacting to control signals must interrupt background routines immediately to guarantee low latency.
-* `Task_UART`: Task on processing non-critical serial telemetry or prepares diagnostic strings to send back to the Pi
-    * Priority: Normal, standard telemetry can yield to high-priority control tasks without affecting hardware safety.
-
-![mx_conf_6](mx_conf_6.png)
--->
-
 ### Project Manager
 Select [Project Manager] tab. On [Project], change `Toolchain / IDE` to `STM32CubeIDE`.
 
@@ -340,9 +290,8 @@ We must pair TX of a board with RX of another board. Don't forget that we should
 
 ![hw_connection](hw_connection.png)
 
-## Polling Mode Test
-### 1. Nucleo → Pi
-#### A. Nucleo
+## USART (Nucleo TX → Pi RX)
+### A. Nucleo
 In STM32CubeIDE, find `Drivers/STM32F1xx_HAL_Driver/stm32f1xx_hal_uart.c` in the project to get some information on UART functions.
 
 ```c
@@ -378,7 +327,7 @@ uint8_t tx_buff[]={0,1,2,3,4,5,6,7,8,9};
   /* USER CODE END 3 */
 ```
 
-##### Debug Configuration
+#### Debug Configuration
 In main.c, override `_write` function inside the USER CODE 4 tag like this:
 
 ```c
@@ -420,7 +369,7 @@ Click the SWV ITM Data Console tab, and click the "Configure trace" button.
 
 On "ITM Stimulus Ports", enable port 0 and click OK.
 
-#### B. Pi
+### B. Pi
 From the official Pi documentation [Configuration](https://www.raspberrypi.com/documentation/computers/configuration.html#uarts), it says on Pi 5, `/dev/ttyAMA0` can be used for use on the GPIO by disabling Bluetooth. Be careful older Pi developers! `/dev/serial0` became the symbolic link of `/dev/ttyAMA10` in Pi 5, which is the debug UART for Raspberry Pi Debug Probe. That is, it is the SWD interface for Pi acting the same as ST-LINK for STM32 boards.
 
 ![debug_probe](debug_probe.jpg)
@@ -431,9 +380,32 @@ In a nutshell, we should transmit or receive data via `/dev/ttyAMA0` in Pi 5, or
 
 Let's write a simple Python script to receive data from the Nucleo board. Checking some documents from [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/) would be very helpful.
 
+## FreeRTOS Configuration
+Before the next function implementations are getting complicated, let's setup FreeRTOS. Open the project with STM32CubeMX. Click [Middleware and Software Packs] → [FREERTOS] on the left sidebar.
 
+![freertos_mx](freertos_mx.png)
 
-## Interrupt & DMA Echo
+On `Mode` → `Interface`, select "CMSIS_V2".
+
+On `Configuration` → `Tasks and Queues`, create three tasks.
+
+* `controlTask`
+* `cmdTask`
+* `statusTask`
+
+We'll create queues later.
+
+Click [System Core] → [NVIC] on the left sidebar.
+
+![nvic_freertos.png](nvic_freertos.png)
+
+On `Configuration` → `NVIC`, make sure Priority Group is "4 bits for pre-emption priority 0 bits". You can also see some preemption priorities have changed.
+
+![newlib_disable](newlib_disable.png)
+
+While generating code, a Code Generation warning will pop up. Click Yes to keep disabling the `USE_NEWLIB_REENTRANT`. It's unnecessary so it'll be the waste of the RAM.
+
+![usart_test_result](usart_test_result.png)
 
 ## FreeRTOS Task Integration
 
@@ -893,7 +865,7 @@ Hi 0!
 ...
 ```
 
-Therefore, I tried to find the cause from the STM32 code.
+This means that `rx_count` cannot grow further than 5. Therefore, I tried to find the cause from the STM32 code.
 
 ```c
 /* USER CODE BEGIN Header */
@@ -1133,4 +1105,31 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif /* USE_FULL_ASSERT */
 ```
 
-Which means STM32
+I fixed the problem by (1) decreasing the delay to $< 167 ms$, and (2) refreshing the IWDG.
+
+```c
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  fflush(stdout);
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+	  printf("Hi %d!\n", rx_count);
+	  HAL_IWDG_Refresh(&hiwdg);   // Refresh the IWDG!
+	  HAL_Delay(100);   // Keep delay under the IWDG timeout
+  }
+  /* USER CODE END 3 */
+```
+
+![usart_ack](usart_ack.png)
+
+Now both boards transmit/receive `rx_count` very well!
+
+If you have any similar resetting problem without FreeRTOS, please check the IWDG timeout again.
+
+#### USART Overrun Issue
+![stmrx_wrong](stmrx_wrong.png)
+
+![uart_queue_create](uart_queue_create.png)
