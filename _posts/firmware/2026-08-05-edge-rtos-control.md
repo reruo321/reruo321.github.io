@@ -407,9 +407,13 @@ While generating code, a Code Generation warning will pop up. Click Yes to keep 
 
 ![usart_test_result](usart_test_result.png)
 
-## FreeRTOS Task Integration
+## FreeRTOS Task Scheduling
 
-## C++ Command Parser & GET_STATUS
+## UART with FreeRTOS
+
+## I2C
+
+## SPI
 
 
 ## Build and Debug
