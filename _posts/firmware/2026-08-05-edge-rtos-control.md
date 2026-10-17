@@ -59,6 +59,7 @@ We are going to configure these:
     * **USART1**:
     * **USART2**:
 
+
 * Middleware and Software Packs
     * **FreeRTOS**: CMSIS_V2
 
