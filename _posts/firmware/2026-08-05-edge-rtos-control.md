@@ -36,6 +36,7 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 * [FreeRTOS on STM32 v2 - Youtube Playlist](https://www.youtube.com/watch?v=5rWyAlrkQec&list=PLnMKNibPkDnExrAsDpjjF1PsvtoAIBquX)
 * [Raspberry Pi Documentation](https://www.raspberrypi.com/documentation/)
 * [pySerial's documentation](https://pyserial.readthedocs.io/en/latest/)
+* [FreeRTOS Best Practices](https://dev.st.com/stm32cube-docs/mw-freertos/2.0.0/en/docs/markup/freertos_best_practices.html)
 
 ## Project Configuration
 Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with STM32CubeMX. Instead of using the easy-going Board Selector, I tried to use MCU/MPU Selector for studying peripherals manually.
