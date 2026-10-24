@@ -418,7 +418,6 @@ While generating code, a Code Generation warning will pop up. Click Yes to keep 
 
 ## SPI
 
-
 ## Build and Debug
 ![build_console](build_console.png)
 
