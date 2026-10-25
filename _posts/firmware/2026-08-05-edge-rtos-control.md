@@ -411,7 +411,6 @@ While generating code, a Code Generation warning will pop up. Click Yes to keep 
 
 ## FreeRTOS Task Scheduling
 
-
 ## UART with FreeRTOS
 
 ## I2C
