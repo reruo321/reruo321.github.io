@@ -64,14 +64,6 @@ We are going to configure these:
 * Middleware and Software Packs
     * **FreeRTOS**: CMSIS_V2
 
-<!--
-## Configuration Method A. Board Selector
-This is easier way to configure the project than Method B. Open STM32CubeMX, and select [File] → [New Project].
-
-![board_selector](board_selector.png)
-
-Click [Board Selector] and write `NUCLEO-F103RB` on `Commercial Part Number`.
--->
 ### MCU/MPU Selector
 ![mcu_selector](mcu_selector.png)
 
