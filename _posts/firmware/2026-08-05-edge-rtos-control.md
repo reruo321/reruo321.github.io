@@ -43,7 +43,6 @@ Here are configurations for setting the FreeRTOS project for NUCLEO-F103RB with 
 
 We are going to configure these:
 
-
 * System Core
     * **DMA**:
     * **GPIO**:
