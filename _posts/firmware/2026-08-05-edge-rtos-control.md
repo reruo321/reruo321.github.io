@@ -18,6 +18,7 @@ The NUCLEO-F103RB board has a MCU called STM32F103RB, which contains an Arm Cort
 * NUCLEO-F103RB board
 * Raspberry Pi 5
 * Wire × 3
+* I2C:
 
 ### Documents
 #### NUCLEO-F103RB
