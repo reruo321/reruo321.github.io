@@ -206,13 +206,6 @@ On [Code Generator], choose `Copy only the necessary library files`, and check `
 
 After finishing the configurations, generate code and open the project with STM32CubeIDE!
 
-### C++ Project Conversion
-Right-click the project and select "Convert to C++".
-
-![cpp_conversion](cpp_conversion.png)
-
-Click the "Continue" button.
-
 ## Raspberry Pi Software Configuration Tool
 Open the terminal in Pi.
 
