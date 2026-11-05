@@ -8,4 +8,3 @@ categories: firmware
 tags: [firmware, STM32, Nucleo, NUCLEO-F103RB, STM32F103RBT6]
 math: true
 ---
-
