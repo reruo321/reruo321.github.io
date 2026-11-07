@@ -9,38 +9,38 @@ tags: [firmware, STM32, Nucleo, NUCLEO-F103RB, STM32F103RBT6]
 math: true
 ---
 
-### HAL
+## HAL
 **HAL (Hardware Abstraction Layer)** is an abstraction layer, implemented in software, between the physical hardware of a computer and the software that runs on that computer. In ST's HAL library, almost every function provided by ST starts with `HAL_`. The naming convention look like this:
 
 > HAL_ + [PERIPHERAL] + _ + [ACTION]
 
-### STM32CubeIDE Tips
+## STM32CubeIDE Tips
 * To see the full function documentation pop-up, hover your cursor over the function name and press `F2`.
 * To find the definition of a function, hover your cursor over the function name and press `F3`.
 * To see the parameter hint pop-up while typing inside the parentheses `(...)`, place your cursor inside the function's parentheses and press `Ctrl + Shift + Space`. (Windows/Linux)
 * Auto-complete feature gives some default proposals to easily find a function or an argument which are defined somewhere. For example, to auto-complete `HAL_UART_Transmit(...)`, type `HAL_UART_` and press `Ctrl + Space`. And to find any candidates for the first argument, `Ctrl + Space` on the `huart`. It'll show something like `huart1` and `huart2`. Don't forget to add `&` if you are going to refer some address!
 
-### JTAG vs SWD
+## JTAG vs SWD
 Both are industry standard for verifying designs of and testing printed circuit boards after manufacture. That is, both are interface for debugging and programming MCUs or embedded systems.
 
 For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
 
-#### JTAG
+### JTAG
 **Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`.
 
-##### Pros
+#### Pros
 * **Universal Compatibility**: Can be supported by almost all major microprocessors, microcontrollers, FPGAs, and DSPs.
 * **Boundary Scan Testing**: Can test the physical connections on a PCB without using physical probes.
 * **Daisy-Chaining**: Can connect multiple ICs in a single serial chain, which allows a single JTAG debugger header to program and debug multiple chips on the same board.
 
-##### Cons
+#### Cons
 * **High Pin Count**: It requires at least 4 pins, and often up to 20 pins for standard debugging headers. On small microcontrollers with limited GPIOs, dedicating 4 or 5 pins just for debugging is a significant drawback.
 * **Complex Routing**: Routing 4 to 5 high-speed signals across a crowded PCB increases layout complexity and requires more physical board space for the connector.
 
-#### SWD
+### SWD
 **Serial Wire Debug (SWD)** is an alternative 2-pin electrical interface that uses the same protocol. It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
 
-##### Pros
+#### Pros
 * **Ultra-Low Pin Count**: It uses only 2 pins, which frees up extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs).
 * **Space Saving**: It only requires 2 lines, drastically simplifies PCB routing and allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
 * **Optimized for ARM Cortex**: 
@@ -55,7 +55,7 @@ For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either 
 | **Multi-Device Support** | Daisy-chaining allowed | Point-to-point (1:1 only) |
 | **PCB Space Impact** | Requires larger connectors and more routing | Highly efficient for tight spaces |
 
-### Button Interrupts
+## Button Interrupts
 Hardware EXTI line interrupts fire on edge transitions. Assume that a button use a pull-up resistor. (Active-LOW circuit) Its default state is HIGH, and when it is pressed, it is connected directly to GND so it drops to LOW.
 
 * **Rising Edge**: Fires the interrupt when you release the button.
@@ -64,7 +64,7 @@ Hardware EXTI line interrupts fire on edge transitions. Assume that a button use
 
 The interrupts do not fire on static signal levels. Therefore, if you need continuous detection while a button is held down, polling a standard GPIO pin or using a timer-based debouncing task in FreeRTOS is the proper approach.
 
-### FLASH vs SRAM
+## FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
 
 ![memory_detail](memory_detail.png)
@@ -127,15 +127,15 @@ Meanwhile, SRAM looks like this, which seems similar to the RAM in a normal comp
 [ SRAM Start: 0x2000 0000 ]
 ```
 
-### Finding Start and End Addresses of Sections
+## Finding Start and End Addresses of Sections
 1. Memory Detail
 2. Map File
 3. Linker Script
-#### 1. Memory Detail
-#### 2. Map File
+### 1. Memory Detail
+### 2. Map File
 ![map_file](map_file.png)
 
-#### 3. Linker Script
+### 3. Linker Script
 The linker script (`.ld`) file in the project root shows how the sections are structured dynamically.
 
 ![linker_script](linker_script.png)
