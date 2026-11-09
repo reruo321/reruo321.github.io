@@ -38,12 +38,15 @@ For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either 
 * **Complex Routing**: Routing 4 to 5 high-speed signals across a crowded PCB increases layout complexity and requires more physical board space for the connector.
 
 ### SWD
-**Serial Wire Debug (SWD)** is an alternative 2-pin electrical interface that uses the same protocol. It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
+**Serial Wire Debug (SWD)** is a two-wire hardware interface and protocol developed by ARM. It has a bidirectional serial data line (SWDIO) and a synchronization clock (SWCLK). It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
 
 #### Pros
-* **Ultra-Low Pin Count**: It uses only 2 pins, which frees up extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs).
-* **Space Saving**: It only requires 2 lines, drastically simplifies PCB routing and allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
+* **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
 * **Optimized for ARM Cortex**: 
+
+#### Cons
+* **Not Available in Non-ARM devices**
+* 
 
 ---
 
