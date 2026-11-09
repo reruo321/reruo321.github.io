@@ -26,27 +26,30 @@ Both are industry standard for verifying designs of and testing printed circuit 
 For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
 
 ### JTAG
-**Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`.
+**Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It shifts data through a scan chain and can address multiple devices.
 
 #### Pros
 * **Universal Compatibility**: Can be supported by almost all major microprocessors, microcontrollers, FPGAs, and DSPs.
-* **Boundary Scan Testing**: Can test the physical connections on a PCB without using physical probes.
-* **Daisy-Chaining**: Can connect multiple ICs in a single serial chain, which allows a single JTAG debugger header to program and debug multiple chips on the same board.
+* **Boundary Scan Testing Support**: Can test the physical connections on a PCB without using physical probes.
+* **Daisy-Chaining**: Can connect multiple ICs in a single serial chain, (scan chain) which allows a single JTAG debugger header to program and debug multiple chips on the same board.
 
 #### Cons
-* **High Pin Count**: It requires at least 4 pins, and often up to 20 pins for standard debugging headers. On small microcontrollers with limited GPIOs, dedicating 4 or 5 pins just for debugging is a significant drawback.
-* **Complex Routing**: Routing 4 to 5 high-speed signals across a crowded PCB increases layout complexity and requires more physical board space for the connector.
+* **Complex Hardware Interface**: It requires at least 4 to 5 pins, and often up to 20 pins for standard debugging headers.
 
 ### SWD
-**Serial Wire Debug (SWD)** is a two-wire hardware interface and protocol developed by ARM. It has a bidirectional serial data line (SWDIO) and a synchronization clock (SWCLK). It uses an ARM CPU standard bi-directional wire protocol. It uses just two signal pins, `SWCLK` and `SWDIO`.
+**Serial Wire Debug (SWD)** is a two-wire hardware interface and protocol developed by ARM. It has a bidirectional serial data line (`SWDIO`) and a synchronization clock (`SWCLK`). It uses an ARM CPU standard bi-directional wire protocol. It exchanges structed packets between a debugger and a single target in alternating turns.
 
 #### Pros
 * **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
-* **Optimized for ARM Cortex**: 
+* **Optimized for ARM Cortex**: It offers special features for ARM-based MCUs.
+* **Better Debugging Performance**: Its debugging performance is better than JTAG which was originally developed for boundary-scan testing, because it is intended for debugging.
 
 #### Cons
 * **Not Available in Non-ARM devices**
-* 
+* **No Boundary-Scan Testing**: It is designed just for debugging and firmware flashing, so it cannot be used for board-level testing.
+* **No Daisy-Chaining**: Since it uses a point-to-point link, it cannot access multiple ICs at the same time via scan chain.
+* **Communicate In Turns**[^1]: Since it has a single bidirectional data line, the devices cannot transmit and receive data at the same time.
+
 
 ---
 
@@ -144,3 +147,6 @@ The linker script (`.ld`) file in the project root shows how the sections are st
 ![linker_script](linker_script.png)
 
 The startup code utilizes these exact symbols (`_sbss` and `_ebss`) to know exactly where to start and stop clearing the RAM to zero.
+
+## Notes
+[^1] "In turns" means "one after the other", "번갈아 가며" in Korean.
