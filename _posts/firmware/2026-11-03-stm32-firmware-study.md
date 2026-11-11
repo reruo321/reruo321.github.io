@@ -25,6 +25,8 @@ Both are industry standard for verifying designs of and testing printed circuit 
 
 For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
 
+Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/en/maker/blogs/2026/what-is-swd-and-how-does-it-compare-to-jtag)
+
 ### JTAG
 **Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It shifts data through a scan chain and can address multiple devices.
 
@@ -42,14 +44,14 @@ For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either 
 #### Pros
 * **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
 * **Optimized for ARM Cortex**: It offers special features for ARM-based MCUs.
-* **Better Debugging Performance**: Its debugging performance is better than JTAG which was originally developed for boundary-scan testing, because it is intended for debugging.
+* **Better Debugging Performance**: Because it is intended for debugging, its debugging performance is better than JTAG which was originally developed for boundary-scan testing.
 
 #### Cons
 * **Not Available in Non-ARM devices**
 * **No Boundary-Scan Testing**: It is designed just for debugging and firmware flashing, so it cannot be used for board-level testing.
 * **No Daisy-Chaining**: Since it uses a point-to-point link, it cannot access multiple ICs at the same time via scan chain.
 * **Communicate In Turns**[^1]: Since it has a single bidirectional data line, the devices cannot transmit and receive data at the same time.
-
+* **Low Reliability on Asynchronous Mode**: In the asynchronous mode, it drops the clock signal, making it a one-wire interface. However the mode is rarely used due to the increased reliability the clock provides.
 
 ---
 
