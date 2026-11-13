@@ -57,10 +57,10 @@ Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/e
 
 | | **JTAG** | **SWD** |
 | - | - | - |
-| **Minimum Pins Needed** | 4~5 | 2 |
+| **Minimum Pin Count** | 4~5 | 2 |
 | **Target Architecture** | Universal | ARM Cortex series only |
-| **Hardware Testing** | Boundary Scan supported | - |
-| **Multi-Device Support** | Daisy-chaining allowed | Point-to-point (1:1 only) |
+| **Hardware Testing** | Boundary Scan | X |
+| **Multi-Device Support** | Yes, Daisy-chaining | No, Point-to-point (1:1 only) |
 | **PCB Space Impact** | Requires larger connectors and more routing | Highly efficient for tight spaces |
 
 ## Button Interrupts
