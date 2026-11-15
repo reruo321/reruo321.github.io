@@ -9,25 +9,28 @@ tags: [firmware, STM32, Nucleo, NUCLEO-F103RB, STM32F103RBT6]
 math: true
 ---
 
-## HAL
-**HAL (Hardware Abstraction Layer)** is an abstraction layer, implemented in software, between the physical hardware of a computer and the software that runs on that computer. In ST's HAL library, almost every function provided by ST starts with `HAL_`. The naming convention look like this:
-
-> HAL_ + [PERIPHERAL] + _ + [ACTION]
-
-## STM32CubeIDE Tips
+## ✅ STM32CubeIDE Tips
 * To see the full function documentation pop-up, hover your cursor over the function name and press `F2`.
 * To find the definition of a function, hover your cursor over the function name and press `F3`.
 * To see the parameter hint pop-up while typing inside the parentheses `(...)`, place your cursor inside the function's parentheses and press `Ctrl + Shift + Space`. (Windows/Linux)
 * Auto-complete feature gives some default proposals to easily find a function or an argument which are defined somewhere. For example, to auto-complete `HAL_UART_Transmit(...)`, type `HAL_UART_` and press `Ctrl + Space`. And to find any candidates for the first argument, `Ctrl + Space` on the `huart`. It'll show something like `huart1` and `huart2`. Don't forget to add `&` if you are going to refer some address!
 
-## JTAG vs SWD
+## ✅ HAL
+**HAL (Hardware Abstraction Layer)** is an abstraction layer, implemented in software, between the physical hardware of a computer and the software that runs on that computer. In ST's HAL library, almost every function provided by ST starts with `HAL_`. The naming convention look like this:
+
+> HAL_ + [PERIPHERAL] + _ + [ACTION]
+
+## ✅ JTAG vs SWD
+![JTAG-vs-SWD](JTAG-vs-SWD.webp)
+_JTAG vs SWD: Choosing a Debug Interface for Embedded Systems - PCBCOOL_
+
 Both are industry standard for verifying designs of and testing printed circuit boards after manufacture. That is, both are interface for debugging and programming MCUs or embedded systems.
 
 For example, interfaces such as ST-LINK or Raspberry Pi Debug Probe have either JTAG or SWD (or both) for debugger or programmer. Some devices such as ARTIK 053 can even provide such interfaces by default.
 
 Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/en/maker/blogs/2026/what-is-swd-and-how-does-it-compare-to-jtag)
 
-### JTAG
+### 1️⃣ JTAG
 **Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It shifts data through a scan chain and can address multiple devices.
 
 #### Pros
@@ -38,11 +41,11 @@ Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/e
 #### Cons
 * **Complex Hardware Interface**: It requires at least 4 to 5 pins, and often up to 20 pins for standard debugging headers.
 
-### SWD
+### 2️⃣ SWD
 **Serial Wire Debug (SWD)** is a two-wire hardware interface and protocol developed by ARM. It has a bidirectional serial data line (`SWDIO`) and a synchronization clock (`SWCLK`). It uses an ARM CPU standard bi-directional wire protocol. It exchanges structed packets between a debugger and a single target in alternating turns.
 
 #### Pros
-* **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it can become the absolute standard for compact devices like wearables and IoT gadgets.
+* **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it's PCB-friendly and can become the absolute standard for compact devices like wearables and IoT gadgets.
 * **Optimized for ARM Cortex**: It offers special features for ARM-based MCUs.
 * **Better Debugging Performance**: Because it is intended for debugging, its debugging performance is better than JTAG which was originally developed for boundary-scan testing.
 
@@ -53,17 +56,18 @@ Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/e
 * **Communicate In Turns**[^1]: Since it has a single bidirectional data line, the devices cannot transmit and receive data at the same time.
 * **Low Reliability on Asynchronous Mode**: In the asynchronous mode, it drops the clock signal, making it a one-wire interface. However the mode is rarely used due to the increased reliability the clock provides.
 
----
-
+### Table
 | | **JTAG** | **SWD** |
 | - | - | - |
-| **Minimum Pin Count** | 4~5 | 2 |
 | **Target Architecture** | Universal | ARM Cortex series only |
-| **Hardware Testing** | Boundary Scan Testing | - |
-| **Multi-Device Support** | **Yes**, Daisy-chaining | **No**, Point-to-point (1:1 only) |
-| **PCB Space Impact** | Requires larger connectors and more routing | Highly efficient for tight spaces |
+| **Minimum Pin Count** | 4~5 | 2 |
+| **Hardware Interface** | Complex | Simple |
+| **Hardware Testing** | O, Boundary Scan Testing | X |
+| **Multi-Device Support** | O, Daisy-chaining | X, Point-to-point (1:1 only) |
 
-## Button Interrupts
+---
+
+## ✅ Button Interrupts
 Hardware EXTI line interrupts fire on edge transitions. Assume that a button use a pull-up resistor. (Active-LOW circuit) Its default state is HIGH, and when it is pressed, it is connected directly to GND so it drops to LOW.
 
 * **Rising Edge**: Fires the interrupt when you release the button.
@@ -72,7 +76,7 @@ Hardware EXTI line interrupts fire on edge transitions. Assume that a button use
 
 The interrupts do not fire on static signal levels. Therefore, if you need continuous detection while a button is held down, polling a standard GPIO pin or using a timer-based debouncing task in FreeRTOS is the proper approach.
 
-## FLASH vs SRAM
+## ✅ FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
 
 ![memory_detail](memory_detail.png)
@@ -135,7 +139,7 @@ Meanwhile, SRAM looks like this, which seems similar to the RAM in a normal comp
 [ SRAM Start: 0x2000 0000 ]
 ```
 
-## Finding Start and End Addresses of Sections
+## ✅ Finding Start and End Addresses of Sections
 1. Memory Detail
 2. Map File
 3. Linker Script
@@ -151,4 +155,4 @@ The linker script (`.ld`) file in the project root shows how the sections are st
 The startup code utilizes these exact symbols (`_sbss` and `_ebss`) to know exactly where to start and stop clearing the RAM to zero.
 
 ## Notes
-[^1] "In turns" means "one after the other", "번갈아 가며" in Korean.
+[^1]: "In turns" means "one after the other", "번갈아 가며" in Korean.
