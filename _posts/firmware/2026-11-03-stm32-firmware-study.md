@@ -15,10 +15,14 @@ math: true
 * To see the parameter hint pop-up while typing inside the parentheses `(...)`, place your cursor inside the function's parentheses and press `Ctrl + Shift + Space`. (Windows/Linux)
 * Auto-complete feature gives some default proposals to easily find a function or an argument which are defined somewhere. For example, to auto-complete `HAL_UART_Transmit(...)`, type `HAL_UART_` and press `Ctrl + Space`. And to find any candidates for the first argument, `Ctrl + Space` on the `huart`. It'll show something like `huart1` and `huart2`. Don't forget to add `&` if you are going to refer some address!
 
+---
+
 ## ✅ HAL
 **HAL (Hardware Abstraction Layer)** is an abstraction layer, implemented in software, between the physical hardware of a computer and the software that runs on that computer. In ST's HAL library, almost every function provided by ST starts with `HAL_`. The naming convention look like this:
 
 > HAL_ + [PERIPHERAL] + _ + [ACTION]
+
+---
 
 ## ✅ JTAG vs SWD
 ![JTAG-vs-SWD](JTAG-vs-SWD.webp)
@@ -34,36 +38,58 @@ Article: [What Is SWD and How Does It Compare to JTAG?](https://www.digikey.kr/e
 **Joint Test Action Group (JTAG)** is a serial protocol using at least 4~5 pins, `TCK`, `TMS`, `TDI`, `TDO`, and optionally `TRST`. It shifts data through a scan chain and can address multiple devices.
 
 #### Pros
-* **Universal Compatibility**: Can be supported by almost all major microprocessors, microcontrollers, FPGAs, and DSPs.
-* **Boundary Scan Testing Support**: Can test the physical connections on a PCB without using physical probes.
-* **Daisy-Chaining**: Can connect multiple ICs in a single serial chain, (scan chain) which allows a single JTAG debugger header to program and debug multiple chips on the same board.
+* Universal Compatibility: Can be supported by almost all major microprocessors, microcontrollers, FPGAs, and DSPs.
+* Boundary Scan Testing Support: Can test the physical connections on a PCB without using physical probes.
+* Daisy-Chaining: Can connect multiple ICs in a single serial chain, (scan chain) which allows a single JTAG debugger header to program and debug multiple chips on the same board.
 
 #### Cons
-* **Complex Hardware Interface**: It requires at least 4 to 5 pins, and often up to 20 pins for standard debugging headers.
+* Complex Hardware Interface: It requires at least 4 to 5 pins, and often up to 20 pins for standard debugging headers.
+* Often Worse Debugging Performance than SWD on ARM Systems**
+
+#### Usage
+* Non-ARM Architectures
+* Multi-Device Daisy Chains (like a mixed board with an MCU, FPGA, and other scan-capable parts)
+* Boundary-Scan Manufacturing Tests
 
 ### 2️⃣ SWD
 **Serial Wire Debug (SWD)** is a two-wire hardware interface and protocol developed by ARM. It has a bidirectional serial data line (`SWDIO`) and a synchronization clock (`SWCLK`). It uses an ARM CPU standard bi-directional wire protocol. It exchanges structed packets between a debugger and a single target in alternating turns.
 
+#### SWO
+**Serial Wire Output (SWO)** is an optional extension for SWD. It specifies a dedicated pin, in addition to the debug signals of the SWD interface, which allows the target CPU to output specific data like `printf` output on a dedicated pin via UART or Manchester protocol.
+
+This pin is unidirectional, so it is not possible to send data to the target CPU on this pin.
+
+Article: [SWO - SEGGER Knowledge Base](https://kb.segger.com/SWO)
+
 #### Pros
-* **Simpler Hardware Interface**: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it's PCB-friendly and can become the absolute standard for compact devices like wearables and IoT gadgets.
-* **Optimized for ARM Cortex**: It offers special features for ARM-based MCUs.
-* **Better Debugging Performance**: Because it is intended for debugging, its debugging performance is better than JTAG which was originally developed for boundary-scan testing.
+* Simpler Hardware Interface: It uses only 2 pins and 2 lines, which frees up MCU pins and reduces routing complexity. More freed up MCU pins means more extra microcontroller pins for actual application use (like SPI, I2C, or GPIOs), and simpler routing complexity allows the use of microscopic (very small) headers. Therefore it's PCB-friendly and can become the absolute standard for compact devices like wearables and IoT gadgets.
+* Optimized for ARM Cortex: It offers special features for ARM-based MCUs.
+* Better Debugging Performance: Because it is intended for debugging, its debugging performance is better than JTAG which was originally developed for boundary-scan testing.
 
 #### Cons
-* **Not Available in Non-ARM devices**
-* **No Boundary-Scan Testing**: It is designed just for debugging and firmware flashing, so it cannot be used for board-level testing.
-* **No Daisy-Chaining**: Since it uses a point-to-point link, it cannot access multiple ICs at the same time via scan chain.
-* **Communicate In Turns**[^1]: Since it has a single bidirectional data line, the devices cannot transmit and receive data at the same time.
-* **Low Reliability on Asynchronous Mode**: In the asynchronous mode, it drops the clock signal, making it a one-wire interface. However the mode is rarely used due to the increased reliability the clock provides.
+* Not Available in Non-ARM devices
+* No Boundary-Scan Testing: It is designed just for debugging and firmware flashing, so it cannot be used for board-level testing.
+* No Daisy-Chaining: Since it uses a point-to-point link, it cannot access multiple ICs at the same time via scan chain.
+* Communicate In Turns[^1]: Since it has a single bidirectional data line, the devices cannot transmit and receive data at the same time.
+* Low Reliability on Asynchronous Mode: In the asynchronous mode, it drops the clock signal, making it a one-wire interface. However the mode is rarely used due to the increased reliability the clock provides.
 
-### Table
+#### Usage
+* ARM Projects with Constrained Pin Count or Compact PCB Layouts
+* Real-Time Event Tracing (using SWO)
+* Standard Single-MCU Debugging
+
+### Summary
+
 | | **JTAG** | **SWD** |
 | - | - | - |
 | **Target Architecture** | Universal | ARM Cortex series only |
 | **Minimum Pin Count** | 4~5 | 2 |
 | **Hardware Interface** | Complex | Simple |
-| **Hardware Testing** | O, Boundary Scan Testing | X |
-| **Multi-Device Support** | O, Daisy-chaining | X, Point-to-point (1:1 only) |
+| **Debugging** | Good | Very Good<br>ARM-optimized + SWO Trace |
+| **Hardware Testing** | O<br>Boundary Scan Testing | X |
+| **Multi-Device Support** | O<br>Daisy-chaining | X<br>Point-to-point (1:1 only) |
+
+In conclusion, one protocol is not superior to the other and they were meant for different uses.
 
 ---
 
@@ -75,6 +101,8 @@ Hardware EXTI line interrupts fire on edge transitions. Assume that a button use
 * **Both Edges**: Fires twice—once when pressed and once when released. Useful if you want to measure how long a button was held down.
 
 The interrupts do not fire on static signal levels. Therefore, if you need continuous detection while a button is held down, polling a standard GPIO pin or using a timer-based debouncing task in FreeRTOS is the proper approach.
+
+---
 
 ## ✅ FLASH vs SRAM
 From Build Analyzer on the IDE, you can see various sections are available in **FLASH (ROM)** and **RAM**.
@@ -139,6 +167,8 @@ Meanwhile, SRAM looks like this, which seems similar to the RAM in a normal comp
 [ SRAM Start: 0x2000 0000 ]
 ```
 
+---
+
 ## ✅ Finding Start and End Addresses of Sections
 1. Memory Detail
 2. Map File
@@ -153,6 +183,60 @@ The linker script (`.ld`) file in the project root shows how the sections are st
 ![linker_script](linker_script.png)
 
 The startup code utilizes these exact symbols (`_sbss` and `_ebss`) to know exactly where to start and stop clearing the RAM to zero.
+
+---
+
+## ✅ Semaphore
+**Semaphore** is a signaling mechanism used to control access to a shared resource. There are two kinds of semaphores in FreeRTOS:
+
+* Binary Semaphore
+* Counting Semaphore
+
+### LAB
+Link: [FreeRTOS on STM32 v2 - 14c Binary semaphores - LIVE lab](https://www.youtube.com/watch?v=6WDo6FjcPRU)
+
+Task 1 and Task 2 in the LAB seem to run in turns, by continuously giving and taking a semaphore, but actually not in fact.
+
+`osSemaphoreRelease()` is non-blocking as Task 1 and an ISR by pressing the blue button (`HAL_GPIO_EXTIO_Callback()`) can drop off the signal and immediately move on. However `osSemaphoreAcquire()` is blocking as only Task 2 waits for the signal. We can know this fact as we add some delay before `osSemaphoreAcquire()` in Task 2 like this:
+
+```c
+void StartTask2(void *argument)
+{
+  /* USER CODE BEGIN StartTask2 */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(8000); // ADDED
+    osSemaphoreAcquire(myBinarySem01Handle, 4000);
+    Task_action('2');
+  }
+  /* USER CODE END StartTask2 */
+}
+```
+
+Then the output becomes:
+
+```
+1
+1
+1
+1
+2
+1
+1
+1
+1
+2
+1
+...
+```
+
+We can find these facts:
+1. Task 1 runs independently of Task 2, whether Task 2 acquired the semaphore or not.
+2. Task 2 waits for a semaphore, and calling `osSemaphoreRelease()` guarantees the semaphore to be `1` so Task 2 can take it.
+3. Unlike a mutex that has strict ownership, a semaphore is just a signal to set the counter. Therefore, checking if Task 1 or an ISR "held (owned)" it beforehand does not make sense. They just "produce" the release signals.
+
+---
 
 ## Notes
 [^1]: "In turns" means "one after the other", "번갈아 가며" in Korean.
