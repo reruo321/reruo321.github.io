@@ -397,7 +397,8 @@ While generating code, a Code Generation warning will pop up. Click Yes to keep 
 ## FreeRTOS Task Scheduling
 
 
-## UART with FreeRTOS
+## UART
+[Nucleo-G071RB_UARTDMA_Idle_Circular wiki - GitHub](https://github.com/karlyamashita/Nucleo-G071RB_UART_DMA_Idle_Circular/wiki)
 
 ## I2C
 
